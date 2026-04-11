@@ -1,6 +1,6 @@
 ## FoxOne
 
-A minimalistic, mouse centered CSS theme for FireFox, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
+A minimalist one-line userChrome.css theme for Firefox, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
 
 <img width="1466" height="1007" alt="foxone" src="https://github.com/user-attachments/assets/c5119b70-4ad6-45c1-83f6-e7785f27b654" />
 
