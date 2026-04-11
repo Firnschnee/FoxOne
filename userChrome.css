@@ -1,0 +1,280 @@
+/* CONFIG */
+
+:root {
+  /* Minimum window width */
+  --window_min_width: 450px;
+
+  /* Show/hide reload button
+   * show: flex
+   * hide: none
+   */
+  --show-reload: flex;
+
+  /* Navigation bar width
+   * max width is applied when url bar is expanded
+   */
+  --navbar-width: max(35vw, 500px);
+  --navbar-max-width: max(60vw, 800px);
+
+  /* Dynamic tab width */
+  --active-tab-width: clamp(100px, 24vw, 240px);    
+  --inactive-tab-width: clamp(100px, 18vw, 180px);
+
+}
+
+/* LAYOUT */
+
+@media (min-width: 1200px) {
+  #navigator-toolbox {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+  }
+
+  #toolbar-menubar {
+    order: 0;
+    width: 100% !important;
+  }
+
+  #nav-bar {
+    order: 1;
+    width: var(--navbar-width) !important;
+  }
+  #nav-bar:has(#urlbar[open]) {
+    width: var(--navbar-max-width) !important;
+  }
+
+  #TabsToolbar {
+    order: 2;
+    width: auto !important;
+  }
+  #navigator-toolbox:has(#urlbar[open]) #TabsToolbar {
+    margin-left: calc(var(--navbar-width) - var(--navbar-max-width)) !important;
+  }
+
+  #PersonalToolbar {
+    order: 3;
+    width: 100% !important;
+  }
+}
+
+:root {
+  /* set minimum window width */
+  min-width: var(--window_min_width) !important;
+
+  /* hide panel borders */
+  --arrowpanel-border-color: transparent !important;
+
+  /* hide focus borders */
+  --toolbar-field-focus-border-color: transparent !important;
+}
+
+/* hide navigator toolbox border */
+#navigator-toolbox {
+  border: none !important;
+}
+
+/* hide context menu border */
+.menupopup-arrowscrollbox {
+  border: none !important;
+}
+
+/* hide notifications toolbar */
+#notifications-toolbar {
+  display: none !important;
+}
+
+/* hide spacers */
+.titlebar-spacer {
+  display: none !important;
+}
+
+/* NAVBAR */
+
+/* hide nav bar background */
+#nav-bar {
+  background: none !important;
+}
+
+/* remove margins from extension buttons*/
+.toolbaritem-combined-buttons {
+  margin-inline: 0px !important;
+}
+
+/* override default first item padding */
+#nav-bar-customization-target > :first-child:not([disabled], #unified-extensions-button) {
+  &:is(toolbarbutton) {
+    padding-inline-start: var(--toolbarbutton-outer-padding) !important;
+  }
+  &:is(toolbaritem) {
+    padding-inline-start: 0px !important;
+  }
+}
+#nav-bar-customization-target > :is(toolbaritem):not([disabled], #unified-extensions-button):first-child {
+  padding-inline-start: 0px !important;
+}
+
+/* pad last visible item before tabs (large window) */
+@media (min-width: 1200px) {
+  /* need to be explicit about hbox else FireFox crashes on dialog box popup for some reason */
+  hbox#nav-bar-customization-target > :nth-last-child(1 of :is(toolbarbutton, toolbaritem):not([disabled], #unified-extensions-button)) {
+    &:is(#stop-reload-button, .unified-extensions-item) {
+      padding-inline-end: calc(var(--urlbar-margin-inline) - var(--toolbarbutton-outer-padding)) !important;
+    }
+    &:not(#urlbar-container, #stop-reload-button, .unified-extensions-item) {
+      padding-inline-end: var(--urlbar-margin-inline) !important;
+    }
+  }
+}
+
+/* pad last visible item (small window) */
+@media (max-width: 1200px) {
+  /* need to be explicit about hbox else FireFox crashes on dialog box popup for some reason */
+  hbox#nav-bar-customization-target > :nth-last-child(1 of :is(toolbarbutton, toolbaritem):not([disabled], #unified-extensions-button)) {
+    &:is(#urlbar-container) {
+      margin-inline-end: var(--toolbar-start-end-padding) !important;
+    }
+    &:is(#stop-reload-button, .unified-extensions-item) {
+      padding-inline-end: calc(var(--toolbar-start-end-padding) - var(--toolbarbutton-outer-padding)) !important;
+    }
+    &:not(#urlbar-container, #stop-reload-button, .unified-extensions-item) {
+      padding-inline-end: var(--toolbar-start-end-padding) !important;
+    }
+  }
+}
+
+/* hide all page action buttons except zoom */
+#urlbar:not(:hover, [focused]) #page-action-buttons > :not([open], #urlbar-zoom-button) {
+  display: none !important
+}
+
+/* TABS */
+
+/* always positions tabs first */
+#tabbrowser-tabs {
+  order: -1 !important;
+}
+
+/* hide default border, padding, and margin left of tabs */
+#tabbrowser-tabs {
+  border-inline-start: none !important;
+  padding-inline-start: 0px !important;
+  margin-inline-start: 0px !important;
+}
+
+/* add padding left of first tab (small window) */
+@media (max-width: 1200px) {
+  #pinned-tabs-container, #tabbrowser-tabs:not([overflow], :has(#pinned-tabs-container > .tabbrowser-tab)) #tabbrowser-arrowscrollbox {
+    /* & > .tabbrowser-tab:first-child, & > tab-group:first-child > .tab-group-label-container { */
+    & > tab-group:first-child > .tab-group-label-container {
+      padding-inline-start: calc(2 * var(--tab-overflow-clip-margin)) !important;
+    }
+  }
+}
+
+/* add margin right of tabs so that there is always a draggable area */
+#tabbrowser-tabs:not(:has(+ #new-tab-button)),
+#TabsToolbar-customization-target:has(#tabbrowser-tabs + #new-tab-button) :is(#new-tab-button, #tabs-newtab-button) {
+  margin-right: 40px !important;
+}
+
+/* remove gap after pinned tabs */
+#pinned-tabs-container {
+  margin-inline-end: 0px !important;
+}
+
+/* hide tab group label outline */
+.tab-group-label {
+  outline: none !important;
+}
+
+/* hide tab shadow & outline */
+.tabbrowser-tab .tab-background {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* hide tab close button */
+.tabbrowser-tab:not([pinned]) .tab-close-button {
+  display: none !important;
+}
+.tabbrowser-tab:not([pinned]):hover .tab-close-button {
+  display: inline-block !important;
+}
+
+/* dynamic tab width */
+.tabbrowser-tab[selected]:not([pinned]) {
+  max-width: var(--active-tab-width) !important;
+}
+:not([collapsed]) > .tabbrowser-tab[fadein]:not([selected], [pinned]) {
+  max-width: var(--inactive-tab-width) !important;
+}
+
+
+/* TOOLBAR */
+
+/* rounded toolbar corners */
+#PersonalToolbar {
+  border-top-left-radius: var(--tab-border-radius) !important;
+  border-top-right-radius: var(--tab-border-radius) !important;
+}
+
+/* toolbar button margins */ 
+#PersonalToolbar toolbarbutton {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+}
+
+/* make bookmark button padding uniform */ 
+#PlacesToolbarItems toolbarbutton {
+  padding: var(--bookmark-block-padding) !important;
+}
+
+/* match chevron button size to bookmark button size */
+#PlacesChevron .toolbarbutton-icon {
+  width: calc(2 * var(--bookmark-block-padding) + 16px) !important;
+  height: calc(2 * var(--bookmark-block-padding) + 16px) !important;
+  padding: var(--bookmark-block-padding) !important;
+}
+
+/* tabs haben jetzt abstand nach oben und unten, wie bei safari */
+
+.tabbrowser-tab {
+  position: relative !important;
+}
+
+.tabbrowser-tab .tab-background {
+  position: absolute !important;
+  top: 2px !important;
+  bottom: 2px !important;
+  left: 0 !important;
+  right: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* permanently hide unwanted page action buttons */
+#reader-mode-button,
+#taskbar-tabs-button,
+#translations-button,
+#pageAction-urlbar-_testpilot-containers,
+#pageAction-urlbar-_e26226b8-5263-4b42-9789-504fde4443b3_ {
+  display: none !important;
+}
+
+/* Hamburger → far right, before Windows buttons */
+#navigator-toolbox {
+  position: relative !important;
+}
+
+#PanelUI-button {
+  position: absolute !important;
+  right: 170px !important; /* Breite der Windows-Buttons — kalibrieren */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+}
+
+#nav-bar {
+  position: static !important;
+}
