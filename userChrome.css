@@ -144,7 +144,7 @@
 }
 
 /* hide all page action buttons except zoom */
-#urlbar:not(:hover, [focused]) #page-action-buttons > :not([open], #urlbar-zoom-button) {
+#urlbar:not(:hover, [focused]) #page-action-buttons > :not([open], #urlbar-zoom-button, #star-button-box) {
   display: none !important
 }
 
