@@ -10,7 +10,7 @@ A minimalist one-line userChrome.css theme for Firefox, inspired by [LittleFox](
 2. In Firefox go to `about:config`. Set `toolkit.legacyUserProfileCustomizations.stylesheets` to `true`.
 3. In Firefox go to `about:support`. Open your Profile Folder. Create a new folder named `chrome` if it does not already exist.
 4. Copy the [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) into the `chrome` folder and restart Firefox.
-5. For best results with the Hamburger-Menu, place a 'flexible Space' between the `Sidebar`- and `List all tabs` button. 
+5. For best results with the Hamburger-Menu, place a `flexible Space` between the `Sidebar`- and `List all tabs` button. 
 
 ### Customization?
 
