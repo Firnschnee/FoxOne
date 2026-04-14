@@ -49,6 +49,9 @@
 
   /* Windows control button width — used for Hamburger positioning */
   --uc-window-buttons-width: 138px;
+
+  /* Hamburger button width — reserved in tab bar to prevent overlap */
+  --uc-hamburger-width: 44px;
 }
 
 
@@ -138,6 +141,10 @@
 
   #TabsToolbar {
     width: calc(100vw - var(--uc-urlbar-min-width) - 1px);
+  }
+
+  #tabbrowser-arrowscrollbox {
+    margin-inline-end: var(--uc-hamburger-width) !important;
   }
 
   #navigator-toolbox:focus-within #nav-bar {
@@ -269,15 +276,12 @@
   outline-color: var(--toolbarseparator-color) !important;
 }
 
-/* tab close button: hidden by default, visible on hover, always on selected */
+/* tab close button: hidden by default, visible on hover */
 .tabbrowser-tab:not([pinned]) .tab-close-button {
   display: var(--show-tab-close-button) !important;
 }
 .tabbrowser-tab:not([pinned]):hover .tab-close-button {
   display: var(--show-tab-close-button-hover) !important;
-}
-#tabbrowser-tabs .tabbrowser-tab[selected]:not([pinned]) .tab-close-button.close-icon {
-  display: block !important;
 }
 
 /* adaptive tab width */
