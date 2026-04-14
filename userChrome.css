@@ -272,7 +272,7 @@
 
 #urlbar[focused="true"] > #urlbar-background,
 #urlbar:not([open]) > #urlbar-background {
-  background: var(--toolbar-field-background-color) !important;
+  background: var(--uc-highlight-colour) !important;
 }
 
 #urlbar[open] > #urlbar-background {
