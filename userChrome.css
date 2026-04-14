@@ -215,16 +215,58 @@
 #pageActionButton { display: none !important; }
 #urlbar-go-button { display: none !important; }
 
-#identity-permission-box { display: none !important; }
+#identity-permission-box {
+  max-width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  transition: max-width 0.2s ease, opacity 0.2s ease,
+              margin-inline 0.2s ease, padding-inline 0.2s ease !important;
+}
+
+#nav-bar:hover #identity-permission-box,
+#urlbar[focused="true"] #identity-permission-box {
+  max-width: 30px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  margin-inline: revert !important;
+  padding-inline: revert !important;
+}
 #identity-box.extensionPage { display: none !important; }
 
-/* Hide unwanted page action icons */
+/* Hide unwanted page action icons — reveal on hover/focus */
 #reader-mode-button,
 #taskbar-tabs-button,
 #translations-button,
 #pageAction-urlbar-_testpilot-containers,
 #pageAction-urlbar-_e26226b8-5263-4b42-9789-504fde4443b3_ {
-  display: none !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  transition: max-width 0.2s ease, opacity 0.2s ease,
+              margin-inline 0.2s ease, padding-inline 0.2s ease !important;
+}
+
+#nav-bar:hover #reader-mode-button,
+#nav-bar:hover #taskbar-tabs-button,
+#nav-bar:hover #translations-button,
+#nav-bar:hover #pageAction-urlbar-_testpilot-containers,
+#nav-bar:hover #pageAction-urlbar-_e26226b8-5263-4b42-9789-504fde4443b3_,
+#urlbar[focused="true"] #reader-mode-button,
+#urlbar[focused="true"] #taskbar-tabs-button,
+#urlbar[focused="true"] #translations-button,
+#urlbar[focused="true"] #pageAction-urlbar-_testpilot-containers,
+#urlbar[focused="true"] #pageAction-urlbar-_e26226b8-5263-4b42-9789-504fde4443b3_ {
+  max-width: 30px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  margin-inline: revert !important;
+  padding-inline: revert !important;
 }
 
 /* Hide secondary tab label (e.g. playing indicator text) */
