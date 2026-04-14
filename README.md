@@ -2,6 +2,8 @@
 
 A minimalist one-line `userChrome.css` theme for Firefox.
 
+<img width="1485" height="951" alt="foxone2" src="https://github.com/user-attachments/assets/dd0ec7a9-6593-49ff-8fa5-7c2f053ae3ba" />
+
 Based on [Cascade](https://github.com/andreasgrafen/cascade) by Andreas Grafen, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
 
 ### Features
