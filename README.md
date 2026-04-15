@@ -1,8 +1,8 @@
-## FoxOne
+# FoxOne
 
-A minimalist one-line `userChrome.css` theme for Firefox.
+A minimalistic one-line `userChrome.css` theme for Firefox.
 
-<img width="1525" height="1159" alt="foxone3" src="https://github.com/user-attachments/assets/60791594-4129-4a7c-9fc2-c3bcdafa9561" />
+<img width="1390" height="772" alt="Screenshot 2026-04-15 110213" src="https://github.com/user-attachments/assets/b36683c7-c392-47ac-9625-b39ebf9a4869" />
 
 ### Features
 
@@ -12,6 +12,8 @@ A minimalist one-line `userChrome.css` theme for Firefox.
 - Hamburger menu repositioned next to window controls
 - Tab close button visible on hover
 - Configurable via CSS variables at the top of the file
+
+<img width="800" height="47" alt="new-2cb39d8d5755c6dc" src="https://github.com/user-attachments/assets/42abe0a1-3622-4ead-901b-1cdd71d85159" />
 
 ### Installation
 
@@ -38,7 +40,7 @@ Works well with [LittleFox-ColorTheme](https://github.com/Firnschnee/LittleFox-C
 
 ### Credits
 
-Based on [Cascade](https://github.com/andreasgrafen/cascade) by Andreas Grafen, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
+Based on [Cascade](https://github.com/andreasgrafen/cascade), inspired by [LittleFox](https://github.com/biglavis/LittleFox).
 
 ### License
 
