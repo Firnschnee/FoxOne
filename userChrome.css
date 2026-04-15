@@ -33,7 +33,7 @@
   --uc-urlbar-top-spacing: 1px;
 
   /* Dynamic tab widths */
-  --uc-active-tab-width: clamp(100px, 30vw, 300px);
+  --uc-active-tab-width: clamp(100px, 30vw, 250px);
   --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
 
   /* Tab close button (none = hidden, -moz-inline-block = visible) */
@@ -246,10 +246,10 @@
   overflow: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  margin-inline: 0 !important;
-  padding-inline: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   transition: max-width 0.2s ease, opacity 0.2s ease,
-              margin-inline 0.2s ease, padding-inline 0.2s ease !important;
+              padding 0.2s ease, margin 0.2s ease !important;
 }
 
 #nav-bar:hover #reader-mode-button,
@@ -265,8 +265,8 @@
   max-width: 30px !important;
   opacity: 1 !important;
   pointer-events: auto !important;
-  margin-inline: revert !important;
-  padding-inline: revert !important;
+  padding: 6px !important;
+  margin: 0 !important;
 }
 
 /* Hide secondary tab label (e.g. playing indicator text) */
