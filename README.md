@@ -31,7 +31,7 @@ All configuration lives in the `:root` block at the top of the file. Key variabl
 | `--uc-border-radius` | `8px` | Global corner radius |
 | `--uc-urlbar-min-width` | `35vw` | URL bar width |
 | `--uc-urlbar-position` | `1` | URL bar position (1 = left, 3 = right) |
-| `--uc-active-tab-width` | `clamp(100px, 30vw, 300px)` | Active tab width |
+| `--uc-active-tab-width` | `clamp(100px, 30vw, 250px)` | Active tab width |
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 200px)` | Inactive tab width |
 | `--uc-window-buttons-width` | `138px` | Windows control button width |
 | `--uc-toolbar-position` | `4` | Bookmarks bar position (0 = top, 4 = bottom) |
