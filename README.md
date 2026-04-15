@@ -4,13 +4,13 @@ A minimalist one-line `userChrome.css` theme for Firefox.
 
 <img width="1525" height="1159" alt="foxone3" src="https://github.com/user-attachments/assets/60791594-4129-4a7c-9fc2-c3bcdafa9561" />
 
-Based on [Cascade](https://github.com/andreasgrafen/cascade) by Andreas Grafen, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
-
 ### Features
 
-- One-line layout — URL bar and tabs share a single row
+- One-line layout – URL bar and tabs share a single row
+- Clean URL bar – non-essential icons hidden by default
+- Hover reveal – non-essential icons slide in with animated transitions on hover/focus
 - Hamburger menu repositioned next to window controls
-- Tab close button visible on active tab and on hover
+- Tab close button visible on hover
 - Configurable via CSS variables at the top of the file
 
 ### Installation
@@ -38,9 +38,8 @@ Works well with [LittleFox-ColorTheme](https://github.com/Firnschnee/LittleFox-C
 
 ### Credits
 
-- [Cascade](https://github.com/andreasgrafen/cascade) by Andreas Grafen — the foundation
-- [LittleFox](https://github.com/biglavis/LittleFox) — design inspiration
+Based on [Cascade](https://github.com/andreasgrafen/cascade) by Andreas Grafen, inspired by [LittleFox](https://github.com/biglavis/LittleFox).
 
 ### License
 
-MIT License — see [LICENSE](LICENSE)
+MIT License – see [LICENSE](LICENSE)
