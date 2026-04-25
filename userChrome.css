@@ -52,6 +52,9 @@
 
   /* Hamburger button width — reserved in tab bar to prevent overlap */
   --uc-hamburger-width: 44px;
+
+  /* Extra toolbar button width (extensions, uBlock etc.) */
+  --uc-toolbar-button-width: 36px;
 }
 
 
@@ -144,7 +147,7 @@
   }
 
   #tabbrowser-arrowscrollbox {
-    margin-inline-end: var(--uc-hamburger-width) !important;
+    margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-toolbar-button-width) * 2) !important;
   }
 
   #navigator-toolbox:focus-within #nav-bar {
@@ -228,12 +231,27 @@
 
 #nav-bar:hover #identity-permission-box,
 #urlbar[focused="true"] #identity-permission-box {
-  max-width: 30px !important;
+  max-width: none !important;
   opacity: 1 !important;
   pointer-events: auto !important;
   margin-inline: revert !important;
   padding-inline: revert !important;
 }
+
+/* Always show active permissions (granted camera/mic/location) and sharing
+   icons (active stream) — security indicator should not depend on focus.
+   Firefox sets [hasPermissions] also for blocked-only permissions (e.g.
+   autoplay), so we exclude those via :not(:has(.blocked-permission-icon))
+   to keep blocked icons hover/focus-revealed like the rest of FoxOne. */
+#identity-permission-box[hasPermissions]:not(:has(.blocked-permission-icon)),
+#identity-permission-box[hasSharingIcon] {
+  max-width: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  margin-inline: revert !important;
+  padding-inline: revert !important;
+}
+
 #identity-box.extensionPage { display: none !important; }
 
 /* Hide unwanted page action icons — reveal on hover/focus */
@@ -269,6 +287,9 @@
   margin: 0 !important;
 }
 
+/* Hide private browsing indicator */
+.private-browsing-indicator-with-label { display: none !important; }
+
 /* Hide secondary tab label (e.g. playing indicator text) */
 .tab-secondary-label { display: none !important; }
 
@@ -280,17 +301,44 @@
 
 
 /* ==========================================================================
-   HAMBURGER MENU — fixed position next to Windows control buttons
+   HAMBURGER MENU — fixed position next to Windows control buttons.
+   Only applies in one-line layout (>= 1000px). Below that, the buttons
+   fall back to their natural position in the nav-bar so they don't
+   overlap the tab strip in the two-row layout.
    ========================================================================== */
 
-#PanelUI-button {
-  position: fixed !important;
-  right: var(--uc-window-buttons-width) !important;
-  top: 0 !important;
-  height: 44px !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  align-items: center !important;
+@media (min-width: 1000px) {
+  #PanelUI-button {
+    position: fixed !important;
+    right: var(--uc-window-buttons-width) !important;
+    top: 0 !important;
+    height: 44px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Extensions (puzzle) icon — left of hamburger */
+  #unified-extensions-button {
+    position: fixed !important;
+    right: calc(var(--uc-window-buttons-width) + var(--uc-hamburger-width)) !important;
+    top: 0 !important;
+    height: 44px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* uBlock Origin — left of extensions icon */
+  #ublock0_raymondhill_net-browser-action {
+    position: fixed !important;
+    right: calc(var(--uc-window-buttons-width) + var(--uc-hamburger-width) + var(--uc-toolbar-button-width)) !important;
+    top: 0 !important;
+    height: 44px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
 }
 
 
