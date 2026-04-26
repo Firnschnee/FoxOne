@@ -317,30 +317,7 @@
     display: flex !important;
     align-items: center !important;
   }
-
-  /* Extensions (puzzle) icon — left of hamburger */
-  #unified-extensions-button {
-    position: fixed !important;
-    right: calc(var(--uc-window-buttons-width) + var(--uc-hamburger-width)) !important;
-    top: 0 !important;
-    height: 44px !important;
-    z-index: 1000 !important;
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  /* uBlock Origin — left of extensions icon */
-  #ublock0_raymondhill_net-browser-action {
-    position: fixed !important;
-    right: calc(var(--uc-window-buttons-width) + var(--uc-hamburger-width) + var(--uc-toolbar-button-width)) !important;
-    top: 0 !important;
-    height: 44px !important;
-    z-index: 1000 !important;
-    display: flex !important;
-    align-items: center !important;
-  }
 }
-
 
 /* ==========================================================================
    TABS
