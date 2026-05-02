@@ -473,3 +473,11 @@
 #statuspanel #statuspanel-label {
   margin: 0 0 var(--uc-status-panel-spacing) var(--uc-status-panel-spacing) !important;
 }
+
+/* ==========================================================================
+   SPLIT VIEW BIGGER 
+   ========================================================================== */
+
+tab-split-view-wrapper {
+    --tab-max-width: 300px!important;
+}
