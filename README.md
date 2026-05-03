@@ -2,7 +2,7 @@
 
 A minimalistic one-line `userChrome.css` theme for Firefox.
 
-<img width="1920" height="1280" alt="foxone_Bg" src="https://github.com/user-attachments/assets/063c3038-a0dc-45c7-9f01-6ce8a7b01535" />
+<img width="1920" height="1280" alt="foxone_bg2" src="https://github.com/user-attachments/assets/9d5588ce-c035-4f61-baf0-2a82e85199a3" />
 
 ### Features
 
