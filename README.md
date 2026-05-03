@@ -36,7 +36,7 @@ All configuration lives in the `:root` block at the top of the file. Key variabl
 | `--uc-window-buttons-width` | `138px` | Windows control button width |
 | `--uc-toolbar-position` | `4` | Bookmarks bar position (0 = top, 4 = bottom) |
 
-Works well with [LittleFox-ColorTheme](https://github.com/Firnschnee/LittleFox-ColorTheme).
+Works well with the ColorTheme.
 
 ### Credits
 
