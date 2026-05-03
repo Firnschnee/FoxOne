@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "version": "1.0",
+  "name": "LittleFox ColorTheme",
+  "theme": {
+    "colors": {
+      "frame": "#282828",
+      "tab_background_text": "#FFFFFF",
+      "icons_attention": "#fabd2f",
+      "ntp_background": "#282828",
+      "ntp_text": "#FFFFFF",
+      "popup": "#3c3836",
+      "popup_border": "#282828",
+      "popup_highlight": "#7c6f64",
+      "popup_text": "#FFFFFF",
+      "sidebar": "#282828",
+      "sidebar_border": "#3c3836",
+      "sidebar_highlight": "#7c6f64",
+      "sidebar_text": "#FFFFFF",
+      "tab_background_separator": "black",
+      "tab_selected": "#504945",
+      "tab_line": "#fabd2f",
+      "tab_loading": "#fabd2f",
+      "tab_text": "#fabd2f",
+      "toolbar": "#282828",
+      "toolbar_field": "#1d2021",
+      "toolbar_field_border_focus": "#fabd2f",
+      "toolbar_field_text": "#FFFFFF",
+      "toolbar_text": "#FFFFFF",
+      "toolbar_vertical_separator": "#282828"
+    }
+  }
+}
