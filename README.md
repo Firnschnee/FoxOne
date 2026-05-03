@@ -2,7 +2,7 @@
 
 A minimalistic one-line `userChrome.css` theme for Firefox.
 
-<img width="1316" height="810" alt="foxone" src="https://github.com/user-attachments/assets/07ab4ada-71e0-47d9-8ed3-a17ba9753f59" />
+<img width="1920" height="1280" alt="foxone_Bg" src="https://github.com/user-attachments/assets/063c3038-a0dc-45c7-9f01-6ce8a7b01535" />
 
 ### Features
 
@@ -13,7 +13,7 @@ A minimalistic one-line `userChrome.css` theme for Firefox.
 - Tab close button visible on hover
 - Configurable via CSS variables at the top of the file
 
-<img width="800" height="47" alt="foxone" src="https://github.com/user-attachments/assets/8ae9a84f-03e8-4729-ac6c-00a7b78b0940" />
+<img width="800" height="55" alt="foxone" src="https://github.com/user-attachments/assets/faf46c71-6b44-418b-a281-0c6348f906ac" />
 
 ### Installation
 
