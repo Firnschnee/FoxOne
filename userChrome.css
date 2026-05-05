@@ -170,6 +170,28 @@
   background: var(--toolbar-field-background-color) !important;
 }
 
+/* kill toolbar–content separator (covers all known Firefox versions) */
+#navigator-toolbox::after,
+#navigator-toolbox::before {
+  display: none !important;
+  height: 0 !important;
+  border: none !important;
+}
+
+:root {
+  --chrome-content-separator-color: transparent !important;
+}
+
+#navigator-toolbox {
+  border-bottom: 0 solid transparent !important;
+}
+
+#browser,
+#appcontent,
+#tabbrowser-tabbox {
+  border-top: none !important;
+}
+
 #nav-bar {
   padding-block-start: 0px !important;
   border: none !important;
