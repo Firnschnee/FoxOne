@@ -162,7 +162,7 @@ sidebar-main,
   }
 
   #tabbrowser-tabs {
-    max-width: calc(100% - var(--uc-window-buttons-width) - var(--uc-hamburger-width)) !important;
+    max-width: calc(100% - var(--uc-window-buttons-width) - var(--uc-hamburger-width) - var(--uc-toolbar-button-width)) !important;
   }
 
   #navigator-toolbox:focus-within #nav-bar {
@@ -467,6 +467,21 @@ browser[type="content"],
     align-items: center !important;
   }
 }
+
+/* ==========================================================================
+   TOOLBAR EXTENSION BUTTONS — push to right, next to hamburger.
+   Only targets <toolbarbutton> and <toolbaritem> children of #TabsToolbar
+   that are NOT known built-in elements. Adjust --uc-toolbar-button-width
+   in CONFIG for multiple buttons (36px per button).
+   ========================================================================== */
+
+@media (min-width: 1000px) {
+  #TabsToolbar-customization-target > toolbaritem {
+    margin-inline-start: auto !important;
+    margin-inline-end: var(--uc-hamburger-width) !important;
+  }
+}
+
 
 /* ==========================================================================
    TABS
