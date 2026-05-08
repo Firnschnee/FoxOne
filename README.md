@@ -7,17 +7,17 @@
 
 One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else.
 
-Want to see it in action? [Click here!](docs/action.md]
+Want to see it in action? [Click here for gifs](https://github.com/Firnschnee/FoxOne/blob/feature/docs/action.md)
 
 <br>
 
-And this time: Dynamic toolbar support - add your extension icon to the right side without breaking the layout
+And this time: Dynamic toolbar support - add an extension icon right next to the Hamburger Menu without breaking the layout
 
 </div>
 
 
 ---
  
-**[Installation](docs/installation.md) & [Customisation](docs/customisation.md)** |
+**[Installation](docs/installation.md) & [docs/customisation.md](https://github.com/Firnschnee/FoxOne/blob/feature/docs/action.md)** |
 Based on and inspired by Andreas Grafen's [Cascade](https://github.com/andreasgrafen/cascade) & biglavis' [LittleFox](https://github.com/biglavis/LittleFox) |
 License: [MIT](LICENSE)
