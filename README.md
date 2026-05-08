@@ -7,11 +7,7 @@
 
 One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else.
 
-{GIF1 - DYNAMIC TABS AND ICON REVEAL}
-
-{GIF2 - DYNAMIC URLBAR EXTENSION}
-
-{GIF3 - FINDBAR}
+Want to see it in action? [Click here!](docs/action.md]
 
 <br>
 
