@@ -27,7 +27,7 @@ Create a `chrome` folder inside your profile folder if it doesn't exist, then co
 
 The theme applies on restart.
 
-### Color Theme
+### 6. Color Theme
 
 FoxOne now includes a built-in Gruvbox inspired Dark color theme that activates automatically in dark mode. No separate extension needed.
 
