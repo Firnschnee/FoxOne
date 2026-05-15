@@ -934,11 +934,20 @@ label.found-matches {
 }
 
 /* ==========================================================================
-   SPLIT VIEW BIGGER 
+   SPLIT VIEW
    ========================================================================== */
 
 tab-split-view-wrapper {
     --tab-max-width: 300px!important;
+}
+
+.split-view-splitter {
+  border: none !important;
+  background: #282828 !important;
+  appearance: none !important;
+  width: 2px !important;
+  min-width: 2px !important;
+  max-width: 2px !important;
 }
 
 
