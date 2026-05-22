@@ -8,6 +8,7 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 |---|---|---|
 | `--uc-border-radius` | `8px` | Global corner radius |
 | `--uc-status-panel-spacing` | `12px` | Statuspanel distance from window border (`0` = corner) |
+| `--uc-urlbar-background` | `#282828` | URL bar background (`#282828` = blends with toolbar, `#3c3836` = distinct) |
 | `--uc-urlbar-min-width` | `35vw` | URL bar default width |
 | `--uc-urlbar-max-width` | `50vw` | URL bar width on focus |
 | `--uc-urlbar-position` | `1` | URL bar position (`1` = tabs right, `3` = tabs left) |

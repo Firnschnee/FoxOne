@@ -85,6 +85,9 @@
   --match-diacritics-position: 2;
   --whole-words-position:      3;
 
+  /* URL bar background (#282828 = blends with toolbar, #3c3836 = distinct) */
+  --uc-urlbar-background: #282828;
+
   /* Tab loading progress bar (1 = show, 0 = hide) */
   --uc-show-loading-progress: 1;
 
@@ -114,7 +117,7 @@
     --toolbarbutton-icon-fill-attention: #fabd2f !important;
 
     /* URL bar */
-    --toolbar-field-background-color: #282828 !important;
+    --toolbar-field-background-color: var(--uc-urlbar-background) !important;
     --toolbar-field-color: #FFFFFF !important;
     --toolbar-field-focus-color: #FFFFFF !important;
     --toolbar-field-focus-border-color: #fabd2f !important;

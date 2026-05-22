@@ -15,7 +15,7 @@
    * none = hidden (scroll via mousewheel/keyboard/touchpad)
    * thin = always visible, slim style
    * auto = default OS scrollbar */
-  --uc-content-scrollbar: none;
+  --uc-content-scrollbar: auto;
 }
 
 
