@@ -92,7 +92,7 @@
   --uc-urlbar-rounded: 0;
 
   /* Tab loading progress bar (1 = show, 0 = hide) */
-  --uc-show-loading-progress: 1;
+  --uc-show-loading-progress: 0;
 
 }
 
