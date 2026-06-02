@@ -402,6 +402,11 @@ sidebar-main,
 
 #navigator-toolbox {
   border-bottom: 0 solid transparent !important;
+  /* Nova frames the toolbox with a 4px margin, letting the window
+     background show through as a border. FoxOne is edge-to-edge, so drop
+     it. Side effect: removing the 4px top margin realigns #PanelUI-button
+     (position: fixed; top: 0), which the margin had pushed out of sync. */
+  margin: 0 !important;
 }
 
 #browser,
