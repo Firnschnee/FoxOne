@@ -534,6 +534,28 @@ sidebar-main,
   margin: auto;
 }
 
+/* Nova's search-mode switcher (the engine icon) is a moz-button; its
+   visible button lives in the shadow DOM (part="button") and draws a violet
+   frame (#d4c1ff in dark mode) from the design tokens. Rather than fight to
+   remove it, recolour it to FoxOne's accent so it reads as an on-brand
+   search-mode indicator. Cover the host tokens (incl. the full
+   --focus-outline shorthand, missed earlier) and the exposed part, since
+   the exact channel resisted isolation. */
+.searchmode-switcher {
+  --focus-outline: 2px solid var(--uc-color-accent) !important;
+  --focus-outline-color: var(--uc-color-accent) !important;
+  --button-border: 1px solid var(--uc-color-accent) !important;
+  --button-border-color: var(--uc-color-accent) !important;
+  --button-border-color-active: var(--uc-color-accent) !important;
+  --button-border-color-hover: var(--uc-color-accent) !important;
+  --button-border-color-selected: var(--uc-color-accent) !important;
+  --border-color-selected: var(--uc-color-accent) !important;
+}
+.searchmode-switcher::part(button) {
+  border-color: var(--uc-color-accent) !important;
+  outline-color: var(--uc-color-accent) !important;
+}
+
 .urlbar-page-action {
   padding: 0 inherit !important;
 }
