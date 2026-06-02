@@ -258,6 +258,10 @@ sidebar-main,
   box-shadow: inset 0 0 50vh rgba(0, 0, 0, var(--uc-darken-toolbar)) !important;
   order: var(--uc-toolbar-position);
   width: 100%;
+  /* Nova sets the bookmarks bar background directly (#2b2a33, the default
+     dark toolbar colour) instead of inheriting --toolbar-bgcolor, so it
+     drifts from the navbar. Pin it to the palette base. */
+  background-color: var(--uc-color-base) !important;
 }
 
 #statuspanel #statuspanel-label {
