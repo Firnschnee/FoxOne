@@ -226,8 +226,13 @@ sidebar-main,
   display: none !important;
 }
 
-/* fix Shield Icon padding */
+/* fix Shield Icon padding — Nova moved urlbar-input-container from id to
+   class, so match both. */
 #urlbar-input-container[pageproxystate="valid"]
+  > #tracking-protection-icon-container
+  > #tracking-protection-icon-box
+  > #tracking-protection-icon,
+.urlbar-input-container[pageproxystate="valid"]
   > #tracking-protection-icon-container
   > #tracking-protection-icon-box
   > #tracking-protection-icon {
@@ -424,16 +429,26 @@ sidebar-main,
   border-radius: calc(var(--uc-urlbar-rounded) * var(--uc-border-radius)) !important;
 }
 
-#urlbar-background {
-  border: transparent !important;
+/* Nova rebuilt the urlbar as <moz-urlbar> and moved its internals from
+   id to class (.urlbar-background, .urlbar-input-container). The new
+   .urlbar-input-container carries a 1px deemphasized border
+   (urlbar-searchbar.css). Reset both the legacy id and the Nova classes
+   so the field keeps blending into the toolbar across channels. */
+#urlbar-background,
+.urlbar-background,
+.urlbar-input-container {
+  border: none !important;
 }
 
 #urlbar[focused="true"] > #urlbar-background,
-#urlbar:not([open]) > #urlbar-background {
+#urlbar[focused="true"] > .urlbar-background,
+#urlbar:not([open]) > #urlbar-background,
+#urlbar:not([open]) > .urlbar-background {
   background: var(--uc-highlight-colour) !important;
 }
 
-#urlbar[open] > #urlbar-background {
+#urlbar[open] > #urlbar-background,
+#urlbar[open] > .urlbar-background {
   background: var(--toolbar-field-background-color) !important;
 }
 
