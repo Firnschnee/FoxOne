@@ -661,10 +661,14 @@ sidebar-main,
   --sidebar-border-color: transparent !important;
 }
 
-/* splitter between content and sidebar — thin 2px line, still draggable */
+/* splitter between content and sidebar — thin 2px line, still draggable.
+   Use --toolbar-bgcolor (not the hardcoded dark base) so it blends in both
+   colour schemes: dark mode resolves it to base via FoxOne's override, light
+   mode to the system toolbar tone. Without this the dark splitter shows as a
+   black bar next to light content. */
 #sidebar-splitter {
   border: none !important;
-  background: var(--uc-color-base) !important;
+  background: var(--toolbar-bgcolor) !important;
   appearance: none !important;
   width: 2px !important;
   min-width: 2px !important;
@@ -1229,7 +1233,9 @@ tab-split-view-wrapper {
 
 .split-view-splitter {
   border: none !important;
-  background: var(--uc-color-base) !important;
+  /* same adaptive splitter colour as #sidebar-splitter — blends in light
+     and dark instead of a hardcoded dark base */
+  background: var(--toolbar-bgcolor) !important;
   appearance: none !important;
   width: 2px !important;
   min-width: 2px !important;
