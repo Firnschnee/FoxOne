@@ -42,6 +42,7 @@
   /* Dynamic tab widths */
   --uc-active-tab-width: clamp(100px, 30vw, 250px);
   --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  --uc-tab-min-width: 36px;
 
   /* Inactive tab hover title color (issue #16) */
   --uc-tab-hover-text: #ffda85;
@@ -834,6 +835,9 @@ browser[type="content"],
 }
 .tabbrowser-tab[fadein]:not([selected]):not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   max-width: var(--uc-inactive-tab-width) !important;
+}
+.tabbrowser-tab:not([pinned]) {
+  min-width: var(--uc-tab-min-width) !important;
 }
 
 /* active pinned tab — bottom glow indicator (mirrors container-line style) */
