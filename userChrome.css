@@ -836,7 +836,7 @@ browser[type="content"],
 .tabbrowser-tab[fadein]:not([selected]):not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   max-width: var(--uc-inactive-tab-width) !important;
 }
-.tabbrowser-tab:not([pinned]) {
+.tabbrowser-tab[fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   min-width: var(--uc-tab-min-width) !important;
 }
 
