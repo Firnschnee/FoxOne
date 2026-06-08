@@ -1298,6 +1298,16 @@ tab-split-view-wrapper {
     --tab-max-width: 300px!important;
 }
 
+#tabbrowser-tabpanels {
+  &[splitview] {
+    & .browserContainer {
+      .deck-selected > & {
+        outline: 2px solid #fabd2f !important;
+      }
+    }
+  }
+}
+
 .split-view-splitter {
   border: none !important;
   /* same adaptive splitter colour as #sidebar-splitter — blends in light
