@@ -2,13 +2,23 @@
 
 All configuration lives in the `:root` block at the top of `userChrome.css`.
 
+### Color Palette
+
+| Variable | Default | Description |
+|---|---|---|
+| `--uc-color-base` | `#282828` | Main background (toolbar, frame) |
+| `--uc-color-surface` | `#3c3836` | Elevated surfaces (panels, popups) |
+| `--uc-color-accent` | `#fabd2f` | Accent color (active tab, focus ring) |
+| `--uc-color-text` | `#FFFFFF` | Primary text |
+| `--uc-color-hover` | `#7c6f64` | Hover / highlight backgrounds |
+
 ### Layout
 
 | Variable | Default | Description |
 |---|---|---|
 | `--uc-border-radius` | `8px` | Global corner radius |
 | `--uc-status-panel-spacing` | `12px` | Statuspanel distance from window border (`0` = corner) |
-| `--uc-urlbar-background` | `#282828` | URL bar background (`#282828` = blends with toolbar, `#3c3836` = distinct) |
+| `--uc-urlbar-background` | `var(--uc-color-base)` | URL bar background (`var(--uc-color-base)` = blends with toolbar, `var(--uc-color-surface)` = distinct) |
 | `--uc-urlbar-rounded` | `0` | Rounded corners on URL bar and findbar (`1` = rounded, `0` = square) |
 | `--uc-urlbar-min-width` | `35vw` | URL bar default width |
 | `--uc-urlbar-max-width` | `50vw` | URL bar width on focus |
@@ -22,9 +32,11 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 |---|---|---|
 | `--uc-active-tab-width` | `clamp(100px, 30vw, 250px)` | Active tab width |
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 200px)` | Inactive tab width |
+| `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
+| `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
 | `--show-tab-close-button` | `none` | Tab close button (`none` = hidden, `-moz-inline-block` = visible) |
 | `--show-tab-close-button-hover` | `-moz-inline-block` | Tab close button on hover |
-| `--uc-show-loading-progress` | `1` | Tab loading progress bar (`1` = show, `0` = hide) |
+| `--uc-show-loading-progress` | `0` | Tab loading progress bar (`1` = show, `0` = hide) |
 
 ### Active Tab Highlight
 
@@ -47,7 +59,6 @@ Both options can be combined for maximum visibility.
 | Variable | Default | Description |
 |---|---|---|
 | `--uc-window-buttons-width` | `138px` | Windows control button width (auto `0px` on macOS) |
-| `--uc-traffic-light-width` | `80px` | macOS only — space reserved for traffic light buttons |
 | `--uc-hamburger-width` | `44px` | Hamburger menu reserved width |
 | `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
 | `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |
@@ -59,7 +70,8 @@ Both options can be combined for maximum visibility.
 |---|---|---|
 | `--uc-show-context-splitview` | `none` | Context menu "Open Link in Split View" (`none` = hidden, `-moz-box` = visible) |
 | `--uc-show-all-tabs-button` | `none` | All-tabs button (`none` = hidden, `-moz-box` = visible) |
-| `--uc-autohide-nav-buttons` | `0` | Navigation buttons auto-hide (`1` = hidden until hover, `0` = always visible) |
+| `--uc-autohide-nav-buttons` | `0` | Navigation buttons auto-hide (`0` = always visible, `1` = reveal on hover and focus, `2` = reveal on hover only) |
+| `--uc-hide-nav-buttons` | `0` | Remove navigation buttons entirely (`1` = hide, `0` = show) |
 
 ### Scrollbar (`userContent.css`)
 
