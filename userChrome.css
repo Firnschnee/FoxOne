@@ -78,8 +78,9 @@
   /* Standalone new-tab button width (set to 0 if removed from toolbar) */
   --uc-newtab-width: 36px;
 
-  /* Drag space — gap between tabs and toolbar buttons for window dragging */
-  --uc-drag-space: 40px;
+  /* Drag space — grab zone after the tabs for moving the window. Kept small;
+     it is functional space, not just a gap, so don't drop it to 0. */
+  --uc-drag-space: 20px;
 
   /* Findbar — floating search bar */
   --findbar-top: 8px;
@@ -973,7 +974,16 @@ browser[type="content"],
    ========================================================================== */
 
 #TabsToolbar-customization-target > toolbaritem {
+  margin-inline: 0 !important;
+}
+/* Only the first item gets the auto start-margin, so the whole group shifts
+   right as one cluster instead of each item claiming its own slice of free
+   space (which split a second icon off toward the middle). */
+#TabsToolbar-customization-target > toolbaritem:first-of-type {
   margin-inline-start: auto !important;
+}
+/* Only the last item clears the fixed hamburger; intermediate items stay snug. */
+#TabsToolbar-customization-target > toolbaritem:last-of-type {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
 
