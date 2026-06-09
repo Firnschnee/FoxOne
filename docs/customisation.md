@@ -58,7 +58,7 @@ Both options can be combined for maximum visibility.
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-window-buttons-width` | `138px` | Windows control button width (auto `0px` on macOS) |
+| `--uc-window-buttons-width` | `138px` | Window control button width. Fallback only: on non-macOS the hamburger auto-tracks the real control box via CSS anchor positioning; used on macOS and on Firefox builds without anchor support (auto `0px` on macOS) |
 | `--uc-hamburger-width` | `44px` | Hamburger menu reserved width |
 | `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
 | `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |

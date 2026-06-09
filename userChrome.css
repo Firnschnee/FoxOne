@@ -66,7 +66,10 @@
   --container-tabs-indicator-margin: 10px;
   --uc-identity-glow: 0 1px 10px 1px;
 
-  /* Windows control button width — used for Hamburger positioning */
+  /* Windows control button width. Fallback only: on non-macOS the hamburger
+     auto-tracks the real window-control box via CSS anchor positioning, so
+     this value is used just on macOS and on Firefox builds without anchor
+     support. No need to measure it by hand on a modern build. */
   --uc-window-buttons-width: 138px;
 
   /* Hamburger button width — reserved in tab bar to prevent overlap */
@@ -957,7 +960,9 @@ browser[type="content"],
 
 
 /* ==========================================================================
-   HAMBURGER MENU — fixed position next to Windows control buttons.
+   HAMBURGER MENU — fixed position next to the window control buttons.
+   Base rule uses the --uc-window-buttons-width fallback; non-macOS overrides
+   it below with CSS anchor positioning so it tracks the real box width.
    ========================================================================== */
 
 #PanelUI-button {
@@ -968,6 +973,22 @@ browser[type="content"],
   z-index: 1000 !important;
   display: flex !important;
   align-items: center !important;
+}
+
+/* Non-macOS (Windows, Linux): anchor the hamburger's right edge to the left
+   edge of the real window-control box, so it auto-adapts to display scaling,
+   custom titlebar themes and per-DE control widths with no hand-set value.
+   The anchor() fallback keeps the old --uc-window-buttons-width behaviour on
+   Firefox builds without anchor positioning, so there is no regression.
+   Excluded on macOS, where the control box sits on the LEFT (traffic lights)
+   and would fling the hamburger to the wrong edge. (Issue #9) */
+@media not (-moz-platform: macos) {
+  .titlebar-buttonbox-container {
+    anchor-name: --uc-winbtns !important;
+  }
+  #PanelUI-button {
+    right: anchor(--uc-winbtns left, var(--uc-window-buttons-width)) !important;
+  }
 }
 
 /* ==========================================================================
