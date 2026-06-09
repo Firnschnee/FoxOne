@@ -39,9 +39,12 @@
   /* Vertical URL Bar spacing adjustment */
   --uc-urlbar-top-spacing: 1px;
 
-  /* Dynamic tab widths */
+  /* Dynamic tab widths. The inactive ceiling is intentionally lower than the
+     active one: inactive tabs cap sooner, freeing strip space for the active
+     tab to grow visibly larger. Raise it back toward the active ceiling and the
+     active-tab size advantage only appears at very wide strips (issue #7). */
   --uc-active-tab-width: clamp(100px, 30vw, 250px);
-  --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  --uc-inactive-tab-width: clamp(100px, 20vw, 120px);
   /* Tab min width (opt-in): 76px = Firefox default (browser.tabs.tabMinWidth).
      Lower it (e.g. 36px) to allow narrower tabs / fit more before overflow scroll */
   --uc-tab-min-width: 76px;
