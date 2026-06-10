@@ -30,8 +30,8 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width |
-| `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger) |
+| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD — the threshold is tiered by `resolution`/dppx so it fires at the same physical size under DPI scaling) |
+| `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
 | `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
 | `--show-tab-close-button` | `none` | Tab close button (`none` = hidden, `-moz-inline-block` = visible) |

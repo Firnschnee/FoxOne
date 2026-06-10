@@ -42,7 +42,12 @@
   /* Dynamic tab widths. The inactive ceiling is intentionally lower than the
      active one: inactive tabs cap sooner, freeing strip space for the active
      tab to grow visibly larger. Raise it back toward the active ceiling and the
-     active-tab size advantage only appears at very wide strips (issue #7). */
+     active-tab size advantage only appears at very wide strips (issue #7).
+
+     These are the narrow-window defaults (< 1710px). At and above 1710px
+     (~2/3 of WQHD) the ceilings are widened back to the pre-#7 pair so the
+     strip distributes evenly and tabs read uniformly again — see the
+     min-width: 1710px override below the :root block. */
   --uc-active-tab-width: clamp(100px, 30vw, 190px);
   --uc-inactive-tab-width: clamp(100px, 20vw, 120px);
   /* Tab min width (opt-in): 76px = Firefox default (browser.tabs.tabMinWidth).
@@ -135,6 +140,52 @@
   --uc-active-tab-background: transparent;
   --uc-active-tab-underline: 0;
 
+}
+
+/* Wide-window tab widths (>= 1710px physical, ~2/3 of WQHD). Restores the
+   pre-#7 ceilings: inactive caps near the active one, so flex distributes strip
+   space evenly and tabs look uniform — the everyday-comfortable behaviour.
+   Below that the narrow defaults above keep the active tab visibly larger.
+
+   The catch: `width` is CSS pixels, which DPI scaling shrinks (1920 physical
+   at 125% = 1536 CSS px), so a plain `min-width: 1710px` never fires on a
+   scaled display. CSS can't read the scale factor as a number, but it can
+   match it via `resolution` (dppx == OS scale). So the threshold is tiered per
+   scale, each set to 1710 / scale CSS px, all writing the SAME wide values —
+   overlap between tiers is harmless. The highest dppx tier <= the current
+   scale wins, giving a constant ~1710 *physical*-px trigger at any scaling.
+     100%  -> 1710 / 1.00 = 1710     150%  -> 1710 / 1.50 = 1140
+     125%  -> 1710 / 1.25 = 1368     175%  -> 1710 / 1.75 =  977
+                                     200%  -> 1710 / 2.00 =  855 */
+@media (min-width: 1710px) {
+  :root {
+    --uc-active-tab-width: clamp(100px, 30vw, 250px);
+    --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  }
+}
+@media (min-resolution: 1.2dppx) and (min-width: 1368px) {
+  :root {
+    --uc-active-tab-width: clamp(100px, 30vw, 250px);
+    --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  }
+}
+@media (min-resolution: 1.45dppx) and (min-width: 1140px) {
+  :root {
+    --uc-active-tab-width: clamp(100px, 30vw, 250px);
+    --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  }
+}
+@media (min-resolution: 1.7dppx) and (min-width: 977px) {
+  :root {
+    --uc-active-tab-width: clamp(100px, 30vw, 250px);
+    --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  }
+}
+@media (min-resolution: 1.95dppx) and (min-width: 855px) {
+  :root {
+    --uc-active-tab-width: clamp(100px, 30vw, 250px);
+    --uc-inactive-tab-width: clamp(100px, 20vw, 200px);
+  }
 }
 
 
