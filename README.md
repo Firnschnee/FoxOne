@@ -1,8 +1,8 @@
 # FoxOne
 
 **A minimalist one-line Firefox theme.**
-> **Ready for Nova.** Tested and stable on current Firefox Beta with the upcoming redesign.
-
+> Ready for Nova. Tested and stable on current Firefox Beta with the upcoming redesign.
+> 
 <img width="1920" height="1080" alt="640_1x_shots_so" src="https://github.com/user-attachments/assets/f2d49a1e-f56c-4cf6-b1d2-40a36d1eb084" /><br>
 One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else.
 
@@ -10,10 +10,13 @@ Want to see it in action? [Watch the animations!](https://github.com/Firnschnee/
 
 <br>
 
-**And this time: dynamic toolbar support - add an extension icon of your choice right next to the hamburger menu!**
-
 </div>
 
+Supported configuration: **Firefox 152+ with `browser.nova.enabled`**. From 3.0 on, that is the only setup tested and maintained.
+
+Running classic (pre-Nova) Firefox? 
+The stylesheet is dual-written and should still work, but it is no longer tested there. 
+For a fully-tested classic build, pin the `2.3` as an earlier base. 
 
 ---
  
