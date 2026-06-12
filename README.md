@@ -12,4 +12,4 @@ Want to see it in action? [Watch the animations!](https://github.com/Firnschnee/
 ---
  
 **[Installation](docs/installation.md) & [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
-Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | Running pre-Nova Firefox? [Please read me](docs/installation.md) | License: [MIT](LICENSE) 
+Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | Running pre-Nova Firefox? [Please read](docs/installation.md) | License: [MIT](LICENSE) 
