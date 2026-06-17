@@ -195,7 +195,26 @@
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  /* ----------------------------------------------------------------------
+     Dynamic-theme compatibility (issue #5)
+
+     Firefox applies a lightweight theme's colours as inline custom properties
+     on :root. Author !important rules beat those inline values, so FoxOne's
+     forced surface colours used to override extensions like Adaptive Tab Bar
+     Colour, which retints the chrome to match each page. The surface overrides
+     below are therefore scoped to :root:not([lwtheme]): when any dynamic theme
+     is active FoxOne steps back and lets it drive frame, toolbar, URL field,
+     popups and sidebar. The accent/identity cues stay unconditional so FoxOne
+     remains recognisable, and a small :root[lwtheme] block keeps FoxOne's own
+     helper tokens following the theme instead of drifting to Nova defaults.
+     FoxOne itself sets no lightweight theme, so without such an extension
+     :root:not([lwtheme]) always matches and behaviour is unchanged.
+     (Firefox sets lwtheme="" on the root; the old :-moz-lwtheme pseudo-class
+     was removed, so attribute selectors are the way now.)
+     ---------------------------------------------------------------------- */
+
+  /* Chrome surfaces – yielded to a dynamic theme when one is active */
+  :root:not([lwtheme]) {
     /* Frame & toolbar */
     --lwt-accent-color: var(--uc-color-base) !important;
     --toolbar-bgcolor: var(--uc-color-base) !important;
@@ -208,25 +227,11 @@
     --toolbar-background-color: var(--uc-color-base) !important;
     --toolbox-background-color: var(--uc-color-base) !important;
 
-    /* Tabs */
-    --uc-highlight-colour: var(--uc-color-base);
-    --lwt-tab-line-color: var(--uc-color-accent) !important;
-    --tab-selected-textcolor: var(--uc-color-accent) !important;
-    /* Kill native grey hover background – hover is a title-colour cue (issue #16).
-       Nova renamed the token to --tab-background-color-hover (word order
-       flipped, tab.tokens.css); override both names. */
-    --tab-hover-background-color: transparent !important;
-    --tab-background-color-hover: transparent !important;
-
-    /* Icons */
-    --lwt-toolbarbutton-icon-fill-attention: var(--uc-color-accent) !important;
-    --toolbarbutton-icon-fill-attention: var(--uc-color-accent) !important;
-
     /* URL bar */
+    --uc-highlight-colour: var(--uc-color-base);
     --toolbar-field-background-color: var(--uc-urlbar-background) !important;
     --toolbar-field-color: var(--uc-color-text) !important;
     --toolbar-field-focus-color: var(--uc-color-text) !important;
-    --toolbar-field-focus-border-color: var(--uc-color-accent) !important;
     --toolbar-field-focus-background-color: var(--uc-color-surface) !important;
 
     /* Popups & panels */
@@ -242,7 +247,27 @@
     --sidebar-highlight-background-color: var(--uc-color-hover) !important;
   }
 
-  #navigator-toolbox {
+  /* Accent & identity – always applied, including under a dynamic theme, so
+     FoxOne stays recognisable: the selected-tab line/text, focus ring, the
+     attention icon fill, and the deliberate transparent tab-hover (issue #16). */
+  :root {
+    --lwt-tab-line-color: var(--uc-color-accent) !important;
+    --tab-selected-textcolor: var(--uc-color-accent) !important;
+    /* Kill native grey hover background – hover is a title-colour cue (issue #16).
+       Nova renamed the token to --tab-background-color-hover (word order
+       flipped, tab.tokens.css); override both names. */
+    --tab-hover-background-color: transparent !important;
+    --tab-background-color-hover: transparent !important;
+    --lwt-toolbarbutton-icon-fill-attention: var(--uc-color-accent) !important;
+    --toolbarbutton-icon-fill-attention: var(--uc-color-accent) !important;
+    --toolbar-field-focus-border-color: var(--uc-color-accent) !important;
+  }
+
+  /* Toolbox background – forced to base only when no dynamic theme is active;
+     otherwise Firefox paints it from the theme frame colour. The per-theme
+     surface collapse lives outside this dark-mode block (a theme can set the
+     chrome to light, switching these rules off) – see DYNAMIC-THEME COMPAT. */
+  :root:not([lwtheme]) #navigator-toolbox {
     background: var(--uc-color-base) !important;
   }
 
@@ -264,6 +289,41 @@
     color: var(--uc-color-text) !important;
     background: transparent !important;
   }
+}
+
+
+/* ==========================================================================
+   DYNAMIC-THEME COMPATIBILITY (issue #5) – scheme-independent
+
+   Lives OUTSIDE the dark-mode block on purpose. A theme extension (e.g.
+   Adaptive Tab Bar Colour) sets the chrome colour scheme per page, and can
+   report a LIGHT scheme even while the OS is dark – which switches FoxOne's
+   @media (prefers-color-scheme: dark) rules off entirely. The per-page compat
+   must therefore not depend on them.
+
+   ATBC paints frame, toolbar and URL field as three different tones for a
+   layered look; FoxOne is one flat surface, so that layering shows up as a box
+   around the URL field. Collapse them onto the frame tone (--lwt-accent-color,
+   the tab-strip colour that sits behind FoxOne's transparent nav-bar). In Nova
+   --toolbar-bgcolor is unset (renamed to --toolbar-background-color); revive it
+   here too so FoxOne's own consumers (splitters, sound-overlay icons, bookmarks
+   bar) keep resolving under a theme.
+   ========================================================================== */
+
+:root[lwtheme] {
+  --toolbar-bgcolor: var(--lwt-accent-color) !important;
+  --toolbar-background-color: var(--lwt-accent-color) !important;
+  --toolbox-background-color: var(--lwt-accent-color) !important;
+  --toolbar-field-background-color: var(--lwt-accent-color) !important;
+  --uc-highlight-colour: var(--lwt-accent-color);
+}
+
+/* Nova paints the URL field fill on .urlbar-input-container (the legacy
+   .urlbar-background is transparent), so back the variable override above with
+   a direct paint of the element to the frame tone. */
+:root[lwtheme] .urlbar-input-container,
+:root[lwtheme] #urlbar-input-container {
+  background-color: var(--lwt-accent-color) !important;
 }
 
 
@@ -337,10 +397,17 @@ sidebar-main,
   box-shadow: inset 0 0 50vh rgba(0, 0, 0, var(--uc-darken-toolbar)) !important;
   order: var(--uc-toolbar-position);
   width: 100%;
-  /* Nova sets the bookmarks bar background directly (#2b2a33, the default
-     dark toolbar colour) instead of inheriting --toolbar-bgcolor, so it
-     drifts from the navbar. Pin it to the palette base. */
+}
+/* Bookmarks bar background. Nova sets it directly (#2b2a33, the default dark
+   toolbar colour) instead of inheriting --toolbar-bgcolor, so it drifts from
+   the navbar. Pin it to base when no dynamic theme is active; under one (e.g.
+   Adaptive Tab Bar Colour) follow --toolbar-bgcolor like the rest of the
+   chrome so it retints with the page (issue #5). */
+:root:not([lwtheme]) #PersonalToolbar {
   background-color: var(--uc-color-base) !important;
+}
+:root[lwtheme] #PersonalToolbar {
+  background-color: var(--toolbar-bgcolor) !important;
 }
 
 #statuspanel #statuspanel-label {
@@ -474,7 +541,7 @@ sidebar-main,
    NAV BAR
    ========================================================================== */
 
-#navigator-toolbox:not(:-moz-lwtheme) {
+:root:not([lwtheme]) #navigator-toolbox {
   background: var(--toolbar-field-background-color) !important;
 }
 
@@ -1124,10 +1191,10 @@ browser[type="content"],
 }
 
 /* multi tab selection */
-#tabbrowser-tabs:not([noshadowfortests])
+:root[lwtheme] #tabbrowser-tabs:not([noshadowfortests])
   .tabbrowser-tab:is([multiselected])
   > .tab-stack
-  > .tab-background:-moz-lwtheme {
+  > .tab-background {
   outline-color: var(--toolbarseparator-color) !important;
 }
 
