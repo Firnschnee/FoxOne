@@ -389,6 +389,15 @@ sidebar-main,
   margin-top: 2px !important;
 }
 
+/* The EME / DRM-content indicator (#eme-notification-icon, in
+   #notification-popup-box) pops up next to the shield during DRM playback and
+   hits the same Nova quirk: it renders ~2px too high relative to the other
+   urlbar icons. Same nudge as the shield above. Sibling notification icons
+   (geo, camera, mic) likely share this if they ever surface. */
+#eme-notification-icon {
+  margin-top: 2px !important;
+}
+
 #TabsToolbar { order: 2; }
 #nav-bar { order: 3; }
 
