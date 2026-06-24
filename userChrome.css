@@ -1546,16 +1546,26 @@ tab-split-view-wrapper {
     --tab-max-width: 300px!important;
 }
 
-#tabbrowser-tabpanels[splitview] {
-  /* Outline only the pane the user is actually working in. The two visible
-     split panes carry .split-view-panel; .deck-selected sits on a THIRD,
-     non-split container (the deck tab from before the split was opened), so
-     the old `.deck-selected > .browserContainer` painted a full-width bar on
-     the wrong element whenever a split tab was in front. :focus-within tracks
-     the active pane and clears when focus leaves the split (e.g. tab switch). */
-  .split-view-panel:focus-within > .browserContainer {
-    outline: 1px solid #fabd2f !important;
-  }
+/* FF 153 moved <split-view-footer> INSIDE .browserContainer, so the container
+   now reaches the bottom of the pane. FoxOne zeroes #browser's padding for
+   edge-to-edge content (see the #browser rule far above), leaving that bottom
+   flush with the window edge and clipping the bottom row of every active-pane
+   outline, the native one included. Give the inset back on the split panes
+   themselves, NOT on #browser: #browser is shared across all tabs, and
+   [splitview] persists while any split tab is open, so padding #browser would
+   strip-pad every non-split tab too. .split-view-panel only ever matches the
+   actual split panes. 2px = the native outline width; our amber fits inside. */
+#tabbrowser-tabpanels[splitview] .split-view-panel {
+  padding-bottom: 2px !important;
+}
+
+/* Active-pane outline. Both visible split panes carry .split-view-panel;
+   :focus-within tracks the one actually being worked in and clears on tab
+   switch. (.deck-selected sits on a THIRD, non-split container, so the old
+   `.deck-selected > .browserContainer` painted a bar on the wrong element.)
+   With the inset above restored, this closes on all four sides in 152 and 153. */
+#tabbrowser-tabpanels[splitview] .split-view-panel:focus-within > .browserContainer {
+  outline: 1px solid #fabd2f !important;
 }
 
 .split-view-splitter {
