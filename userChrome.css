@@ -1181,15 +1181,17 @@ browser[type="content"],
 /* Opt-in: fully hide URL-bar clutter icons, no hover/focus reveal.
    display:none removes them regardless of the reveal rules above, so misclicks
    while aiming for the URL bar are impossible. The shield/security indicator
-   (Nova: #trust-icon-container; pre-Nova: #tracking-protection-icon-container)
-   and #star-button-box are otherwise always visible; this is the only thing
-   that hides them. (Issue #21) */
+   (Nova: #trust-icon-container; pre-Nova: #tracking-protection-icon-container),
+   #star-button-box and the picture-in-picture button are otherwise always
+   visible (PiP only while a video plays); this is the only thing that hides
+   them. (Issue #21) */
 @container style(--uc-hide-urlbar-buttons: 1) {
   #trust-icon-container,
   #tracking-protection-icon-container,
   #reader-mode-button,
   #taskbar-tabs-button,
   #translations-button,
+  #picture-in-picture-button,
   #star-button-box {
     display: none !important;
   }
