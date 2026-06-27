@@ -22,13 +22,8 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 |---|---|---|
 | `--uc-border-radius` | `8px` | Global corner radius |
 | `--uc-status-panel-spacing` | `12px` | Statuspanel distance from window border (`0` = corner) |
-| `--uc-urlbar-background` | `var(--uc-color-base)` | URL bar background (`var(--uc-color-base)` = blends with toolbar, `var(--uc-color-surface)` = distinct) |
-| `--uc-urlbar-rounded` | `0` | Rounded corners on URL bar and findbar (`1` = rounded, `0` = square) |
 | `--uc-urlbar-min-width` | `min(35vw, 630px)` | URL bar default width (px ceiling caps growth on ultrawide/4K) |
 | `--uc-urlbar-max-width` | `min(50vw, 900px)` | URL bar width on focus (px ceiling caps growth on ultrawide/4K) |
-| `--uc-urlbar-position` | `1` | URL bar position (`1` = tabs right, `3` = tabs left) |
-| `--uc-urlbar-top-spacing` | `1px` | Vertical URL bar spacing adjustment |
-| `--uc-toolbar-position` | `4` | Bookmarks bar position (`0` = top, `4` = bottom) |
 
 ### Tabs
 
@@ -38,25 +33,6 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
 | `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
-| `--show-tab-close-button` | `none` | Tab close button (`none` = hidden, `-moz-inline-block` = visible) |
-| `--show-tab-close-button-hover` | `-moz-inline-block` | Tab close button on hover |
-| `--uc-show-loading-progress` | `0` | Tab loading progress bar (`1` = show, `0` = hide) |
-
-### Active Tab Highlight
-
-| Variable | Default | Description |
-|---|---|---|
-| `--uc-active-tab-background` | `transparent` | Background tint for active tab (`transparent` = off, e.g. `#3c3836` for subtle Gruvbox tint) |
-| `--uc-active-tab-underline` | `0` | Colored bar below active tab (`1` = show, `0` = hide) |
-
-Both options can be combined for maximum visibility.
-
-### Container Tabs
-
-| Variable | Default | Description |
-|---|---|---|
-| `--container-tabs-indicator-margin` | `10px` | Container indicator inset from tab edges |
-| `--uc-identity-glow` | `0 1px 10px 1px` | Container indicator glow (box-shadow spread) |
 
 ### Window Controls
 

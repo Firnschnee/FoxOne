@@ -1,8 +1,8 @@
 /*==============================================================================================*
 
-  FoxOne — A minimalist one-line Firefox theme
-  Based on Cascade by Andreas Grafen (https://github.com/andreasgrafen/cascade)
-  Inspired by LittleFox (https://github.com/biglavis/LittleFox)
+  FoxOne – A minimalistic one-line Firefox theme
+  Based on Cascade (https://github.com/andreasgrafen/cascade)
+  Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
 
 *==============================================================================================*/
@@ -26,20 +26,11 @@
   /* Statuspanel distance from window border (0 = corner) */
   --uc-status-panel-spacing: 12px;
 
-  /* Personal Toolbar position (0 = top, 4 = bottom) */
-  --uc-toolbar-position: 4;
-
   /* URL Bar width (min applied normally, max on focus). The px ceiling caps
      growth on ultrawide/4K, where bare vw scales to absurd widths (issue #6).
      Caps engage from ~1800px CSS-px viewport; below that the vw value wins. */
   --uc-urlbar-min-width: min(35vw, 630px);
   --uc-urlbar-max-width: min(50vw, 900px);
-
-  /* URL Bar position (1 = tabs right, 3 = tabs left) */
-  --uc-urlbar-position: 1;
-
-  /* Vertical URL Bar spacing adjustment */
-  --uc-urlbar-top-spacing: 1px;
 
   /* Dynamic tab widths. The inactive ceiling is intentionally lower than the
      active one: inactive tabs cap sooner, freeing strip space for the active
@@ -57,21 +48,13 @@
   --uc-tab-min-width: 76px;
 
   /* Inactive tab hover title color (issue #16) */
-  --uc-tab-hover-text: #ffda85;
-
-  /* Tab close button (none = hidden, -moz-inline-block = visible) */
-  --show-tab-close-button: none;
-  --show-tab-close-button-hover: -moz-inline-block;
+  --uc-tab-hover-text: #008000;
 
   /* Context menu: "Open Link in Split View" (none = hidden, -moz-box = visible) */
   --uc-show-context-splitview: none;
 
   /* All-tabs button (none = hidden, -moz-box = visible) */
   --uc-show-all-tabs-button: none;
-
-  /* Container tab indicator */
-  --container-tabs-indicator-margin: 10px;
-  --uc-identity-glow: 0 1px 10px 1px;
 
   /* Windows control button width. Fallback only: on non-macOS the hamburger
      auto-tracks the real window-control box via CSS anchor positioning, so
@@ -112,15 +95,6 @@
   --match-diacritics-position: 2;
   --whole-words-position:      3;
 
-  /* URL bar background (base = blends with toolbar, surface = distinct) */
-  --uc-urlbar-background: var(--uc-color-base);
-
-  /* Rounded corners on URL bar and findbar (1 = rounded, 0 = square) */
-  --uc-urlbar-rounded: 0;
-
-  /* Tab loading progress bar (1 = show, 0 = hide) */
-  --uc-show-loading-progress: 0;
-
   /* Navigation buttons — auto-hide with hover reveal (0 = always show, 1 = reveal with hover and focus, 2 = reveal with hover) */
   --uc-autohide-nav-buttons: 0;
 
@@ -135,12 +109,6 @@
   /* Pinned toolbar extension icons — hide and reveal on hamburger hover, to
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
-
-  /* Active tab highlight (combine or use individually)
-   * Background: set a hex color to enable (e.g. #3c3836), transparent = off
-   * Underline: colored bar below active tab (1 = show, 0 = hide) */
-  --uc-active-tab-background: transparent;
-  --uc-active-tab-underline: 0;
 
 }
 
@@ -230,7 +198,7 @@
     --toolbox-background-color: var(--uc-color-base) !important;
 
     /* URL bar */
-    --toolbar-field-background-color: var(--uc-urlbar-background) !important;
+    --toolbar-field-background-color: var(--uc-color-base) !important;
     --toolbar-field-color: var(--uc-color-text) !important;
     --toolbar-field-focus-color: var(--uc-color-text) !important;
     --toolbar-field-focus-background-color: var(--uc-color-surface) !important;
@@ -404,7 +372,7 @@ sidebar-main,
 #PersonalToolbar {
   padding: 6px !important;
   box-shadow: inset 0 0 50vh rgba(0, 0, 0, var(--uc-darken-toolbar)) !important;
-  order: var(--uc-toolbar-position);
+  order: 4;
   width: 100%;
 }
 /* Bookmarks bar background. Nova sets it directly (#2b2a33, the default dark
@@ -449,7 +417,7 @@ sidebar-main,
 }
 
 #nav-bar {
-  order: var(--uc-urlbar-position);
+  order: 1;
   width: var(--uc-urlbar-min-width);
   /* !important required: Firefox overrides our transition with
      :root[sessionrestored][lwtheme] #nav-bar { transition-property:
@@ -551,7 +519,7 @@ sidebar-main,
    ========================================================================== */
 
 /* Toolbox fill is the frame tone (base), NOT the URL-field colour. Feeding
-   --toolbar-field-background-color in here leaked --uc-urlbar-background onto the
+   --toolbar-field-background-color in here leaked the field colour onto the
    whole top panel (issue #28); the field itself is painted at #urlbar below. */
 :root:not([lwtheme]) #navigator-toolbox {
   background: var(--uc-color-base) !important;
@@ -624,7 +592,7 @@ sidebar-main,
 #urlbar-background,
 #urlbar-input-container,
 #urlbar-container {
-  border-radius: calc(var(--uc-urlbar-rounded) * var(--uc-border-radius)) !important;
+  border-radius: 0 !important;
 }
 
 /* Nova rebuilt the urlbar as <moz-urlbar> and moved its internals from
@@ -642,7 +610,7 @@ sidebar-main,
 #urlbar[focused="true"] > .urlbar-background,
 #urlbar:not([open]) > #urlbar-background,
 #urlbar:not([open]) > .urlbar-background {
-  /* The field tone (issue #28): --uc-urlbar-background normally, --lwt-accent-color
+  /* The field tone (issue #28): --uc-color-base normally, --lwt-accent-color
      under a dynamic theme, both resolved via --toolbar-field-background-color. */
   background: var(--toolbar-field-background-color) !important;
 }
@@ -861,11 +829,11 @@ sidebar-main,
   display: block !important;
   position: absolute !important;
   bottom: 0 !important;
-  left: var(--container-tabs-indicator-margin) !important;
-  right: var(--container-tabs-indicator-margin) !important;
+  left: 10px !important;
+  right: 10px !important;
   height: 1px !important;
   background: var(--tab-selected-textcolor, #fabd2f) !important;
-  box-shadow: var(--uc-identity-glow) var(--tab-selected-textcolor, #fabd2f) !important;
+  box-shadow: 0 1px 10px 1px var(--tab-selected-textcolor, #fabd2f) !important;
   transform-origin: left !important;
   transform: scaleX(0);
   opacity: 0 !important;
@@ -875,7 +843,7 @@ sidebar-main,
 
 /* Bottom bar — animated on ALL busy tabs */
 .tabbrowser-tab[busy] .tab-background::before {
-  opacity: var(--uc-show-loading-progress) !important;
+  opacity: 0 !important;
   transition: none !important;
   animation: uc-progress 2.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards !important;
 }
@@ -883,7 +851,7 @@ sidebar-main,
 /* Inactive busy tabs — white to match tab text color */
 .tabbrowser-tab[busy]:not([selected]) .tab-background::before {
   background: var(--toolbar-color, #FFFFFF) !important;
-  box-shadow: var(--uc-identity-glow) var(--toolbar-color, #FFFFFF) !important;
+  box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
 
 /* Top glow — all busy tabs (no base state = no pinned indicator conflict) */
@@ -892,13 +860,13 @@ sidebar-main,
   display: block !important;
   position: absolute !important;
   top: 0 !important;
-  left: var(--container-tabs-indicator-margin) !important;
-  right: var(--container-tabs-indicator-margin) !important;
+  left: 10px !important;
+  right: 10px !important;
   height: 1px !important;
   background: var(--tab-selected-textcolor, #fabd2f) !important;
-  box-shadow: var(--uc-identity-glow) var(--tab-selected-textcolor, #fabd2f) !important;
+  box-shadow: 0 1px 10px 1px var(--tab-selected-textcolor, #fabd2f) !important;
   transform-origin: left !important;
-  opacity: var(--uc-show-loading-progress) !important;
+  opacity: 0 !important;
   animation: uc-progress 2.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards !important;
   pointer-events: none !important;
 }
@@ -906,7 +874,7 @@ sidebar-main,
 /* Top glow — inactive tabs use white */
 .tabbrowser-tab[busy]:not([selected]) .tab-background::after {
   background: var(--toolbar-color, #FFFFFF) !important;
-  box-shadow: var(--uc-identity-glow) var(--toolbar-color, #FFFFFF) !important;
+  box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
 
 @keyframes uc-progress {
@@ -1333,10 +1301,10 @@ browser[type="content"],
 
 /* tab close button: hidden by default, visible on hover */
 .tabbrowser-tab:not([pinned]) .tab-close-button {
-  display: var(--show-tab-close-button) !important;
+  display: none !important;
 }
 .tabbrowser-tab:not([pinned]):hover .tab-close-button {
-  display: var(--show-tab-close-button-hover) !important;
+  display: -moz-inline-block !important;
 }
 
 /* adaptive tab width */
@@ -1356,8 +1324,8 @@ browser[type="content"],
   display: block !important;
   position: absolute !important;
   bottom: 0 !important;
-  left: var(--container-tabs-indicator-margin) !important;
-  right: var(--container-tabs-indicator-margin) !important;
+  left: 10px !important;
+  right: 10px !important;
   height: 1px !important;
   background: var(--tab-selected-textcolor, #fabd2f) !important;
   box-shadow: 0 -1px 10px 1px var(--tab-selected-textcolor, #fabd2f) !important;
@@ -1365,12 +1333,12 @@ browser[type="content"],
 
 /* container tabs indicator */
 #TabsToolbar .tab-context-line {
-  margin: 2px var(--container-tabs-indicator-margin) 0
-    var(--container-tabs-indicator-margin) !important;
+  margin: 2px 10px 0
+    10px !important;
   height: 1px !important;
 }
 .tab-context-line {
-  box-shadow: var(--uc-identity-glow) var(--identity-tab-color) !important;
+  box-shadow: 0 1px 10px 1px var(--identity-tab-color) !important;
 }
 
 /* show favicon when media is playing but tab is hovered */
@@ -1450,15 +1418,13 @@ browser[type="content"],
   color: var(--toolbar-bgcolor) !important;
 }
 
-/* selected tab background + configurable highlight */
+/* selected tab: accent text only, no background tint or underline */
 .tabbrowser-tab[selected] .tab-background {
-  background-color: var(--uc-active-tab-background) !important;
+  background-color: transparent !important;
   /* Nova paints a gradient "border" on the active tab via a layered
      background-image (--tab-border-color-accent). FoxOne marks the active
-     tab with accent text + optional underline, so kill the gradient. */
+     tab with accent text alone, so kill the gradient. */
   background-image: none !important;
-  box-shadow: inset 0 calc(var(--uc-active-tab-underline) * -2px) 0 0
-    var(--tab-selected-textcolor, #fabd2f) !important;
   outline: none !important;
 }
 .tab-background {
@@ -1526,7 +1492,7 @@ findbar {
   max-width: var(--findbar-max-width) !important;
   margin-left: auto !important;
   border: none !important;
-  border-radius: calc(var(--uc-urlbar-rounded) * var(--uc-border-radius)) !important;
+  border-radius: 0 !important;
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -1546,7 +1512,7 @@ findbar[hidden] {
   width: var(--textbox-width) !important;
   min-width: var(--textbox-min-width) !important;
   border: none !important;
-  border-radius: calc(var(--uc-urlbar-rounded) * var(--uc-border-radius)) !important;
+  border-radius: 0 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -1747,8 +1713,8 @@ html[id^="taskbartab"] #urlbar-container {
   findbar[hidden] { transition: none !important; }
 
   /* Loading progress bar - resting full stroke instead of growth.
-     Visibility stays bound to --uc-show-loading-progress, so the feature
-     remains opt-in exactly as before. */
+     The bar is hidden via opacity, so this only governs its unseen
+     resting state. */
   .tabbrowser-tab .tab-background::before { transition: none !important; }
 
   .tabbrowser-tab[busy] .tab-background::before,
