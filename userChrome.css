@@ -1709,3 +1709,51 @@ tab-split-view-wrapper {
 html[id^="taskbartab"] #urlbar-container {
   display: none !important;
 }
+
+
+/* ==========================================================================
+   REDUCED MOTION - honour the OS "reduce motion" preference.
+   Overrides FoxOne's OWN decorative transitions/animations only; Firefox's
+   native chrome animations are left untouched. Placed at end-of-file on
+   purpose: media queries add no specificity, so these rules win over the
+   !important originals through later source order alone.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  /* Urlbar / titlebar width animation */
+  #nav-bar  { transition: none !important; }
+  #titlebar { transition: none !important; }
+
+  /* Auto-hide nav buttons reveal */
+  #reload-button,
+  #stop-reload-button { transition: none !important; }
+
+  /* Urlbar hover-reveal groups */
+  #identity-permission-box { transition: none !important; }
+
+  #userContext-label,
+  #userContext-indicator { transition: none !important; }
+
+  #reader-mode-button,
+  #taskbar-tabs-button,
+  #translations-button,
+  .urlbar-addon-page-action { transition: none !important; }
+
+  /* Tabstrip extension-icon reveal */
+  #TabsToolbar-customization-target > toolbaritem { transition: none !important; }
+
+  /* Findbar slide / scale */
+  findbar,
+  findbar[hidden] { transition: none !important; }
+
+  /* Loading progress bar - resting full stroke instead of growth.
+     Visibility stays bound to --uc-show-loading-progress, so the feature
+     remains opt-in exactly as before. */
+  .tabbrowser-tab .tab-background::before { transition: none !important; }
+
+  .tabbrowser-tab[busy] .tab-background::before,
+  .tabbrowser-tab[busy] .tab-background::after {
+    animation: none !important;
+    transform: scaleX(1) !important;
+  }
+}
