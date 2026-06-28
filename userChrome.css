@@ -1340,6 +1340,23 @@ browser[type="content"],
   display: revert !important;
 }
 
+/* Close X sat ~2px low: it's a 24x24 border-box <image> and the icon scales
+   to its content box. Native 6px padding all round left a 12x12 content box,
+   so the 16px X drew low. Zeroing only the block padding (first attempt)
+   recentred it but made the box 24x12 and stretched the X vertically. The
+   icon must keep a SQUARE content box to stay proportional: 4px symmetric
+   padding gives a 16x16 content box — the 16px X fits exactly, unstretched,
+   and centres on the tab-label line (box centre is already at centerY 22). */
+.tab-close-button {
+  padding: 4px !important;
+  /* The icon won't scale below its 16px intrinsic size via padding (it
+     overflows instead), and 16px reads too large. transform: scale shrinks
+     the rendered X around its centre without touching the layout box, so the
+     24x24 click target and the centerY-22 alignment are preserved. Tune the
+     factor for size: 0.75 ≈ 12px. */
+  transform: scale(0.75) !important;
+}
+
 /* adaptive tab width */
 .tabbrowser-tab[selected][fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   max-width: var(--uc-active-tab-width) !important;
