@@ -1698,6 +1698,17 @@ tab-split-view-wrapper {
   outline: none !important;
 }
 
+/* The inactive pane's URL footer is Firefox' split-view echo of #statuspanel.
+   Native it sits flush in the bottom-right corner with one square and one
+   rounded corner per side ("toothpaste"). Match the status panel: square all
+   corners (step 1) and float it off the corner by the same spacing, mirrored
+   to the right edge since the footer hugs bottom-right, not bottom-left
+   (step 2). */
+split-view-footer {
+  border-radius: 0 !important;
+  margin: 0 var(--uc-status-panel-spacing) var(--uc-status-panel-spacing) 0 !important;
+}
+
 .split-view-splitter {
   border: none !important;
   /* same adaptive splitter colour as #sidebar-splitter — blends in light
