@@ -5,6 +5,12 @@
 > 
 ![Preview](assets/Preview.png)
 
+---
+ 
+**[Installation](docs/installation.md) and [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
+Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/)! | License: [MIT](LICENSE) 
+
+---
 
 <br>
 
@@ -31,7 +37,4 @@ Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFo
 
 ![findbar](assets/findbar.gif)
 
----
- 
-**[Installation](docs/installation.md) and [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
-Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/)! | License: [MIT](LICENSE) 
+-
