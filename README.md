@@ -86,7 +86,7 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
 
-### Window Controls
+#### Window Controls
 
 | Variable | Default | Description |
 |---|---|---|
