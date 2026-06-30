@@ -3,7 +3,7 @@
 **A minimalistic one-line Firefox theme.**
 > **Ready for Nova. Tested and stable on Firefox 152+ with `browser.nova.enabled`**
 > 
-<img width="830" height="466" alt="640_1x_shots_so - Kopie" src="https://github.com/user-attachments/assets/1a82e44a-41a3-47ed-9626-ed5810eae4f7" />
+![Preview](assets/Preview.png)
 
 One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else.
 
@@ -14,7 +14,7 @@ One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else
 
 **Dynamic URL**
 
-<img width="830" height="170" alt="linke seite" src="https://github.com/user-attachments/assets/84469f5e-2084-48fc-8de8-c2976d53f2f4" />
+![urlbar](assets/dynamic_url.gif)
 
 
 
@@ -22,11 +22,11 @@ One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else
 
 TAB SWITCH & Two extension icons of your choice, pinned by the hamburger, revealed on hover.
 
-<img width="830" height="170" alt="rechte seite" src="https://github.com/user-attachments/assets/075dae82-fd03-422d-8787-b7f66867ee48" />
+![toolbar](assets/dynamic_toolbar.gif)
 
 
 
-**plus a [Floating Find Bar](Link) and more!**
+**plus a [Floating Find Bar](assets/findbar.gif) and more!**
 
 It is *highly customisable* with variables & it works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/)! 
 
