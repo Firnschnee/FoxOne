@@ -28,8 +28,9 @@ TAB SWITCH & Two extension icons of your choice, pinned by the hamburger, reveal
 
 **plus a [Floating Find Bar](Link) and more!**
 
-And it is *highly customisable*: 
-Change with variables: color, layout, backgrounds, rounded corners, tab size, tab indicators, hide buttons and of course it works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/)! 
+And it is *highly customisable* with variables you can: 
+
+change layout, backgrounds, rounded corners, tab size, tab indicators, colors, hide buttons and of course it works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/)! 
 
 ---
  
