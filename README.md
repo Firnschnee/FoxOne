@@ -8,6 +8,21 @@
 
 <br>
 
+## Installation
+>
+>1. Download [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) and [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css)
+>
+>2. Go to **`about:config`** in FireFox. Search for **`toolkit.legacyUserProfileCustomizations.stylesheets`** and set it to **`true`**.
+>
+>3. Find your profile folder: In Firefox, go to `about:support` and click **Open Profile Folder**.
+>
+>4. Create a `chrome` folder inside your profile folder if it doesn't exist, then copy these files into it:
+>
+>- [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) — browser UI styling
+>- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) — new tab / home page colors
+>
+>5. Restart Firefox - The theme applies on restart.
+
 ### Features
 
 Dynamic URL bar with hover-reveal Icons
