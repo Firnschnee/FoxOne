@@ -4,7 +4,7 @@
 > Ready for **Nova**. Tested and stable on Firefox 152+ with `browser.nova.enabled`
 >
 > 
-![urlbar](assets/preview_cropped3.png)
+![urlbar](assets/preview_cropped.png)
 
 
 > **Running classic (pre-Nova) Firefox?**
