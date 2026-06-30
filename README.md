@@ -31,5 +31,5 @@ FoxOne is *highly customisable* with variables and works with [Adaptive Tab Bar 
 
 ---
  
-**[Installation](docs/installation.md) & [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
+**[Installation](docs/installation.md) and [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
 Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with Adaptive Tab Bar Colour! | License: [MIT](LICENSE) 
