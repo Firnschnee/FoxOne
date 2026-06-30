@@ -40,7 +40,6 @@ Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFo
 ![findbar](assets/findbar.gif)
 
 
-<br>
 
 ### Installation
 >
