@@ -30,7 +30,7 @@ TAB SWITCH & Two extension icons of your choice, pinned by the hamburger, reveal
 
 And it is *highly customisable* with variables you can: 
 
-change layout, backgrounds, rounded corners, tab size & indicators, hide buttons and of course it works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/)! 
+change layout, backgrounds, rounded corners, tab size & indicators, hide buttons and it works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/)! 
 
 ---
  
