@@ -42,7 +42,6 @@ Dynamic tabs and two addons pinned by the hamburger, revealed on hover.
 
 <br>
 
-<br>
 
 
 Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFox)
