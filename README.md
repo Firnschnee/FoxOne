@@ -1,26 +1,20 @@
 # FoxOne
 
-**A minimalistic one-line Firefox theme.**
+**A minimalistic one-line Firefox theme with Gruvbox colors**
 > **Ready for Nova. Tested and stable on Firefox 152+ with `browser.nova.enabled`**
 > 
 ![Preview](assets/Preview.png)
 
-One-line layout. Clean URL bar. Hover-reveal icons. Gruvbox colors. Nothing else.
 
-## Features
+<br>
 
-[minimalistic theme.] *description from notes.md*
+### Features
 
-
-**Dynamic URL**
+Dynamic URL bar with hover-reveal Icons
 
 ![urlbar](assets/dynamic_url.gif)
 
-
-
-**Dynamic toolbar support.** 
-
-TAB SWITCH & Two extension icons of your choice, pinned by the hamburger, revealed on hover.
+Dynamic tabs and two extensions of your choice, pinned by the hamburger, revealed on hover.
 
 ![toolbar](assets/dynamic_toolbar.gif)
 
