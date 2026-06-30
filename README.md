@@ -1,13 +1,14 @@
 # FoxOne
 
-**A minimalistic one-line Firefox theme**
-> Ready for **Nova**. Tested and stable on Firefox 152+ with `browser.nova.enabled`\
+One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox colors.
+> Ready for **Nova**.\
+> Tested and stable on Firefox 152+ with `browser.nova.enabled`\
 > Tested on Windows, macOS, and Linux (GNOME & KDE).
 > 
 ![urlbar](assets/preview_cropped.png)
 
 
-> **Running classic (pre-Nova) Firefox?**
+> Running classic (**pre-Nova**) Firefox?
 > 
 > From release 3.0 onward, FoxOne targets the Nova UI. The stylesheet is dual-written (Proton & Nova) and should still work, but it is no longer tested. For a known-good classic build, use the 2.3 release.
 
