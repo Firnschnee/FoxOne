@@ -10,7 +10,26 @@ Want to see it in action? [Watch the animations!](https://github.com/Firnschnee/
 
 <br>
 
-**Dynamic toolbar support.** Two extension icons of your choice, pinned by the hamburger, revealed on hover.
+## Features
+
+[minimalistic theme.] *description from notes.md*
+
+**Dynamic URL**
+
+DYNAMIC URL GIF
+
+**Dynamic toolbar support.** 
+TAB SWITCH & Two extension icons of your choice, pinned by the hamburger, revealed on hover.
+
+GIF
+
+**Customizable Floating Find Bar**
+
+FINDBAR GIF 
+
+**... and more!**
+
+
 
 ---
  
