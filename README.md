@@ -29,7 +29,7 @@ FINDBAR GIF
 
 **... and more!**
 
-
+HIHGLY CUSTOMIZABLE (examples)
 
 ---
  
