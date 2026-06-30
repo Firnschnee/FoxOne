@@ -55,7 +55,6 @@ Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFo
 >   
 >6. FoxOne includes a built-in Gruvbox inspired Dark color theme that activates automatically in dark mode. No separate extension needed.
 
-<br>
 
 ### Customisation
 > FoxOne is fully configurable through CSS variables. See all options → [docs/customisation.md](docs/customisation.md)
