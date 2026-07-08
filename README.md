@@ -57,8 +57,6 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 ### Customisation
 > FoxOne is fully configurable through CSS variables. See all options → [docs/customisation.md](docs/customisation.md)
-> 
-> If you use a different system theme or want light mode, the color theme section in userChrome.css only applies inside @media (prefers-color-scheme: dark) and won't interfere.
 ---
  
 **[Installation](docs/installation.md) and [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |

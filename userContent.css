@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne — userContent.css
+  FoxOne 3.3 – userContent.css
   Styles for browser content pages (new tab, home).
 
 *==============================================================================================*/
@@ -12,19 +12,40 @@
 
 :root {
   /* Scrollbar visibility in web content
-   * none = hidden (scroll via mousewheel/keyboard/touchpad)
-   * thin = always visible, slim style
-   * auto = default OS scrollbar */
-  --uc-content-scrollbar: auto;
+   * thin = slim style, forced on all scroll containers
+   * none = hidden (scroll via mousewheel/keyboard/touchpad), forced too
+   * auto = hands off: pages keep full control of their own scrollbars */
+  --uc-content-scrollbar: thin;
 }
 
 
 /* ==========================================================================
    SCROLLBAR
+   `thin` and `none` are enforced with !important (user-origin important
+   rules beat page CSS, so they win everywhere). `auto` matches neither
+   style query below, so a page's own scrollbar styling stays untouched –
+   the old single `* { scrollbar-width: var(...) !important }` rule forced
+   the OS default onto pages that deliberately style their scrollbars.
    ========================================================================== */
 
-* {
-  scrollbar-width: var(--uc-content-scrollbar) !important;
+/* Root/viewport scrollbar. Style queries can't match on :root (it has no
+   query container), so the root gets a direct var() rule instead. Kept at
+   normal weight: a page that styles its own root scrollbar wins (author
+   origin beats non-important user origin), which is the defensive default. */
+:root {
+  scrollbar-width: var(--uc-content-scrollbar);
+}
+
+/* Inner scroll containers – forced only for the non-default values. */
+@container style(--uc-content-scrollbar: thin) {
+  * {
+    scrollbar-width: thin !important;
+  }
+}
+@container style(--uc-content-scrollbar: none) {
+  * {
+    scrollbar-width: none !important;
+  }
 }
 
 

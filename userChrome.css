@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne – A minimalistic one-line Firefox theme
+  FoxOne 3.3 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
@@ -52,11 +52,11 @@
   /* Inactive tab hover title color (issue #16) */
   --uc-tab-hover-text: #ffda85;
 
-  /* Context menu: "Open Link in Split View" (none = hidden, -moz-box = visible) */
-  --uc-show-context-splitview: none;
+  /* Context menu: "Open Link in Split View" (0 = hidden, 1 = visible) */
+  --uc-show-context-splitview: 0;
 
-  /* All-tabs button (none = hidden, -moz-box = visible) */
-  --uc-show-all-tabs-button: none;
+  /* All-tabs button (0 = hidden, 1 = visible) */
+  --uc-show-all-tabs-button: 0;
 
   /* Windows control button width. Fallback only: on non-macOS the hamburger
      auto-tracks the real window-control box via CSS anchor positioning, so
@@ -126,12 +126,20 @@
    at 125% = 1536 CSS px), so a plain `min-width: 1710px` never fires on a
    scaled display. CSS can't read the scale factor as a number, but it can
    match it via `resolution` (dppx == OS scale). So the threshold is tiered per
-   scale, each set to 1710 / scale CSS px, all writing the SAME wide values —
-   overlap between tiers is harmless. The highest dppx tier <= the current
+   scale, each set to 1710 / scale CSS px, all writing the SAME wide values
+   (overlap between tiers is harmless). The highest dppx tier <= the current
    scale wins, giving a constant ~1710 *physical*-px trigger at any scaling.
      100%  -> 1710 / 1.00 = 1710     150%  -> 1710 / 1.50 = 1140
      125%  -> 1710 / 1.25 = 1368     175%  -> 1710 / 1.75 =  977
-                                     200%  -> 1710 / 2.00 =  855 */
+                                     200%  -> 1710 / 2.00 =  855
+
+   Deliberate semantics: the trigger is a constant physical pixel COUNT, not a
+   constant perceived size. High-PPI panels pack more device px per CSS px, so
+   1710 physical px is reached by a physically smaller window there; on scaled
+   displays wide mode therefore engages earlier in real terms (a 2x Retina
+   panel sits in wide mode almost permanently). Kept on purpose – tuned and
+   preferred on the hardware this project targets. A plain CSS-px breakpoint
+   would be the perceptually consistent alternative if ever revisited. */
 @media (min-width: 1710px) {
   :root {
     --uc-active-tab-width: clamp(100px, 30vw, 250px);
@@ -407,7 +415,6 @@ sidebar-main,
 
 #PersonalToolbar {
   padding: 6px !important;
-  box-shadow: inset 0 0 50vh rgba(0, 0, 0, var(--uc-darken-toolbar)) !important;
   order: 4;
   width: 100%;
 }
@@ -766,10 +773,6 @@ sidebar-main,
   outline-color: var(--uc-color-accent) !important;
 }
 
-.urlbar-page-action {
-  padding: 0 inherit !important;
-}
-
 /* Bookmark star alignment: the star renders lower than the sibling urlbar
    icons. #star-button (the image) already carries margin:auto from the rule
    above, so the offset is one of two things — the #star-button-box container
@@ -907,6 +910,12 @@ sidebar-main,
    Animated glow bar at the bottom of the selected tab while loading.
    Same visual style as the pinned-tab indicator (::after), using ::before
    to avoid conflicts.
+   Pinned tabs are excluded from every [busy] rule: the pinned indicator owns
+   ::after, and the busy top-glow would merge into it (its opacity is bound to
+   --uc-show-loading-progress, so with the progress bar off the indicator
+   vanished for the whole load; with it on, top:0 + bottom:0 + fixed height is
+   over-constrained and the bar jumped to the top edge). A 36px pinned tab has
+   no legible progress track anyway.
    Note: transform must NOT be !important — animations can't override it.
    ========================================================================== */
 
@@ -928,21 +937,21 @@ sidebar-main,
   pointer-events: none !important;
 }
 
-/* Bottom bar — animated on ALL busy tabs */
-.tabbrowser-tab[busy] .tab-background::before {
+/* Bottom bar – animated on busy tabs (pinned excluded, see header) */
+.tabbrowser-tab[busy]:not([pinned]) .tab-background::before {
   opacity: var(--uc-show-loading-progress) !important;
   transition: none !important;
   animation: uc-progress 2.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards !important;
 }
 
 /* Inactive busy tabs — white to match tab text color */
-.tabbrowser-tab[busy]:not([selected]) .tab-background::before {
+.tabbrowser-tab[busy]:not([selected], [pinned]) .tab-background::before {
   background: var(--toolbar-color, #FFFFFF) !important;
   box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
 
-/* Top glow — all busy tabs (no base state = no pinned indicator conflict) */
-.tabbrowser-tab[busy] .tab-background::after {
+/* Top glow – busy tabs (pinned excluded: their ::after is the indicator) */
+.tabbrowser-tab[busy]:not([pinned]) .tab-background::after {
   content: "" !important;
   display: block !important;
   position: absolute !important;
@@ -959,7 +968,7 @@ sidebar-main,
 }
 
 /* Top glow — inactive tabs use white */
-.tabbrowser-tab[busy]:not([selected]) .tab-background::after {
+.tabbrowser-tab[busy]:not([selected], [pinned]) .tab-background::after {
   background: var(--toolbar-color, #FFFFFF) !important;
   box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
@@ -1130,8 +1139,14 @@ browser[type="content"],
 #pageActionButton { display: none !important; }
 #urlbar-go-button { display: none !important; }
 
-/* Context menu: hide "Open Link in Split View" (toggle in CONFIG) */
-#context-openlinkinsplitview { display: var(--uc-show-context-splitview) !important; }
+/* Context menu: "Open Link in Split View" (toggle in CONFIG). Hidden by
+   default, restored via style query at 1. The old none/-moz-box toggle broke
+   silently: -moz-box was removed from Firefox and CSS-wide keywords like
+   revert cannot travel through var(), so 0/1 + revert is the pattern. */
+#context-openlinkinsplitview { display: none !important; }
+@container style(--uc-show-context-splitview: 1) {
+  #context-openlinkinsplitview { display: revert !important; }
+}
 
 #identity-permission-box {
   max-width: 0 !important;
@@ -1261,8 +1276,12 @@ browser[type="content"],
 /* Hide vertical tabs new tab button */
 #vertical-tabs-newtab-button { display: none !important; }
 
-/* Hide all-tabs button */
-#alltabs-button { display: var(--uc-show-all-tabs-button) !important; }
+/* All-tabs button (toggle in CONFIG) – same 0/1 + revert pattern as the
+   split-view context-menu item. */
+#alltabs-button { display: none !important; }
+@container style(--uc-show-all-tabs-button: 1) {
+  #alltabs-button { display: revert !important; }
+}
 
 
 /* ==========================================================================
@@ -1471,7 +1490,6 @@ browser[type="content"],
 }
 
 .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
-  stroke: transparent !important;
   background: transparent !important;
   opacity: 1 !important;
   fill-opacity: 0.8 !important;
@@ -1727,14 +1745,6 @@ label.found-matches {
   margin-left: calc(4px * var(--show-margin)) !important;
 }
 
-
-/* ==========================================================================
-   FLOATING PANEL
-   ========================================================================== */
-
-#statuspanel #statuspanel-label {
-  margin: 0 0 var(--uc-status-panel-spacing) var(--uc-status-panel-spacing) !important;
-}
 
 /* ==========================================================================
    SPLIT VIEW

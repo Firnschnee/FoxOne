@@ -21,7 +21,7 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | Variable | Default | Description |
 |---|---|---|
 | `--uc-border-radius` | `8px` | Global corner radius |
-| `--uc-status-panel-spacing` | `12px` | Statuspanel distance from window border (`0` = corner) |
+| `--uc-status-panel-spacing` | `8px` | Statuspanel distance from window border (`0` = corner); matches the findbar's `8px` inset |
 | `--uc-urlbar-min-width` | `min(35vw, 630px)` | URL bar default width (px ceiling caps growth on ultrawide/4K) |
 | `--uc-urlbar-max-width` | `min(50vw, 900px)` | URL bar width on focus (px ceiling caps growth on ultrawide/4K) |
 
@@ -29,7 +29,7 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD — the threshold is tiered by `resolution`/dppx so it fires at the same physical size under DPI scaling) |
+| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD; the threshold is tiered by `resolution`/dppx so it fires at the same physical pixel count under DPI scaling) |
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
 | `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
@@ -42,18 +42,18 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | `--uc-hamburger-width` | `44px` | Hamburger menu reserved width |
 | `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
 | `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |
-| `--uc-drag-space` | `40px` | Gap for window dragging |
+| `--uc-drag-space` | `20px` | Grab zone after the tabs for moving the window (functional space, don't set to `0`) |
 
 ### Visibility Toggles
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-show-context-splitview` | `none` | Context menu "Open Link in Split View" (`none` = hidden, `-moz-box` = visible) |
-| `--uc-show-all-tabs-button` | `none` | All-tabs button (`none` = hidden, `-moz-box` = visible) |
+| `--uc-show-context-splitview` | `0` | Context menu "Open Link in Split View" (`0` = hidden, `1` = visible) |
+| `--uc-show-all-tabs-button` | `0` | All-tabs button (`0` = hidden, `1` = visible) |
 | `--uc-autohide-nav-buttons` | `0` | Navigation buttons auto-hide (`0` = always visible, `1` = reveal on hover and focus, `2` = reveal on hover only) |
 | `--uc-hide-nav-buttons` | `0` | Remove navigation buttons entirely (`1` = hide, `0` = show) |
 | `--uc-hide-urlbar-buttons` | `0` | Hide URL-bar clutter icons — shield (tracking protection), reader mode, translations, bookmark star, add-to-taskbar (`1` = hide all, `0` = default reveal) |
-| `--uc-hide-extension-icons` | `0` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
+| `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
 | `--uc-show-loading-progress` | `0` | Loading progress bar on the active tab while a page loads (`1` = show, `0` = hide) |
 
 ### Adaptive Tab Bar Colour
@@ -68,7 +68,7 @@ The hand-off keys off the `lwtheme` attribute Firefox sets on the root element w
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-content-scrollbar` | `none` | Scrollbar in web content (`none` = hidden, `thin` = slim, `auto` = OS default) |
+| `--uc-content-scrollbar` | `thin` | Scrollbar in web content (`thin` = slim everywhere, `none` = hidden everywhere, `auto` = hands off, pages keep control of their own scrollbars) |
 
 ### Find Bar
 
