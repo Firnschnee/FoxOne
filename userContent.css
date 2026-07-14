@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.3.9 – userContent.css
+  FoxOne 3.4.0 – userContent.css
   Styles for browser content pages (new tab, home).
 
 *==============================================================================================*/
@@ -65,29 +65,81 @@
 
 
 /* ==========================================================================
-   SETTINGS PAGES — about:preferences, about:addons (Gruvbox Dark)
-   Pins background and selection/accent so they look identical across
-   machines, regardless of the OS accent colour or the active Firefox theme.
-   Both the legacy --in-content-* names and the newer --color-* design
-   tokens are set, so this survives Firefox's token renaming.
+   PRIVILEGED PAGES — all of about: (Gruvbox Dark, dark mode only)
+
+   One block for every about: page instead of per-page rules: the in-content
+   pages (preferences, addons, logins, support, protections, downloads/
+   library views, reader, …) all share the same design-token system as the
+   browser chrome (common-shared.css imports tokens-shared.css), so the same
+   central lever from userChrome's NOVA VIOLET PURGE works here. Under Nova
+   the semantic accent family maps to the violet palette; links, focus
+   rings, toggles, primary buttons, selected borders and table headers all
+   derive from it. Pages with hardcoded colours outside the token system
+   get individual rules appended below as they turn up.
+   Known unreachable: about:newtab / about:home / about:blank (separate
+   privileged process / compiled-in canvas colour; see memory).
+   Both the legacy --in-content-* names and the design tokens are set, so
+   older pages and token renames stay covered.
    ========================================================================== */
 
-@-moz-document url-prefix("about:preferences"), url-prefix("about:addons") {
+/* The chrome:// prefix covers the in-content SUBDIALOGS (site permissions,
+   clear data, … under chrome://browser/content/preferences/dialogs/): they
+   are separate documents in an iframe, so the about: prefix never matches
+   them, and they kept the full Nova violet. Same token system, same cure. */
+@-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/") {
   @media (prefers-color-scheme: dark) {
     :root {
-      /* Page background */
-      --in-content-page-background: #282828 !important;
-      --background-color-canvas: #282828 !important;
+      /* FoxOne palette (userContent has no shared config with userChrome;
+         keep in sync with the CONFIG block there) */
+      --uc-color-base:    #282828;
+      --uc-color-surface: #3c3836;
+      --uc-color-accent:  #fabd2f;
+      --uc-color-text:    #FFFFFF;
+      --uc-color-hover:   #7c6f64;
 
-      /* Selection / accent — Gruvbox bright yellow, dark text for contrast */
-      --in-content-accent-color: #fabd2f !important;
-      --in-content-accent-color-active: #fabd2f !important;
-      --in-content-item-selected: #fabd2f !important;
-      --in-content-item-selected-text: #282828 !important;
+      /* Page backgrounds */
+      --in-content-page-background: var(--uc-color-base) !important;
+      --background-color-canvas: var(--uc-color-base) !important;
+      /* Cards / boxed sections sit one step above the canvas */
+      --background-color-box: var(--uc-color-surface) !important;
+      --background-color-information: var(--uc-color-surface) !important;
 
-      --color-accent-primary: #fabd2f !important;
-      --color-accent-primary-hover: #fabd2f !important;
-      --color-accent-primary-active: #fabd2f !important;
+      /* The central lever: everything accent-coloured (links, focus rings,
+         toggles, primary buttons, selected borders, table headers) derives
+         from the semantic accent family. */
+      --color-accent-primary: var(--uc-color-accent) !important;
+      --color-accent-primary-hover: var(--uc-color-accent) !important;
+      --color-accent-primary-active: var(--uc-color-accent) !important;
+      --color-accent-primary-selected: var(--uc-color-accent) !important;
+
+      /* Tables (about:support, about:unloads, about:profiles, …): the body
+         colour is hardcoded in the token layer (light-dark(#f8f8fa,
+         rgb(35,34,43))), not derived from anything we already override.
+         Base for the cells, surface for the zebra rows. */
+      --table-background-color: var(--uc-color-base) !important;
+      --table-row-background-color-alternate: var(--uc-color-surface) !important;
+
+      /* Text/search inputs: tokens-platform.css maps them to the Field
+         SYSTEM colour (dark standin: compiled-in #2b2a33). The consuming
+         input lives in the shadow DOM of moz-input-search/moz-input-text,
+         out of selector reach, but the custom property inherits across the
+         shadow boundary, so overriding it at :root lands inside. */
+      --input-text-background-color: var(--uc-color-surface) !important;
+      --input-text-color: var(--uc-color-text) !important;
+
+      /* Direct violet references (same satellites as in userChrome) */
+      --icon-color-information: var(--uc-color-accent) !important;
+      --icon-color-accent-primary-desaturated: var(--uc-color-accent) !important;
+      --button-background-color-hover: var(--uc-color-hover) !important;
+      --button-background-color-active: var(--uc-color-hover) !important;
+      --button-background-color-primary-disabled: color-mix(in srgb, var(--uc-color-accent) 40%, var(--uc-color-base)) !important;
+      --text-color: var(--uc-color-text) !important;
+
+      /* Legacy in-content names (pre-token pages) */
+      --in-content-accent-color: var(--uc-color-accent) !important;
+      --in-content-accent-color-active: var(--uc-color-accent) !important;
+      --in-content-item-selected: var(--uc-color-accent) !important;
+      --in-content-item-selected-text: var(--uc-color-base) !important;
     }
 
     /* Highlighted text */
@@ -95,5 +147,82 @@
       background-color: #fabd2f !important;
       color: #282828 !important;
     }
+
+    /* Search/text boxes (about:preferences, about:addons, subdialogs): the
+       visible input lives in the SHADOW root of moz-input-search and reads
+       --input-text-background-color, which resolves to the Field system
+       colour (compiled-in dark standin #2b2a33) in there; the :root token
+       override above never arrives. Escape hatch: user sheets, unlike page
+       CSS, also match inside shadow trees (confirmed via toolbox: FoxOne's
+       ::selection rule lists on the shadow input), so style the input
+       element directly and skip the token plumbing. */
+    input:where([type="search"], [type="text"], [type="password"], [type="email"], [type="url"], [type="number"], [type="tel"]) {
+      background-color: var(--uc-color-surface, #3c3836) !important;
+      color: var(--uc-color-text, #FFFFFF) !important;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   PER-PAGE STRAGGLERS — pages with colours outside the token system.
+   Collected while walking about:about; one block per page.
+   ========================================================================== */
+
+/* about:downloads — the SELECTED row is amber only while the window is
+   inactive. With focus, browser/themes/windows/downloads/allDownloadsView.css
+   paints hardcoded Windows-blue bevel gradients plus a blue outline over it.
+   Flatten the focused state back to the selection tokens. */
+@-moz-document url-prefix("about:downloads") {
+  @media (prefers-color-scheme: dark) {
+    #downloadsListBox:focus > richlistitem[selected] {
+      background-image: none !important;
+      background-color: var(--in-content-item-selected, #fabd2f) !important;
+      color: var(--in-content-item-selected-text, #282828) !important;
+      outline: none !important;
+    }
+  }
+}
+
+/* about:debugging — a devtools page with its own Photon palette on top of
+   the design tokens. Two stragglers: the text-input focus ring
+   (--theme-focus-textinput-outline-color ← --blue-50, variables.css) and
+   the primary button ("Hinzufügen"), which resolves outside the amber
+   override. Repoint the local blues and cover the primary-button classes
+   directly. Scoped to the page, so DevTools proper keeps its blues. */
+@-moz-document url-prefix("about:debugging") {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --blue-50: #fabd2f !important;
+      --blue-55: #fabd2f !important;
+      --blue-60: #fabd2f !important;
+      --theme-focus-outline-color: #fabd2f !important;
+      --theme-focus-textinput-outline-color: #fabd2f !important;
+      --theme-link-color: #fabd2f !important;
+    }
+    button.primary,
+    .primary-button,
+    .default-button.primary-button {
+      background-color: #fabd2f !important;
+      color: #282828 !important;
+    }
+    button.primary:enabled:hover,
+    .primary-button:enabled:hover {
+      background-color: color-mix(in srgb, #fabd2f 85%, #282828) !important;
+    }
+  }
+}
+
+/* about:mozilla — the Book of Mozilla easter egg ships its own maroon
+   radial gradient and white serif text (toolkit aboutMozilla.css). Rebind
+   the scripture to the palette: base background, amber verse. Typography
+   stays untouched; only the colours convert. */
+@-moz-document url("about:mozilla") {
+  html {
+    background: #282828 !important;
+    color: #fabd2f !important;
+  }
+  a {
+    color: #fabd2f !important;
   }
 }
