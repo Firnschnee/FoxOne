@@ -1528,7 +1528,7 @@ sidebar-main {
 
 #identity-box.extensionPage { display: none !important; }
 
-/* Container indicator — hide by default, reveal on hover/focus */
+/* Container indicator: hidden by default; indicator shown on hover/focus, text label on focus only */
 #userContext-label,
 #userContext-indicator {
   max-width: 0 !important;
@@ -1547,7 +1547,6 @@ sidebar-main {
   margin-inline: 2px !important;
 }
 
-#urlbar:hover #userContext-label,
 #urlbar[focused="true"] #userContext-label {
   max-width: 200px !important;
   opacity: 1 !important;
