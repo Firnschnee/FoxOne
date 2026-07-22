@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.4.5 – A minimalistic one-line Firefox theme
+  FoxOne 3.4.6 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
@@ -52,7 +52,7 @@
   /* Inactive tab hover title color (issue #16) */
   --uc-tab-hover-text: #ffda85;
 
-  /* Firefoxs Multi Container Tab Indiktator line (0 = bottom, 1 = top)  */
+  /* Container tab indicator line (0 = bottom edge, 1 = top) */
   --uc-container-line-top: 1;
 
   /* Context menu: "Open Link in Split View" (0 = hidden, 1 = visible) */
@@ -1877,12 +1877,15 @@ sidebar-main {
   inset-block-end: 0 !important;
   inset-inline: 10px !important;
   margin: 0 !important;
+  /* Glow points up, away from the bottom tab edge, so it isn't clipped. */
+  box-shadow: 0 -1px 10px 1px var(--identity-tab-color) !important;
 }
 .tab-context-line {
   /* Same lift as the urlbar indicator: boosted core, raw colour for the glow.
-     Glow points up, away from the bottom tab edge, so it isn't clipped. */
+     Offset-free: vertical tabs live outside #TabsToolbar and get this rule
+     alone, where a directional glow has no edge to point away from. */
   background-color: oklch(from var(--identity-icon-color) calc(l + 0.12) calc(c * 1.15) h) !important;
-  box-shadow: 0 -1px 10px 1px var(--identity-tab-color) !important;
+  box-shadow: 0 0 10px 1px var(--identity-tab-color) !important;
 }
 /* Top placement is the 3.4.5 geometry: back into flow, 2px clear of the tab
    edge so the glow has room on both sides, Nova's -6px shift cancelled by

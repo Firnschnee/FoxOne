@@ -55,6 +55,7 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | `--uc-hide-urlbar-buttons` | `0` | Hide URL-bar clutter icons — shield (tracking protection), reader mode, translations, bookmark star, add-to-taskbar (`1` = hide all, `0` = default reveal) |
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
 | `--uc-show-loading-progress` | `0` | Loading progress bar on the active tab while a page loads (`1` = show, `0` = hide) |
+| `--uc-container-line-top` | `1` | Container tab indicator line position (`1` = top of the tab, the Firefox 153 layout, `0` = bottom edge, the classic pre-153 look) |
 
 ### Adaptive Tab Bar Colour
 
