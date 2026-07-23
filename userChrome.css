@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.4.6 – A minimalistic one-line Firefox theme
+  FoxOne 3.4.7 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
@@ -966,6 +966,35 @@ sidebar-main,
 .urlbarView-button-menu:hover,
 .urlbarView-row:hover .urlbarView-button-result-menu:hover {
   fill: var(--uc-color-accent) !important;
+}
+
+/* Type-icon badges on urlbar results (the small glyph overlaid on the
+   favicon): bookmark star (bookmark-12.svg) and pinned-search pin
+   (pin-12.svg). Nova paints them as background-image SVGs and fills via
+   variable (attention amber for the star, light-dark near-white for the pin),
+   but the context-fill channel is dead on this path: even Nova's own colour
+   never arrives and the glyphs render context-fill's black default. Cascade
+   fixes all fell short: ancestor-anchored selectors (#urlbar, .urlbarView)
+   never match because the extended list re-parents outside both, the bare
+   class loses to Nova's 0,4,0 nested rule, and a winning fill plus an
+   explicit -moz-context-properties channel changed nothing. So bypass fill
+   entirely: reuse each row type's own SVG as a mask (shape only) and paint
+   amber underneath. Immune to the glyph's internal fill plumbing. Should the
+   chrome:// masks ever fail to load, inline them as data-URIs
+   (translations-icon precedent). */
+.urlbarView-row[type="bookmark"] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon,
+.urlbarView-row[pinned] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
+  background-image: none !important;
+  background-color: #fabd2f !important;
+  mask-repeat: no-repeat !important;
+  mask-position: center !important;
+  mask-size: contain !important;
+}
+.urlbarView-row[type="bookmark"] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
+  mask-image: url("chrome://browser/skin/bookmark-12.svg") !important;
+}
+.urlbarView-row[pinned] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
+  mask-image: url("chrome://browser/skin/pin-12.svg") !important;
 }
 
 .urlbar-icon,
