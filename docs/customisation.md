@@ -20,10 +20,29 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-border-radius` | `8px` | Global corner radius |
+| `--uc-border-radius` | `8px` | Corner radius for the surfaces FoxOne owns, and the value the rounded-corners toggle hands to every surface it rounds |
+| `--uc-rounded` | `0` | Rounded corners (`0` = FoxOne's square edges, `1` = every squared surface takes `--uc-border-radius`). See [Rounded corners](#rounded-corners) |
 | `--uc-status-panel-spacing` | `8px` | Statuspanel distance from window border (`0` = corner); matches the findbar's `8px` inset |
 | `--uc-urlbar-min-width` | `min(35vw, 630px)` | URL bar default width (px ceiling caps growth on ultrawide/4K) |
 | `--uc-urlbar-max-width` | `min(50vw, 900px)` | URL bar width on focus (px ceiling caps growth on ultrawide/4K) |
+
+### Rounded corners
+
+FoxOne is square by default. Set `--uc-rounded: 1` if you want FoxOne's layout with the corners the rest of Windows 11 (and stock Firefox) has:
+
+```css
+--uc-rounded: 1;
+```
+
+Every surface FoxOne squares then takes `--uc-border-radius` (`8px`), and the rows inside those surfaces take half of it (`4px`). That is the same pair Firefox ships in its own design tokens, so the result reads like stock Firefox rather than like a theme with one radius painted over everything: arrow panels, context menus and their rows, the URL field and its breakout box, tabs, find bar, status panel and split-view footer.
+
+Change the radius itself with `--uc-border-radius`; `--uc-rounded` only decides whether it is applied or zeroed.
+
+What it deliberately does not touch:
+
+* **Layout.** The content area and the frames around toolbox, sidebar and browser stay square. Firefox only rounds those because it insets them by 4px first; FoxOne is edge-to-edge, and rounding them without the inset cuts notches into the page and alongside the sidebar. That is a layout change, not a corner.
+* **The URL bar's internals.** Row hover, icon chips and result buttons stay square, and are invisible either way since FoxOne draws them without a background. Only the painted shell rounds.
+* **How popups are drawn.** FoxOne draws its popups itself rather than using the Windows 11 Mica backdrop, which is what keeps the palette Gruvbox instead of system-tinted. That path also gives the corners proper antialiasing, so no radius here renders as a staircase.
 
 ### Tabs
 

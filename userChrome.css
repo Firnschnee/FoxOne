@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.4.7 – A minimalistic one-line Firefox theme
+  FoxOne 3.4.8 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
@@ -20,8 +20,15 @@
   --uc-color-text:    #FFFFFF;   /* primary text */
   --uc-color-hover:   #7c6f64;   /* hover / highlight backgrounds */
 
-  /* Global Border Radius — applied to all UI elements */
+  /* Corner radius for the surfaces FoxOne owns (tab-group chips, library
+     search field) and the value handed to every surface the rounded-corners
+     toggle below can round. */
   --uc-border-radius: 8px;
+
+  /* Rounded corners (0 = FoxOne's square edges, 1 = every surface FoxOne
+     squares takes --uc-border-radius instead). Details in the derived block
+     right below the config. */
+  --uc-rounded: 0;
 
   /* Statuspanel distance from window border (0 = corner). Set to match the
      floating findbar's --findbar-top / --findbar-right (8px): both are CSS px,
@@ -118,6 +125,46 @@
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
 
+}
+
+
+/* ==========================================================================
+   ROUNDED CORNERS – derived from --uc-rounded (issue #37).
+
+   Not config: edit --uc-rounded and --uc-border-radius above, not these two.
+   Every surface FoxOne squares reads --uc-radius-surface or --uc-radius-row
+   instead of a literal 0, so one flag drives all of them. Multiplying by the
+   flag rather than gating rules on it keeps the square default byte-for-byte
+   (calc(0 * 8px) resolves to 0px) and needs no @container support: the value
+   arrives everywhere plain inheritance reaches, popups and shadow DOM
+   included.
+
+   Two radii, because Firefox uses two: a shell radius for the surface itself
+   and half that for the rows inside it (toolkit puts menu items on
+   --border-radius-xsmall against a larger panel).
+
+   What the flag deliberately does NOT touch:
+
+   - Layout. The content area and the .chrome-block frames around toolbox,
+     sidebar and browser stay square. Firefox only rounds those because it
+     insets them by 4px first; FoxOne is edge-to-edge, and rounding them
+     without the inset cuts notches into the page and beside the sidebar.
+     That is a layout change, not a corner.
+   - The popups' drawing path. Firefox rounds Win11 context menus by handing
+     shadow, border AND radius to the Mica backdrop (toolkit menu.css sets
+     --panel-border-radius: 0px itself there and lets the backdrop clip the
+     window). FoxOne opts out of that backdrop for its own palette, so the
+     popups sit on the CSS-drawn path with a transparent popup window – which
+     is exactly what makes a CSS radius render as a normal antialiased corner
+     here instead of the 1-bit window region that looked like a staircase in
+     the first attempt. Note the Mica branch covers `menupopup` only, so
+     handing the shape back to the system would round the context menu and
+     leave the hamburger panel square anyway.
+   ========================================================================== */
+
+:root {
+  --uc-radius-surface: calc(var(--uc-rounded) * var(--uc-border-radius));
+  --uc-radius-row: calc(var(--uc-radius-surface) / 2);
 }
 
 /* Wide-window tab widths (>= 1710px physical, ~2/3 of WQHD). Restores the
@@ -337,9 +384,12 @@
      toolkit popup.css defaults --panel-border-radius to 6px (arrow panels:
      hamburger, extensions, permissions popups); context menus already sit
      at 0 via their own :not([type="arrow"]) branch. Pin both to square so
-     every popup matches the findbar / context-menu / breakout-urlbar look. */
+     every popup matches the findbar / context-menu / breakout-urlbar look.
+     Square is --uc-radius-surface at the default --uc-rounded: 0; see the
+     ROUNDED CORNERS block under the config for why the radius can simply be
+     set here, Mica or not. */
   :is(panel, menupopup):not(#DateTimePickerPanel, .autoscroller) {
-    --panel-border-radius: 0 !important;
+    --panel-border-radius: var(--uc-radius-surface) !important;
     /* Row hover marks with accent text instead of a background block, the
        same cue FoxOne uses for toolbar icons and tab titles (issue #16).
        Panel rows (subviewbuttons) consume the ghost button tokens, a few
@@ -359,9 +409,12 @@
        (context menus), --panel-menuitem-border-radius drives subviewbuttons
        (hamburger menu rows, extensions panel rows and its gear icon). Both
        default to a design-token radius (menu.css / tokens-shared.css); square
-       both so the selection colour matches the panel it sits in. */
-    --menuitem-border-radius: 0 !important;
-    --panel-menuitem-border-radius: 0 !important;
+       both so the selection colour matches the panel it sits in. At
+       --uc-rounded: 1 the row radius lands on 4px against the panel's 8px,
+       which is the same pair tokens-shared.css ships (--border-radius-small
+       against --border-radius-medium). */
+    --menuitem-border-radius: var(--uc-radius-row) !important;
+    --panel-menuitem-border-radius: var(--uc-radius-row) !important;
   }
 
   /* Extensions-panel gear buttons escape the hover treatment above: toolkit
@@ -644,7 +697,7 @@ sidebar-main,
 
 #statuspanel #statuspanel-label {
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: var(--uc-radius-surface) !important;
   margin: 0 0 var(--uc-status-panel-spacing) var(--uc-status-panel-spacing) !important;
 }
 
@@ -853,6 +906,33 @@ sidebar-main,
   border-radius: 0 !important;
 }
 
+/* The rounded-corners toggle only lifts the painted shell back out of that
+   catch-all: the field box at rest, the breakout box when the results are
+   open. Everything else inside the URL bar stays square on purpose – row
+   hover, icon chips and result buttons are all transparent under FoxOne, so
+   their corners are invisible either way, and an 8px radius on a 16px icon
+   chip would only look wrong. Descendant selectors because `#urlbar *`
+   carries an id and out-specifies a bare class; legacy id and Nova class are
+   both covered, same pairing as the colour rules further down.
+
+   Exactly ONE box per state, never both. .urlbar-background and
+   .urlbar-input-container are stacked, both painted, and not the same height:
+   round the pair together and the lower box shows at the corners the upper
+   one rounds away, which reads as the field hanging a pixel out of the row.
+   Without a dynamic theme FoxOne paints .urlbar-background (see the field
+   tone rules above), so the radius goes there. */
+#urlbar #urlbar-background,
+#urlbar .urlbar-background {
+  border-radius: var(--uc-radius-surface) !important;
+}
+
+/* Under a dynamic theme the fill moves to .urlbar-input-container (see
+   DYNAMIC-THEME COMPAT), so the radius follows it – and only there. */
+:root[lwtheme] #urlbar #urlbar-input-container,
+:root[lwtheme] #urlbar .urlbar-input-container {
+  border-radius: var(--uc-radius-surface) !important;
+}
+
 /* Match the URL-bar text size to the tab-strip labels (12px). Native Nova
    renders #urlbar-input at 13.8px — ~15% larger than the 12px tab labels —
    so the two read as different heights on the shared toolbar row. Both boxes
@@ -895,24 +975,29 @@ sidebar-main,
 }
 
 /* Nova extends the breakout by dropping .urlbar-background below the toolbar
-   row (bottom: -8px), so in the one-line layout the field overhangs into the
-   page content. Pull it to -6px so the breakout's lower edge sits flush with
-   the row. Unconditional is safe: bottom only acts while the field is in
-   breakout (absolute-positioned); at rest there's no breakout box for it to
-   move. Fixes the overhang half of issue #31 (Nova megabar). The remaining
-   two-Esc collapse is Nova state logic, not geometry. */
-.urlbar-background {
-  bottom: -6px !important;
-}
+   row (--urlbar-background-inset-breakout resolves to -8px on every side:
+   --urlbar-min-height / 2 - --border-radius-xxlarge, 16 - 24), so in the
+   one-line layout the field overhangs into the page content. Pull the lower
+   edge back until it sits flush with the row. Fixes the overhang half of
+   issue #31 (Nova megabar); the remaining two-Esc collapse is Nova state
+   logic, not geometry.
 
-/* Touch density (browser.uidensity = 1) makes the toolbar row taller, so the
-   -6px above no longer lands flush: ~1px of the breakout box stays visible
-   after the first Esc (issue #31, reopened). Firefox flags this state with
-   uidensity="touch" on the root, so scope a 1px-tighter pull to it. Raising
-   the bottom edge toward 0 (less negative) reduces the overhang; the base
-   rule stays untouched for normal/compact density. */
-:root[uidensity="touch"] .urlbar-background {
-  bottom: -5px !important;
+   The [breakout-extend] scope is the fix for issue #37's stray pixel. The
+   note that used to sit here – "unconditional is safe, bottom only acts in
+   breakout" – is wrong: urlbar-searchbar.css gives .urlbar-background
+   `position: absolute; inset: 0` in EVERY state, so an unconditional bottom
+   drags the resting field box below its row too. Square and toolbar-coloured
+   that goes unnoticed; give the box a corner radius and it reads as the URL
+   bar hanging a pixel out of the toolbar.
+
+   The pull is derived, not measured: the row is 44px (the height the
+   hamburger is pinned to) and the field is centred in it, so the gap below
+   the field is (--urlbar-min-height - 44px) / 2. That resolves to -6px for
+   the normal 32px field and -5px at touch density's 34px – the same pair
+   that used to sit here as two hand-tuned rules, now one expression that
+   tracks the density by itself. */
+#urlbar[breakout-extend] > .urlbar-background {
+  bottom: calc((var(--urlbar-min-height) - 44px) / 2) !important;
 }
 
 .urlbarView-row:hover > .urlbarView-row-inner {
@@ -2018,7 +2103,7 @@ sidebar-main {
 }
 .tab-background {
   margin: 0px !important;
-  border-radius: 0px !important;
+  border-radius: var(--uc-radius-surface) !important;
 }
 
 /* vertical tabs — stretch to fill sidebar width */
@@ -2081,7 +2166,7 @@ findbar {
   max-width: var(--findbar-max-width) !important;
   margin-left: auto !important;
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: var(--uc-radius-surface) !important;
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -2101,7 +2186,7 @@ findbar[hidden] {
   width: var(--textbox-width) !important;
   min-width: var(--textbox-min-width) !important;
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: var(--uc-radius-row) !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2237,7 +2322,7 @@ tab-split-view-wrapper {
    (step 2). */
 split-view-footer {
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: var(--uc-radius-surface) !important;
   box-shadow: none !important;
   margin: 0 var(--uc-status-panel-spacing) var(--uc-status-panel-spacing) 0 !important;
 }
