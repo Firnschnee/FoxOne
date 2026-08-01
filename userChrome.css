@@ -996,7 +996,9 @@ sidebar-main,
    the normal 32px field and -5px at touch density's 34px – the same pair
    that used to sit here as two hand-tuned rules, now one expression that
    tracks the density by itself. */
+#urlbar[breakout-extend] > #urlbar-background,
 #urlbar[breakout-extend] > .urlbar-background {
+  top: calc((var(--urlbar-min-height) - 44px) / 2) !important;
   bottom: calc((var(--urlbar-min-height) - 44px) / 2) !important;
 }
 
