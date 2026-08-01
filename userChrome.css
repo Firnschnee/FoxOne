@@ -974,29 +974,28 @@ sidebar-main,
   border: 1px solid var(--uc-color-surface) !important;
 }
 
-/* Nova extends the breakout by dropping .urlbar-background below the toolbar
-   row (--urlbar-background-inset-breakout resolves to -8px on every side:
+/* Nova extends the breakout by growing .urlbar-background past the toolbar
+   row on every side (--urlbar-background-inset-breakout resolves to -8px:
    --urlbar-min-height / 2 - --border-radius-xxlarge, 16 - 24), so in the
-   one-line layout the field overhangs into the page content. Pull the lower
-   edge back until it sits flush with the row. Fixes the overhang half of
-   issue #31 (Nova megabar); the remaining two-Esc collapse is Nova state
-   logic, not geometry.
+   one-line layout the field overhangs into the page content below AND past
+   the window edge above – the breakout box has no visible top edge at all.
+   Pull both edges back until the box sits flush with the row. Fixes the
+   overhang half of issue #31 and the missing top edge (PR #39, NeroWolfe75);
+   the remaining two-Esc collapse is Nova state logic, not geometry.
 
    The [breakout-extend] scope is the fix for issue #37's stray pixel. The
    note that used to sit here – "unconditional is safe, bottom only acts in
    breakout" – is wrong: urlbar-searchbar.css gives .urlbar-background
-   `position: absolute; inset: 0` in EVERY state, so an unconditional bottom
-   drags the resting field box below its row too. Square and toolbar-coloured
+   `position: absolute; inset: 0` in EVERY state, so an unconditional offset
+   drags the resting field box out of its row too. Square and toolbar-coloured
    that goes unnoticed; give the box a corner radius and it reads as the URL
    bar hanging a pixel out of the toolbar.
 
    The pull is derived, not measured: the row is 44px (the height the
-   hamburger is pinned to) and the field is centred in it, so the gap below
-   the field is (--urlbar-min-height - 44px) / 2. That resolves to -6px for
-   the normal 32px field and -5px at touch density's 34px – the same pair
-   that used to sit here as two hand-tuned rules, now one expression that
-   tracks the density by itself. */
-#urlbar[breakout-extend] > #urlbar-background,
+   hamburger is pinned to) and the field is centred in it, so the gap between
+   field and row edge is (--urlbar-min-height - 44px) / 2 on either side.
+   That resolves to -6px for the normal 32px field and -5px at touch
+   density's 34px – one expression that tracks the density by itself. */
 #urlbar[breakout-extend] > .urlbar-background {
   top: calc((var(--urlbar-min-height) - 44px) / 2) !important;
   bottom: calc((var(--urlbar-min-height) - 44px) / 2) !important;
