@@ -88,6 +88,11 @@ body.landing .site-footer { margin-top: 0; }
 
 .buttons { display: flex; gap: 16px; justify-content: flex-start; flex-wrap: wrap; }
 
+/* Same idea as the tagline: above the wrap point the row stretches to the right edge */
+@media (min-width: 900px) {
+  .buttons { justify-content: space-between; }
+}
+
 .btn {
   display: inline-block;
   padding: 10px 28px;
