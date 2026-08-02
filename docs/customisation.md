@@ -1,3 +1,8 @@
+---
+layout: default
+title: Customisation
+---
+
 # Customisation
 ---
 > Running classic (pre-Nova) Firefox?

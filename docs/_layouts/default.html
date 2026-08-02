@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} – FoxOne</title>
+<meta name="description" content="{{ site.description }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="{{ '/' | relative_url }}">FoxOne</a>
+  <nav class="nav-links">
+    <a href="{{ '/installation.html' | relative_url }}">Installation</a>
+    <a href="{{ '/customisation.html' | relative_url }}">Customisation</a>
+    <a href="https://github.com/Firnschnee/FoxOne">GitHub</a>
+  </nav>
+</header>
+
+<main class="content">
+{{ content }}
+</main>
+
+<footer class="site-footer">
+  <p>Released under the <a href="https://github.com/Firnschnee/FoxOne/blob/main/LICENSE">MIT License</a>.
+  Inspired by <a href="https://github.com/andreasgrafen/cascade">Cascade</a> and <a href="https://github.com/biglavis/LittleFox">LittleFox</a>.</p>
+</footer>
+
+</body>
+</html>
