@@ -34,8 +34,10 @@ img { max-width: 100%; height: auto; border-radius: 8px; }
 
 .site-header .brand {
   font-weight: 700;
-  color: var(--text);
+  color: var(--muted);
 }
+
+.site-header .brand:hover { color: var(--accent); text-decoration: none; }
 
 .nav-links { display: flex; gap: 20px; }
 .nav-links a { color: var(--muted); }
