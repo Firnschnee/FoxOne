@@ -43,6 +43,22 @@ img { max-width: 100%; height: auto; border-radius: 8px; }
 .nav-links a { color: var(--muted); }
 .nav-links a:hover { color: var(--accent); text-decoration: none; }
 
+/* Landing: hero + preview vertically centered in the viewport */
+body.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body.landing .site-footer { margin-top: 0; }
+
 /* Hero */
 .hero {
   max-width: 900px;
