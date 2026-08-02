@@ -149,6 +149,12 @@ img { max-width: 100%; height: auto; border-radius: 8px; }
   color: var(--muted);
 }
 
+.content blockquote h1,
+.content blockquote h2,
+.content blockquote h3 {
+  color: inherit;
+}
+
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--surface);
