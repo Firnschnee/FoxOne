@@ -57,11 +57,11 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 
 ### Customisation
-> FoxOne is fully configurable through CSS variables. See all options → [docs/customisation.md](docs/customisation.md)
+> FoxOne is fully configurable through CSS variables. See all options → [Customisation](https://firnschnee.github.io/FoxOne/customisation.html)
 
 ### Thunderbird? 
 > You are looking for [BirdOne!](https://github.com/Firnschnee/BirdOne)
 
 ---
-**[Installation](docs/installation.md) and [Customisation](https://github.com/Firnschnee/FoxOne/blob/main/docs/customisation.md)** |
+**[Installation](https://firnschnee.github.io/FoxOne/installation.html) and [Customisation](https://firnschnee.github.io/FoxOne/customisation.html)** |
 Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/)! | License: [MIT](LICENSE) 

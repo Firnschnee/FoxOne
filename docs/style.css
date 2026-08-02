@@ -43,7 +43,7 @@ img { max-width: 100%; height: auto; border-radius: 8px; }
 .nav-links a { color: var(--muted); }
 .nav-links a:hover { color: var(--accent); text-decoration: none; }
 
-/* Landing: hero + preview vertically centered in the viewport */
+/* Landing: left-aligned, flows from the top, page scrolls */
 body.landing {
   min-height: 100vh;
   display: flex;
@@ -54,17 +54,18 @@ body.landing {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 body.landing .site-footer { margin-top: 0; }
 
 /* Hero */
 .hero {
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
   padding: 64px 24px 32px;
-  text-align: center;
+  text-align: left;
 }
 
 .hero h1 {
@@ -74,13 +75,18 @@ body.landing .site-footer { margin-top: 0; }
 }
 
 .tagline {
-  font-size: 20px;
+  font-size: 19px;
   color: var(--muted);
-  margin: 12px auto 32px;
-  max-width: 640px;
+  margin: 12px 0 32px;
+  text-align: justify;
 }
 
-.buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+/* Single line above the wrap point: stretch it to the full right edge */
+@media (min-width: 900px) {
+  .tagline { text-align-last: justify; }
+}
+
+.buttons { display: flex; gap: 16px; justify-content: flex-start; flex-wrap: wrap; }
 
 .btn {
   display: inline-block;
@@ -104,21 +110,26 @@ body.landing .site-footer { margin-top: 0; }
 
 /* Preview + Features */
 .preview {
+  width: 100%;
   max-width: 1250px;
   margin: 32px auto;
   padding: 0 24px;
-  text-align: center;
+  text-align: left;
 }
+
+.preview img { display: block; }
 
 .feature {
+  width: 100%;
   max-width: 900px;
-  margin: 48px auto;
+  margin: 32px auto 64px;
   padding: 0 24px;
-  text-align: center;
+  text-align: left;
 }
 
-.feature h2 { color: var(--accent); margin-bottom: 4px; }
-.feature p { color: var(--muted); margin-top: 0; }
+.feature h2 { color: var(--accent); margin: 28px 0 4px; }
+.feature h2:first-child { margin-top: 0; }
+.feature p { color: var(--muted); margin: 0; text-align: justify; }
 
 /* Doku-Seiten */
 .content {

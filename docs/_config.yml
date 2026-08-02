@@ -4,3 +4,4 @@ url: https://firnschnee.github.io
 baseurl: /FoxOne
 exclude:
   - superpowers/
+  - index.htmlbak
