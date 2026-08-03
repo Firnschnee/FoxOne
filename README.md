@@ -2,8 +2,6 @@
 
 One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox colors and ready for **Nova**
 
-> **Website: [firnschnee.github.io/FoxOne](https://firnschnee.github.io/FoxOne/)**
-
 > Tested on Firefox 153 with `browser.nova.enabled` and on Windows, macOS, and Linux (GNOME & KDE).
 > 
 ![urlbar](assets/preview_cropped.png)
