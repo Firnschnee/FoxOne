@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.4.10 – A minimalistic one-line Firefox theme
+  FoxOne 3.4.11 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
   MIT License
@@ -578,6 +578,24 @@
    a direct paint of the element to the frame tone. */
 :root[lwtheme] .urlbar-input-container,
 :root[lwtheme] #urlbar-input-container {
+  background-color: var(--lwt-accent-color) !important;
+}
+
+/* Nova washes the toolbox under a theme: browser-shared.css lays a translucent
+   light-dark(rgba(0,0,0,.05), rgba(255,255,255,.05)) over #navigator-toolbox
+   (:root[lwtheme]:not([theme-image-in-toolbox]), Nova-scoped) on top of the
+   body's frame tone. The variable collapse above never sees that layer – it is
+   a literal colour, not token-driven – so the bar sat a shade off the
+   accent-painted URL field and the field read as a box (issues #38/#40).
+   Private windows are hit too: under Nova they ship a built-in theme
+   (firefox-privatewindow@mozilla.org) through the same lwtheme path as a
+   theme extension. Repaint the toolbox with the frame tone directly.
+   background-color only, not the shorthand – a theme's header image lives in
+   background-image on this element ([theme-image-in-toolbox]) and must
+   survive. Also covers the inactive-window repaint (which would dim to
+   --toolbox-background-color-inactive): FoxOne's field paint does not dim
+   either, so bar and field stay one surface in both window states. */
+:root[lwtheme] #navigator-toolbox {
   background-color: var(--lwt-accent-color) !important;
 }
 
