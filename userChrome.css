@@ -941,7 +941,7 @@ sidebar-main,
    tone rules above), so the radius goes there. */
 #urlbar #urlbar-background,
 #urlbar .urlbar-background {
-  border-radius: var(--uc-radius-surface) !important;
+  border-radius: 0 0 var(--uc-radius-surface) var(--uc-radius-surface) !important;
 }
 
 /* Under a dynamic theme the fill moves to .urlbar-input-container (see
