@@ -938,7 +938,15 @@ sidebar-main,
    round the pair together and the lower box shows at the corners the upper
    one rounds away, which reads as the field hanging a pixel out of the row.
    Without a dynamic theme FoxOne paints .urlbar-background (see the field
-   tone rules above), so the radius goes there. */
+   tone rules above), so the radius goes there.
+
+   Bottom corners only (PR #42, NeroWolfe75). The box sits flush against the
+   toolbar row since PR #39 pulled the breakout edges back, so a top radius
+   never rounded anything real – it only drew the open state's border as two
+   stray arcs at the window edge. Square on top the open dropdown merges into
+   the bar like a sheet and rounds only where it meets the page; at rest the
+   field is toolbar-on-toolbar, so the missing top radius is invisible there
+   either way. */
 #urlbar #urlbar-background,
 #urlbar .urlbar-background {
   border-radius: 0 0 var(--uc-radius-surface) var(--uc-radius-surface) !important;
