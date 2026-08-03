@@ -1533,7 +1533,8 @@ sidebar-main {
   #back-button,
   #forward-button,
   #reload-button,
-  #stop-reload-button {
+  #stop-reload-button,
+  #ipprotection-button {
     display: none !important;
   }
 }
@@ -1544,7 +1545,8 @@ sidebar-main {
   #back-button,
   #forward-button,
   #reload-button,
-  #stop-reload-button {
+  #stop-reload-button,
+  #ipprotection-button {
     opacity: 0 !important;
     max-width: 0 !important;
     min-width: 0 !important;
@@ -1558,7 +1560,8 @@ sidebar-main {
     #back-button,
     #forward-button,
     #reload-button,
-    #stop-reload-button
+    #stop-reload-button,
+    #ipprotection-button
   ) {
     opacity: 1 !important;
     width: revert !important;
@@ -1582,7 +1585,8 @@ sidebar-main {
     #back-button,
     #forward-button,
     #reload-button,
-    #stop-reload-button
+    #stop-reload-button,
+    #ipprotection-button
   ) {
     opacity: 1 !important;
     width: revert !important;
@@ -2623,7 +2627,8 @@ html[id^="taskbartab"] #unified-extensions-button {
 
   /* Auto-hide nav buttons reveal */
   #reload-button,
-  #stop-reload-button { transition: none !important; }
+  #stop-reload-button,
+  #ipprotection-button { transition: none !important; }
 
   /* Urlbar hover-reveal groups */
   #identity-permission-box { transition: none !important; }
