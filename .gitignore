@@ -1,0 +1,7 @@
+# Local dev tooling, stays untracked
+tools/
+
+# OS cruft
+Thumbs.db
+Desktop.ini
+.DS_Store
