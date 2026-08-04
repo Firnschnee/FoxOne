@@ -39,7 +39,7 @@
       <a href="action.html">in action</a>
       <a href="https://github.com/Firnschnee/FoxOne">github</a>
     </nav>
-    <button class="raster-btn" id="rasterBtn" aria-pressed="false" aria-label="Toggle the amber 12-column grid overlay (keyboard: G)">raster <kbd>g</kbd></button>
+    <span class="badge">amber</span>
   </div>
 </header>
 
@@ -57,7 +57,7 @@
       </div>
       <div class="m-meta">
         <p class="m-lead">userchrome.css</p>
-        <p>firefox 152+ · nova ui</p>
+        <p>ready for nova redesign</p>
         <p>windows · macos · linux</p>
         <p class="m-dim">mit license · free and open source</p>
       </div>
@@ -90,9 +90,6 @@
         <p>Every surface uses the warm Gruvbox palette, tuned for readability on Windows. All colors sit in CSS variables at the top of one file, so swapping in your own scheme is a small edit in one place.</p>
       </div>
     </div>
-    <div class="g">
-      <p class="invite">This page practises what the theme preaches: twelve columns, a 24-pixel baseline, one grotesque. Press <button type="button" class="kbd-g" data-raster-toggle aria-pressed="false" aria-label="Toggle the amber grid overlay">G</button>, or the raster button above, to see the skeleton drawn in amber.</p>
-    </div>
   </section>
 
   <!-- ============ IN ACTION ============ -->
@@ -108,7 +105,6 @@
           <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: dynamic URL bar">
             <span class="frame">
               <img src="assets/dynamic_url.gif" alt="URL bar expanding on focus with hover-reveal icons" loading="lazy">
-              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
             </span>
           </a>
           <p class="cap"><span class="cat">fx-01</span><span class="ttl">«dynamic url bar»</span><span class="who">clean by default · icons reveal on hover</span></p>
@@ -118,7 +114,6 @@
           <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: dynamic tabs">
             <span class="frame">
               <img src="assets/dynamic_toolbar.gif" alt="Tab bar and toolbar icons revealing on hover" loading="lazy">
-              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
             </span>
           </a>
           <p class="cap"><span class="cat">fx-02</span><span class="ttl">«dynamic tabs»</span><span class="who">tucked by the hamburger · revealed on hover</span></p>
@@ -128,7 +123,6 @@
           <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: floating find bar">
             <span class="frame">
               <img src="assets/findbar.gif" alt="Floating find bar in the top right corner" loading="lazy">
-              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
             </span>
           </a>
           <p class="cap"><span class="cat">fx-03</span><span class="ttl">«floating find bar»</span><span class="who">adapted from littlefox</span></p>
@@ -148,20 +142,11 @@
       <p>Also themed for Thunderbird: <a href="https://firnschnee.github.io/BirdOne/">BirdOne</a>.</p>
     </div>
     <div class="f-col">
-      <p>This site is set in a single grotesque on twelve columns and a 24-pixel baseline. Press <button type="button" class="kbd-g" data-raster-toggle aria-pressed="false" aria-label="Toggle the amber grid overlay">G</button> to check our work.</p>
+      <p>This site is set in a single grotesque on twelve columns and a 24-pixel baseline.</p>
       <p class="f-fine">© 2026 firnschnee · foxone</p>
     </div>
   </div>
 </footer>
-
-<!-- ============ THE GRID ============ -->
-<div class="raster" id="raster" aria-hidden="true">
-  <div class="lines"></div>
-  <div class="wrap g">
-    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-  </div>
-</div>
-<div class="raster-chip" aria-hidden="true">grid 12 columns · gutter <span class="bund-24">24</span><span class="bund-16">16</span> px · baseline 24 px · key g</div>
 
 <script src="js/main.js"></script>
 </body>

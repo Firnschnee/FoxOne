@@ -12,7 +12,7 @@
   --stahl:   #938d84;  /* secondary text */
   --silber:  #6e6961;  /* tertiary, fine print */
   --hair:    #38332d;  /* hairlines, borders */
-  --amber:      #d79921;  /* accent surfaces: rule, dot, raster, buttons */
+  --amber:      #d79921;  /* accent surfaces: rule, dot, badge, buttons */
   --amber-text: #fabd2f;  /* accent for small text, lighter step */
 
   --gutter: 24px;
@@ -49,7 +49,6 @@ body {
 
 a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-kbd { font-family: var(--sans); }
 /* the style never slanted a letter in its life */
 em { font-style: normal; font-weight: 600; }
 img { display: block; width: 100%; height: auto; }
@@ -81,19 +80,12 @@ code, pre { font-family: var(--mono); font-size: 0.92em; }
 .topnav a { font-size: 14px; color: var(--stahl); text-decoration: none; padding: 4px 0; }
 .topnav a:hover { color: var(--creme); box-shadow: 0 2px 0 0 var(--amber); }
 
-.raster-btn {
-  display: inline-flex; align-items: center; gap: 8px;
+.badge {
+  display: inline-flex; align-items: center;
   border: 1px solid var(--amber); color: var(--amber-text);
   font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
   padding: 7px 12px;
-  transition: background 120ms linear, color 120ms linear;
 }
-.raster-btn kbd {
-  font-size: 11px; font-weight: 600; line-height: 1;
-  border: 1px solid currentColor; padding: 2px 5px 3px;
-}
-.raster-btn:hover, .raster-btn[aria-pressed="true"] { background: var(--amber); color: var(--grund); }
-html:not(.js) .raster-btn { display: none; }
 
 /* ---------- masthead ---------- */
 .mast { padding-top: clamp(36px, 5vw, 72px); padding-bottom: var(--sect); }
@@ -137,7 +129,7 @@ html:not(.js) .raster-btn { display: none; }
 }
 .btn:hover { background: var(--amber); color: var(--grund); }
 .btn--ghost { border-color: var(--hair); color: var(--stahl); }
-.btn--ghost:hover { background: none; border-color: var(--stahl); color: var(--creme); }
+.btn--ghost:hover { background: none; border-color: var(--amber); color: var(--creme); }
 
 /* load choreography (gated behind .js so no-JS users see everything) */
 .js .rule { transform: scaleX(0); transform-origin: 0 50%; }
@@ -182,18 +174,6 @@ h2 .en { color: var(--stahl); font-weight: 400; }
 .col-b { grid-column: 7 / 13; }
 .essay p + p { margin-top: 24px; }
 .essay .col-a p, .essay .col-b p { max-width: 62ch; }
-
-.invite { grid-column: 1 / 8; margin-top: clamp(48px, 6vw, 96px); max-width: 62ch; color: var(--stahl); }
-.kbd-g {
-  display: inline-block;
-  font-size: 13px; font-weight: 700; line-height: 1;
-  color: var(--amber-text);
-  border: 1px solid var(--amber);
-  padding: 3px 7px 4px;
-  transform: translateY(-1px);
-  transition: background 120ms linear, color 120ms linear;
-}
-button.kbd-g:hover, button.kbd-g[aria-pressed="true"] { background: var(--amber); color: var(--grund); }
 
 /* ---------- the wall (in action) ---------- */
 .wall { background: var(--flaeche); padding-block: var(--sect); }
@@ -280,101 +260,6 @@ button.kbd-g:hover, button.kbd-g[aria-pressed="true"] { background: var(--amber)
 .doc .cap { margin-bottom: clamp(40px, 5vw, 64px); }
 
 /* ============================================================
-   THE GRID – amber hairlines, toggled with G
-   ============================================================ */
-.raster {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  z-index: 140;
-  opacity: 0; visibility: hidden;
-  transition: opacity 120ms linear, visibility 0s linear 120ms;
-}
-html[data-raster="on"] .raster {
-  opacity: 1; visibility: visible;
-  transition: opacity 120ms linear;
-}
-.raster .lines {
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(215, 153, 33, 0.13) 0 1px,
-    transparent 1px 24px
-  );
-  opacity: 0;
-}
-.raster .wrap { height: 100%; }
-.raster .g { height: 100%; }
-.raster i {
-  display: block; height: 100%;
-  border-inline: 1px solid rgba(215, 153, 33, 0.5);
-  background: rgba(215, 153, 33, 0.04);
-  opacity: 0;
-  transform: scaleY(0);
-  transform-origin: 50% 0;
-}
-/* ON: twelve columns rule down in sequence, then the baseline settles */
-html[data-raster="on"] .raster i {
-  opacity: 1; transform: none;
-  transition: transform 300ms var(--ease), opacity 160ms var(--ease);
-}
-html[data-raster="on"] .raster i:nth-child(1)  { transition-delay: 0ms; }
-html[data-raster="on"] .raster i:nth-child(2)  { transition-delay: 22ms; }
-html[data-raster="on"] .raster i:nth-child(3)  { transition-delay: 44ms; }
-html[data-raster="on"] .raster i:nth-child(4)  { transition-delay: 66ms; }
-html[data-raster="on"] .raster i:nth-child(5)  { transition-delay: 88ms; }
-html[data-raster="on"] .raster i:nth-child(6)  { transition-delay: 110ms; }
-html[data-raster="on"] .raster i:nth-child(7)  { transition-delay: 132ms; }
-html[data-raster="on"] .raster i:nth-child(8)  { transition-delay: 154ms; }
-html[data-raster="on"] .raster i:nth-child(9)  { transition-delay: 176ms; }
-html[data-raster="on"] .raster i:nth-child(10) { transition-delay: 198ms; }
-html[data-raster="on"] .raster i:nth-child(11) { transition-delay: 220ms; }
-html[data-raster="on"] .raster i:nth-child(12) { transition-delay: 242ms; }
-html[data-raster="on"] .raster .lines {
-  opacity: 1;
-  transition: opacity 240ms var(--ease) 330ms;
-}
-/* the columns are counted, like any honest system */
-.raster i::before {
-  position: sticky; top: 64px;
-  display: block;
-  padding: 3px 0 0 5px;
-  font-size: 10px; font-weight: 600; line-height: 1;
-  color: var(--amber-text);
-  font-variant-numeric: tabular-nums;
-}
-.raster i:nth-child(1)::before  { content: "01"; }
-.raster i:nth-child(2)::before  { content: "02"; }
-.raster i:nth-child(3)::before  { content: "03"; }
-.raster i:nth-child(4)::before  { content: "04"; }
-.raster i:nth-child(5)::before  { content: "05"; }
-.raster i:nth-child(6)::before  { content: "06"; }
-.raster i:nth-child(7)::before  { content: "07"; }
-.raster i:nth-child(8)::before  { content: "08"; }
-.raster i:nth-child(9)::before  { content: "09"; }
-.raster i:nth-child(10)::before { content: "10"; }
-.raster i:nth-child(11)::before { content: "11"; }
-.raster i:nth-child(12)::before { content: "12"; }
-
-.raster-chip {
-  position: fixed; left: 16px; bottom: 16px; z-index: 150;
-  background: var(--grund);
-  border: 1px solid var(--amber);
-  color: var(--amber-text);
-  font-size: 12px; font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 8px 12px;
-  font-variant-numeric: tabular-nums;
-  opacity: 0; visibility: hidden;
-  transform: translateY(6px);
-  transition: opacity 120ms linear, transform 120ms var(--ease), visibility 0s linear 120ms;
-}
-html[data-raster="on"] .raster-chip {
-  opacity: 1; visibility: visible; transform: none;
-  transition: opacity 140ms linear 420ms, transform 160ms var(--ease) 420ms;
-}
-.bund-16 { display: none; }
-
-/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1080px) {
@@ -385,7 +270,6 @@ html[data-raster="on"] .raster-chip {
 
 @media (max-width: 900px) {
   .col-a, .col-b { grid-column: 1 / 13; }
-  .invite { grid-column: 1 / 13; }
   .wall-intro { grid-column: 1 / 13; }
   .werk { grid-column: 1 / 13; }
   .doc { grid-column: 1 / 13; }
@@ -394,11 +278,8 @@ html[data-raster="on"] .raster-chip {
 
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
-  .raster i::before { content: none !important; }
   .topnav { display: none; }
   .top-in { justify-content: space-between; }
-  .bund-24 { display: none; }
-  .bund-16 { display: inline; }
 }
 
 /* ============================================================
