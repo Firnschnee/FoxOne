@@ -1,6 +1,6 @@
 # FoxOne
 
-One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox colors and ready for **Nova**
+One-line layout, clean URL bar, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gruvbox colors and ready for **Nova**
 
 > Tested on Firefox 153 with `browser.nova.enabled` and on Windows, macOS, and Linux (GNOME & KDE).
 > 

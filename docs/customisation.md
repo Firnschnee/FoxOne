@@ -83,11 +83,13 @@ What it deliberately does not touch:
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
 | `--uc-show-loading-progress` | `0` | Loading progress bar on the active tab while a page loads (`1` = show, `0` = hide) |
 | `--uc-container-line-top` | `1` | Container tab indicator line position (`1` = top of the tab, the Firefox 153 layout, `0` = bottom edge, the classic pre-153 look) |
-| `--uc-dynamic-bookmarks` | `0` | Bookmarks bar as an overlay that reveals on URL-bar hover instead of a permanent row (`1` = dynamic, `0` = static). Needs the bookmarks toolbar set to "Always show" |
+| `--uc-dynamic-bookmarks` | `1` | Bookmarks bar as an overlay that reveals on URL-bar hover instead of a permanent row (`1` = dynamic, `0` = static row on its own line). Needs Firefox' bookmarks toolbar set to "Always show" |
 | `--uc-dynamic-bookmarks-hover-delay` | `450ms` | Delay before the URL-bar hover reveals the bar |
 | `--uc-dynamic-bookmarks-hide-delay` | `50ms` | Grace period before the bar collapses again, for travelling from the URL bar onto it |
 
 The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavis/LittleFox) (MIT).
+
+Since 3.5.0 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar.
 
 ### Adaptive Tab Bar Colour
 

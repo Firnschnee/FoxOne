@@ -1,8 +1,9 @@
 /*==============================================================================================*
 
-  FoxOne 3.4.11 – A minimalistic one-line Firefox theme
+  FoxOne 3.5.0 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
-  Floating Find Bar by LittleFox (https://github.com/biglavis/LittleFox)
+  Floating Find Bar and dynamic Bookmarks Bar by LittleFox
+  (https://github.com/biglavis/LittleFox)
   MIT License
 
 *==============================================================================================*/
@@ -126,9 +127,10 @@
   --uc-hide-extension-icons: 1;
 
   /* Bookmarks bar — float it out of the layout and reveal it on URL-bar hover
-   * (1 = dynamic overlay, 0 = static row). Requires Firefox' bookmarks toolbar
-   * set to "Always show"; "Only on New Tab" keeps the native collapse and the
-   * bar will not reveal. */
+   * (1 = dynamic overlay, 0 = static row that keeps its own line).
+   * Only bites with Firefox' bookmarks toolbar set to "Always show": under
+   * "Never show" there is nothing to reveal, and "Only on New Tab" leaves
+   * Firefox' own collapse in charge everywhere else. */
   --uc-dynamic-bookmarks: 1;
 
   /* Delay before the URL-bar hover reveals the bar, and before it hides again
@@ -726,7 +728,7 @@ sidebar-main,
 }
 
 /* ==========================================================================
-   DYNAMIC BOOKMARKS BAR (opt-in, --uc-dynamic-bookmarks)
+   DYNAMIC BOOKMARKS BAR (on by default, --uc-dynamic-bookmarks: 0 opts out)
 
    Mechanism adapted from LittleFox (github.com/biglavis/LittleFox, MIT):
    the bar leaves the toolbox flex flow via position:absolute/top:100% and
@@ -759,8 +761,9 @@ sidebar-main,
      @media -moz-pref("browser.nova.enabled")), and #navigator-toolbox is
      one. The overlay's containing block IS the toolbox and it sits at
      top:100%, i.e. entirely outside it, so the clip erases the bar in every
-     state — reveal included. Lifted here only, inside the opt-in block, not
-     on the shared .chrome-block rule. */
+     state — reveal included. Lifted on the toolbox only, from inside this
+     block, so setting --uc-dynamic-bookmarks: 0 hands the clip straight
+     back; the shared .chrome-block rule is never touched. */
   #navigator-toolbox {
     position: relative !important;
     z-index: 9999 !important;
