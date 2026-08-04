@@ -17,14 +17,14 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 >Dynamic URL bar with hover-reveal Icons
 >
-
+![urlbar](assets/dynamic_url.gif)
 
 <br>
 
 
 >Dynamic tabs and two addons pinned by the hamburger, revealed on hover.
+>
 ![toolbar](assets/dynamic_toolbar.gif)
-
 
 
 <br>
@@ -33,6 +33,7 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 >Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFox)
 >
+![findbar](assets/findbar.gif)
 
 
 
