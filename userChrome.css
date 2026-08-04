@@ -752,10 +752,19 @@ sidebar-main,
 
 @container style(--uc-dynamic-bookmarks: 1) {
 
-  /* Positioning context for the overlay, and stacking above the content. */
+  /* Positioning context for the overlay, and stacking above the content.
+
+     overflow is the part LittleFox does not need: Nova gives every
+     .chrome-block container `overflow: clip` (browser-shared.css, inside
+     @media -moz-pref("browser.nova.enabled")), and #navigator-toolbox is
+     one. The overlay's containing block IS the toolbox and it sits at
+     top:100%, i.e. entirely outside it, so the clip erases the bar in every
+     state — reveal included. Lifted here only, inside the opt-in block, not
+     on the shared .chrome-block rule. */
   #navigator-toolbox {
     position: relative !important;
     z-index: 9999 !important;
+    overflow: visible !important;
   }
 
   /* Resting state: out of flow, transparent, zero height. overflow:hidden is
