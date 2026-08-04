@@ -6,59 +6,13 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 > 
 ![urlbar](assets/preview_cropped.png)
 
+Want to see it in Action? [This way!](https://firnschnee.github.io/FoxOne/action.html)
 
 > Running classic (**pre-Nova**) Firefox?
 > 
 > From release 3.0 onward, FoxOne targets the Nova UI. The stylesheet is dual-written (Proton & Nova) and should still work, but it is no longer tested. For a known-good classic build, use the 2.3 release.
 
-
-
-### Features
-
->Dynamic URL bar with hover-reveal Icons
->
-![urlbar](assets/dynamic_url.gif)
-
-<br>
-
-
->Dynamic tabs and two addons pinned by the hamburger, revealed on hover.
->
-![toolbar](assets/dynamic_toolbar.gif)
-
-
-<br>
-
-
-
->Floating Find Bar. Adapted from [LittleFox](https://github.com/biglavis/LittleFox)
->
-![findbar](assets/findbar.gif)
-
-
-
-### Installation
->
->1. Download [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) and [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css)
->
->2. Go to **`about:config`** in FireFox. Search for **`toolkit.legacyUserProfileCustomizations.stylesheets`** and set it to **`true`**.
->
->3. Find your profile folder: In Firefox, go to `about:support` and click **Open Profile Folder**.
->
->4. Create a `chrome` folder inside your profile folder if it doesn't exist, then copy these files into it:
->
->- [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) - browser UI styling
->- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) - new tab / home page colors
->
->5. Restart Firefox - The theme applies on restart.
->   
->6. FoxOne includes a built-in Gruvbox inspired Dark color theme that activates automatically in dark mode. No separate extension needed.
-
-
-### Customisation
-> FoxOne is fully configurable through CSS variables. See all options → [Customisation](https://firnschnee.github.io/FoxOne/customisation.html)
-
-### Thunderbird? 
+What about Thunderbird?
 > You are looking for [BirdOne!](https://github.com/Firnschnee/BirdOne)
 
 ---
