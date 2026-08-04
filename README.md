@@ -23,7 +23,7 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 
 >Dynamic tabs and two addons pinned by the hamburger, revealed on hover.
->
+![toolbar](assets/dynamic_toolbar.gif)
 
 
 
