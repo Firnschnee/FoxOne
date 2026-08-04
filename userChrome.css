@@ -125,6 +125,18 @@
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
 
+  /* Bookmarks bar — float it out of the layout and reveal it on URL-bar hover
+   * (1 = dynamic overlay, 0 = static row). Requires Firefox' bookmarks toolbar
+   * set to "Always show"; "Only on New Tab" keeps the native collapse and the
+   * bar will not reveal. */
+  --uc-dynamic-bookmarks: 1;
+
+  /* Delay before the URL-bar hover reveals the bar, and before it hides again
+   * once the pointer leaves. The hide delay is the grace period for travelling
+   * from the URL bar down onto the bookmarks. */
+  --uc-dynamic-bookmarks-hover-delay: 450ms;
+  --uc-dynamic-bookmarks-hide-delay: 50ms;
+
 }
 
 
@@ -711,6 +723,84 @@ sidebar-main,
 }
 :root[lwtheme] #PersonalToolbar {
   background-color: var(--toolbar-bgcolor) !important;
+}
+
+/* ==========================================================================
+   DYNAMIC BOOKMARKS BAR (opt-in, --uc-dynamic-bookmarks)
+
+   Mechanism adapted from LittleFox (github.com/biglavis/LittleFox, MIT):
+   the bar leaves the toolbox flex flow via position:absolute/top:100% and
+   hangs below it as an overlay, so it costs no vertical space, then fades
+   in on URL-bar hover.
+
+   Three details carried over from LittleFox because each is a trap:
+   - max-height is animated with `0s step-end` DELAYED past the fade, so the
+     bar keeps its hit box while fading out but collapses to a zero-height,
+     unhoverable strip afterwards. Without it the invisible bar still eats
+     clicks at the top of the page.
+   - :not(:has(toolbarpaletteitem)) drops the whole overlay in Customize
+     mode, where an absolutely positioned drop target is unusable.
+   - :has(toolbarbutton[open]) keeps the bar up while a bookmarks FOLDER is
+     open; otherwise the bar collapses out from under its own menu.
+
+   FoxOne differences from the original: gated by @container instead of
+   calc()-encoded 0/1, so at the default 0 not one declaration reaches the
+   toolbar; the reveal trigger is #urlbar rather than #urlbar-container
+   (Nova reshuffled the container); and the hide guard covers Nova's
+   [breakout-extend] alongside [open].
+   ========================================================================== */
+
+@container style(--uc-dynamic-bookmarks: 1) {
+
+  /* Positioning context for the overlay, and stacking above the content. */
+  #navigator-toolbox {
+    position: relative !important;
+    z-index: 9999 !important;
+  }
+
+  /* Resting state: out of flow, transparent, zero height. overflow:hidden is
+     FoxOne's addition — the collapsed box must clip its own rows, otherwise
+     they stay hit-testable over the page and re-trigger the reveal. */
+  #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    position: absolute !important;
+    top: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    transform-origin: top;
+    transform: scaleY(0.96) translateY(-4px) !important;
+    max-height: 0 !important;
+    transition:
+      opacity 100ms ease-out var(--uc-dynamic-bookmarks-hide-delay),
+      transform 100ms ease-out var(--uc-dynamic-bookmarks-hide-delay),
+      max-height 0s step-end calc(100ms + var(--uc-dynamic-bookmarks-hide-delay)) !important;
+  }
+
+  /* Reveal, but never while the URL bar is expanded — the results panel and
+     the bar would occupy the same strip. */
+  #navigator-toolbox:not(:has(#urlbar:is([open], [breakout-extend]))) {
+    &:has(#urlbar:hover) #PersonalToolbar,
+    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
+      opacity: 1 !important;
+      transform: scaleY(1) translateY(0) !important;
+      max-height: 4em !important;
+    }
+    /* Hover on the URL bar waits out the delay; hover on the bar itself (the
+       bridge that lets the pointer travel down) opens immediately. */
+    &:has(#urlbar:hover) #PersonalToolbar {
+      transition-delay: var(--uc-dynamic-bookmarks-hover-delay),
+                        var(--uc-dynamic-bookmarks-hover-delay), 0s !important;
+    }
+    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
+      transition-delay: 0s, 0s, 0s !important;
+    }
+  }
+
+  /* URL bar opened: drop the grace period, collapse the hit box right after
+     the fade instead of after the fade plus hide delay. */
+  #navigator-toolbox:has(#urlbar:is([open], [breakout-extend])) #PersonalToolbar {
+    transition-delay: 0s, 0s, 100ms !important;
+  }
 }
 
 #statuspanel #statuspanel-label {
@@ -2669,6 +2759,10 @@ html[id^="taskbartab"] #unified-extensions-button {
 
   /* Tabstrip extension-icon reveal */
   #TabsToolbar-customization-target > toolbaritem { transition: none !important; }
+
+  /* Dynamic bookmarks bar — reveal and collapse snap, delays included. The
+     bar still appears and disappears on hover, it just does not animate. */
+  #PersonalToolbar { transition: none !important; }
 
   /* Findbar slide / scale */
   findbar,
