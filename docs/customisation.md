@@ -85,6 +85,8 @@ What it deliberately does not touch:
 | `--uc-dynamic-bookmarks-hover-delay` | `450ms` | Delay before the URL-bar hover reveals the bar |
 | `--uc-dynamic-bookmarks-hide-delay` | `50ms` | Grace period before the bar collapses again, for travelling from the URL bar onto it |
 
+The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavis/LittleFox) (MIT).
+
 ### Adaptive Tab Bar Colour
 
 FoxOne is compatible with the [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/) extension out of the box, with no configuration needed. When the extension is active it retints the frame, toolbar, URL field, popups and sidebar to match each page, and FoxOne yields those surfaces to it, collapsing the extension's separate tones onto one flat colour so the one-line bar stays seamless. FoxOne's structural layout and its accent cues (selected-tab line and title, focus ring, container glow) stay in place, so the one-line look survives the recolour.
