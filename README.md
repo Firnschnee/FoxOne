@@ -4,7 +4,7 @@ One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox co
 
 > Tested on Firefox 153 with `browser.nova.enabled` and on Windows, macOS, and Linux (GNOME & KDE).
 > 
-![urlbar](assets/preview_cropped.pn)
+![urlbar](assets/preview_cropped.png)
 
 
 > Running classic (**pre-Nova**) Firefox?
