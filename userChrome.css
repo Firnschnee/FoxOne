@@ -746,8 +746,8 @@ sidebar-main,
    FoxOne differences from the original: gated by @container instead of
    calc()-encoded 0/1, so at the default 0 not one declaration reaches the
    toolbar; the reveal trigger is #urlbar rather than #urlbar-container
-   (Nova reshuffled the container); and the hide guard covers Nova's
-   [breakout-extend] alongside [open].
+   (Nova reshuffled the container); the toolbox clip is lifted (see below);
+   and the collapsed bar sheds its padding, not just its content height.
    ========================================================================== */
 
 @container style(--uc-dynamic-bookmarks: 1) {
@@ -794,9 +794,14 @@ sidebar-main,
       padding-block 0s step-end calc(100ms + var(--uc-dynamic-bookmarks-hide-delay)) !important;
   }
 
-  /* Reveal, but never while the URL bar is expanded — the results panel and
-     the bar would occupy the same strip. */
-  #navigator-toolbox:not(:has(#urlbar:is([open], [breakout-extend]))) {
+  /* Reveal, but never while the results list is open — the panel and the bar
+     would occupy the same strip. The guard keys on [open] (set by
+     UrlbarView when the list opens) and deliberately NOT on
+     [breakout-extend]: under Nova that attribute follows the FOCUS alone
+     (UrlbarInput.updateLayoutExtend: `if (this.focused || this.view.isOpen)`,
+     where pre-Nova it followed view.isOpen), so guarding on it froze the bar
+     for as long as the caret sat in an empty URL bar — every fresh tab. */
+  #navigator-toolbox:not(:has(#urlbar[open])) {
     &:has(#urlbar:hover) #PersonalToolbar,
     & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
       opacity: 1 !important;
@@ -816,9 +821,9 @@ sidebar-main,
     }
   }
 
-  /* URL bar opened: drop the grace period, collapse the hit box right after
-     the fade instead of after the fade plus hide delay. */
-  #navigator-toolbox:has(#urlbar:is([open], [breakout-extend])) #PersonalToolbar {
+  /* Results list opened: drop the grace period, collapse the hit box right
+     after the fade instead of after the fade plus hide delay. */
+  #navigator-toolbox:has(#urlbar[open]) #PersonalToolbar {
     transition-delay: 0s, 0s, 100ms, 100ms !important;
   }
 }
