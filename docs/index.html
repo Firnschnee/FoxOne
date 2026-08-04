@@ -11,47 +11,158 @@
 <meta property="og:image" content="https://firnschnee.github.io/FoxOne/assets/preview_cropped.png">
 <meta property="og:url" content="https://firnschnee.github.io/FoxOne/">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1b1815">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preload" as="font" type="font/woff2" href="fonts/InstrumentSans-02.woff2" crossorigin>
+<link rel="stylesheet" href="fonts/InstrumentSans.css">
 <link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
-<body class="landing">
+<body>
 
-<main class="landing-main">
+<!-- shared SVG defs (grain) -->
+<svg class="svgdefs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.85  0 0 0 0 0.82  0 0 0 0 0.78  0 0 0 0.5 0"/>
+    </filter>
+  </defs>
+</svg>
 
-<section class="hero">
-  <h1>FoxOne</h1>
-  <p class="tagline">One-line layout, clean URL bar, hover-reveal icons, floating Findbar, Gruvbox colors & ready for <b>Nova</b>. Tested on Firefox 152+ with <code>browser.nova.enabled</code> on Windows, macOS, & Linux (GNOME & KDE).</p>
-  <div class="buttons">
-    <a class="btn btn-primary" href="installation.html">Installation</a>
-    <a class="btn" href="customisation.html">Customisation</a>
-    <a class="btn" href="action.html">See it in action</a>
-    <a class="btn" href="https://github.com/Firnschnee/FoxOne">GitHub Repo</a>
-    <a class="btn" href="https://firnschnee.github.io/BirdOne/">Thunderbird?</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="./">foxone</a>
+    <nav class="topnav" aria-label="Pages">
+      <a href="installation.html">installation</a>
+      <a href="customisation.html">customisation</a>
+      <a href="action.html">in action</a>
+      <a href="https://github.com/Firnschnee/FoxOne">github</a>
+    </nav>
+    <button class="raster-btn" id="rasterBtn" aria-pressed="false" aria-label="Toggle the amber 12-column grid overlay (keyboard: G)">raster <kbd>g</kbd></button>
   </div>
-</section>
+</header>
 
-<div class="preview">
-  <img src="assets/preview_cropped.png" width="1560" height="340" alt="FoxOne preview: Firefox with a single combined toolbar and tab line">
-</div>
+<main id="main">
 
-<section class="feature">
-  <h2>One line for everything</h2>
-  <p>FoxOne merges the Firefox tab bar, URL bar and navigation buttons into a single toolbar row.
-  The browser chrome shrinks to one line, and every website gets the vertical space back that a second and third bar would normally take.</p>
-  <h2>A URL bar that stays out of the way</h2>
-  <p>The address bar shows only the page address by default and reveals its icons when you hover or type.
-  What is usually a row of permanent buttons becomes a clean line that expands on demand.</p>
-  <h2>Pure userChrome.css</h2>
-  <p>The whole theme is one <code>userChrome.css</code> stylesheet plus an optional <code>userContent.css</code> for Firefox's internal pages – no extension, no background process, nothing phoning home. Toggles let you switch individual features on and off without touching the rest of the stylesheet. Every surface uses the warm Gruvbox palette, tuned for readability on Windows.
-  All colors are exposed as CSS variables, so swapping in your own scheme is an edit at the top of one file.</p>
-</section>
+  <!-- ============ MASTHEAD ============ -->
+  <section class="mast wrap" aria-label="FoxOne masthead">
+    <div class="rule" aria-hidden="true"></div>
+    <h1 class="m-title"><span class="m-clip"><span class="m-line">foxone<i class="dot" aria-hidden="true"></i></span></span></h1>
+    <div class="m-sub g">
+      <div class="m-langs">
+        <p class="m-clip"><span class="m-line l-1">one line for everything</span></p>
+        <p class="m-clip"><span class="m-line l-2">tabs, url bar and navigation in a single row</span></p>
+        <p class="m-clip"><span class="m-line l-3">gruvbox colors · no extensions · nothing phoning home</span></p>
+      </div>
+      <div class="m-meta">
+        <p class="m-lead">userchrome.css</p>
+        <p>firefox 152+ · nova ui</p>
+        <p>windows · macos · linux</p>
+        <p class="m-dim">mit license · free and open source</p>
+      </div>
+    </div>
+    <div class="m-cta">
+      <a class="btn" href="installation.html">installation</a>
+      <a class="btn btn--ghost" href="https://github.com/Firnschnee/FoxOne">github repo</a>
+      <a class="btn btn--ghost" href="https://firnschnee.github.io/BirdOne/">thunderbird? birdone</a>
+    </div>
+  </section>
+
+  <!-- ============ PREVIEW ============ -->
+  <div class="preview wrap">
+    <figure class="frame">
+      <img src="assets/preview_cropped.png" width="1560" height="340" alt="FoxOne preview: Firefox with a single combined toolbar and tab line">
+      <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+    </figure>
+  </div>
+
+  <!-- ============ THE THEME ============ -->
+  <section class="essay wrap" id="theme" aria-labelledby="h-theme">
+    <h2 id="h-theme"><span>the theme</span> <span class="en">– one line for everything</span></h2>
+    <div class="g essay-g">
+      <div class="col-a">
+        <p>FoxOne merges the Firefox tab bar, URL bar and navigation buttons into a single toolbar row. The browser chrome shrinks to one line, and every website gets back the vertical space that a second and a third bar would normally take.</p>
+        <p>The address bar shows only the page address by default and reveals its icons when you hover or type. What is usually a row of permanent buttons becomes a clean line that expands on demand.</p>
+      </div>
+      <div class="col-b">
+        <p>The whole theme is one <code>userChrome.css</code> stylesheet plus an optional <code>userContent.css</code> for Firefox's internal pages – no extension, no background process, nothing phoning home. Toggles switch individual features on and off without touching the rest of the stylesheet.</p>
+        <p>Every surface uses the warm Gruvbox palette, tuned for readability on Windows. All colors sit in CSS variables at the top of one file, so swapping in your own scheme is a small edit in one place.</p>
+      </div>
+    </div>
+    <div class="g">
+      <p class="invite">This page practises what the theme preaches: twelve columns, a 24-pixel baseline, one grotesque. Press <button type="button" class="kbd-g" data-raster-toggle aria-pressed="false" aria-label="Toggle the amber grid overlay">G</button>, or the raster button above, to see the skeleton drawn in amber.</p>
+    </div>
+  </section>
+
+  <!-- ============ IN ACTION ============ -->
+  <section class="wall" id="action" aria-labelledby="h-action">
+    <div class="wrap">
+      <h2 id="h-action"><span>in action</span> <span class="en">– the moving parts</span></h2>
+      <div class="g">
+        <p class="wall-intro">Three details, recorded in motion. Select any entry to open the full catalogue page.</p>
+      </div>
+      <div class="wand g">
+
+        <article class="werk">
+          <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: dynamic URL bar">
+            <span class="frame">
+              <img src="assets/dynamic_url.gif" alt="URL bar expanding on focus with hover-reveal icons" loading="lazy">
+              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+            </span>
+          </a>
+          <p class="cap"><span class="cat">fx-01</span><span class="ttl">«dynamic url bar»</span><span class="who">clean by default · icons reveal on hover</span></p>
+        </article>
+
+        <article class="werk">
+          <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: dynamic tabs">
+            <span class="frame">
+              <img src="assets/dynamic_toolbar.gif" alt="Tab bar and toolbar icons revealing on hover" loading="lazy">
+              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+            </span>
+          </a>
+          <p class="cap"><span class="cat">fx-02</span><span class="ttl">«dynamic tabs»</span><span class="who">tucked by the hamburger · revealed on hover</span></p>
+        </article>
+
+        <article class="werk">
+          <a class="werk-thumb" href="action.html" aria-label="Open the in-action page: floating find bar">
+            <span class="frame">
+              <img src="assets/findbar.gif" alt="Floating find bar in the top right corner" loading="lazy">
+              <svg class="grain-overlay" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+            </span>
+          </a>
+          <p class="cap"><span class="cat">fx-03</span><span class="ttl">«floating find bar»</span><span class="who">adapted from littlefox</span></p>
+        </article>
+
+      </div>
+    </div>
+  </section>
 
 </main>
 
-<footer class="site-footer">
-  <p>Released under the <a href="https://github.com/Firnschnee/FoxOne/blob/main/LICENSE">MIT License</a>.
-  Inspired by <a href="https://github.com/andreasgrafen/cascade">Cascade</a> and <a href="https://github.com/biglavis/LittleFox">LittleFox</a>.</p>
+<footer class="foot">
+  <div class="wrap g">
+    <p class="f-mark">foxone <span class="f-sep">·</span> one line <span class="f-sep">·</span> firefox</p>
+    <div class="f-col">
+      <p>FoxOne is released under the <a href="https://github.com/Firnschnee/FoxOne/blob/main/LICENSE">MIT License</a>. Inspired by <a href="https://github.com/andreasgrafen/cascade">Cascade</a> and <a href="https://github.com/biglavis/LittleFox">LittleFox</a>.</p>
+      <p>Also themed for Thunderbird: <a href="https://firnschnee.github.io/BirdOne/">BirdOne</a>.</p>
+    </div>
+    <div class="f-col">
+      <p>This site is set in a single grotesque on twelve columns and a 24-pixel baseline. Press <button type="button" class="kbd-g" data-raster-toggle aria-pressed="false" aria-label="Toggle the amber grid overlay">G</button> to check our work.</p>
+      <p class="f-fine">© 2026 firnschnee · foxone</p>
+    </div>
+  </div>
 </footer>
 
+<!-- ============ THE GRID ============ -->
+<div class="raster" id="raster" aria-hidden="true">
+  <div class="lines"></div>
+  <div class="wrap g">
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+</div>
+<div class="raster-chip" aria-hidden="true">grid 12 columns · gutter <span class="bund-24">24</span><span class="bund-16">16</span> px · baseline 24 px · key g</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>

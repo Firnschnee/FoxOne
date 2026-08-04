@@ -118,7 +118,7 @@ html:not(.js) .raster-btn { display: none; }
 .m-line { display: block; }
 
 .m-sub { margin-top: clamp(32px, 4vw, 64px); row-gap: 24px; }
-.m-langs { grid-column: 1 / 8; }
+.m-langs { grid-column: 1 / 9; }
 .m-langs p { font-size: clamp(19px, 2.2vw, 29px); line-height: 1.31; letter-spacing: -0.02em; }
 .m-langs .l-1 { font-weight: 600; }
 .m-langs .l-2, .m-langs .l-3 { color: var(--stahl); }
