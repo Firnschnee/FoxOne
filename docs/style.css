@@ -256,6 +256,21 @@ h2 .en { color: var(--stahl); font-weight: 400; }
 }
 .doc blockquote p { max-width: 60ch; }
 .doc hr { border: 0; border-top: 1px solid var(--hair); margin-block: 32px; }
+.doc table {
+  border-collapse: collapse;
+  margin-block: 16px;
+  font-size: 14.5px; line-height: 22px;
+  display: block; overflow-x: auto;
+}
+.doc th, .doc td {
+  border: 1px solid var(--hair);
+  padding: 8px 12px;
+  text-align: left; vertical-align: top;
+}
+.doc th {
+  color: var(--amber-text);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.03em;
+}
 .doc .frame { margin-top: 32px; }
 .doc .cap { margin-bottom: clamp(40px, 5vw, 64px); }
 
