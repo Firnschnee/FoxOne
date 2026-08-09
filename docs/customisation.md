@@ -11,6 +11,9 @@ title: Customisation
 
 > Looking for the **squared corners** look on windows 11? [This way!](https://github.com/rich-ayr/win11-toggle-rounded-corners)
 
+> Want FoxOne with genuine Windows 11 Mica transparency? Take a look at Wintego's fork – [Firefox-transparent-theme](https://github.com/Wintego/Firefox-transparent-theme). 
+
+
 ---
 All configuration lives in the `:root` block at the top of `userChrome.css`.
 
