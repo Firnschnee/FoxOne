@@ -2071,15 +2071,24 @@ sidebar-main {
   outline-color: var(--toolbarseparator-color) !important;
 }
 
+/* if we set --uc-tab-min-width in options less then 50px (36px for example) allowing tabs to shrink to favicon, 
+X button does't fit the tab width and cuted looks ugly, so - let's hide it on tabs narrower then 50px */
+/* making tabs as container */
+.tabbrowser-tab:not([pinned]) {
+  container-type: inline-size;
+}
 /* tab close button: hidden by default, visible on hover */
 .tabbrowser-tab:not([pinned]) .tab-close-button {
   display: none !important;
 }
+/* hide X button on tabs narrower then 50px  */
+@container (min-width: 50px) {
 .tabbrowser-tab:not([pinned]):hover .tab-close-button {
   /* revert (not -moz-inline-block: a removed alias that parses as invalid and
      gets dropped, leaving the base display:none). revert restores the native
      close-button display so it reappears on hover. */
   display: revert !important;
+  }
 }
 
 /* Close X sat ~2px low: it's a 24x24 border-box <image> and the icon scales
