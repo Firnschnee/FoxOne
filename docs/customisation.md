@@ -61,7 +61,7 @@ What it deliberately does not touch:
 |---|---|---|
 | `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD; the threshold is tiered by `resolution`/dppx so it fires at the same physical pixel count under DPI scaling) |
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
-| `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow) |
+| `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow). Tabs below `50px` go favicon-only: the hover close button stays hidden (close via Ctrl+W or context menu) and the audio button gives way to a small badge on the favicon |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
 
 ### Window Controls

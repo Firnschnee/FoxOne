@@ -2071,15 +2071,28 @@ sidebar-main {
   outline-color: var(--toolbarseparator-color) !important;
 }
 
+/* Tabs as size containers, so rules can react to the actual tab width. Only
+   matters once --uc-tab-min-width drops below ~50px (favicon-only tabs):
+   close button and audio button then no longer fit and get clipped at the
+   tab edge. inline-size containment is safe here because tab widths come
+   from the strip's flexbox and the min/max-width clamps, not from content. */
+.tabbrowser-tab:not([pinned]) {
+  container-type: inline-size;
+}
+
 /* tab close button: hidden by default, visible on hover */
 .tabbrowser-tab:not([pinned]) .tab-close-button {
   display: none !important;
 }
-.tabbrowser-tab:not([pinned]):hover .tab-close-button {
-  /* revert (not -moz-inline-block: a removed alias that parses as invalid and
-     gets dropped, leaving the base display:none). revert restores the native
-     close-button display so it reappears on hover. */
-  display: revert !important;
+/* Below 50px the X cannot fit next to the favicon, so it stays hidden even
+   on hover; close via Ctrl+W or the context menu instead. */
+@container (min-width: 50px) {
+  .tabbrowser-tab:not([pinned]):hover .tab-close-button {
+    /* revert (not -moz-inline-block: a removed alias that parses as invalid
+       and gets dropped, leaving the base display:none). revert restores the
+       native close-button display so it reappears on hover. */
+    display: revert !important;
+  }
 }
 
 /* Close X sat ~2px low: it's a 24x24 border-box <image> and the icon scales
@@ -2182,19 +2195,64 @@ sidebar-main {
   border-radius: 10px !important;
 }
 
+/* Audio on sub-50px tabs. Nova's horizontal audio indicator is NOT the
+   overlay above but a separate 24px .tab-audio-button sitting in flow between
+   icon stack and label; on a favicon-only tab it cannot fit and gets clipped
+   at the tab edge. Firefox already solves favicon-only tabs on the collapsed
+   vertical strip: hide the button, show .tab-icon-overlay as a small badge on
+   the favicon instead. Replicate that here. The badge's list-style-image must
+   be set explicitly because natively only the pinned/vertical-collapsed
+   selectors assign the small icons. Geometry and colours come from the base
+   overlay rules above; only the -8px end-overhang is pulled to -2px so the
+   badge stays inside the tab. Pinned tabs have no container (see the
+   close-button block), so the query never matches them. */
+@container (width < 50px) {
+  .tab-audio-button {
+    display: none !important;
+  }
+  /* Specificity must beat the base margin/inset rules below, hence the full
+     :not()/:is() chains instead of a bare .tab-icon-overlay. */
+  .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
+    display: revert !important;
+    margin-inline-end: 0 !important;
+    top: 2px !important;
+    inset-inline-end: -2px !important;
+    /* At full 16px the badge covers the entire favicon. The box cannot
+       shrink the icon below its intrinsic size (see the close-button scale
+       note), so scale the rendered badge instead, anchored bottom-right so
+       it tucks onto the favicon corner: box bottom edge lands at 18 (top 2 +
+       16), right edge 2px past the favicon, and the ~11px badge grows up and
+       left from that corner. */
+    transform: scale(0.7) !important;
+    transform-origin: 100% 100% !important;
+  }
+  .tab-icon-overlay:not([pinned], [sharing], [crashed])[soundplaying] {
+    list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio-playing-small.svg") !important;
+  }
+  .tab-icon-overlay:not([pinned], [sharing], [crashed])[muted] {
+    list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio-muted-small.svg") !important;
+  }
+  .tab-icon-overlay:not([pinned], [sharing], [crashed])[activemedia-blocked] {
+    list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio-blocked-small.svg") !important;
+  }
+}
+
+/* Badge colours, inverted from the native reading: light circle with a dark
+   glyph at rest, accent circle on hover (the glyph colours live in the
+   #TabsToolbar rules below). */
 .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
   background: transparent !important;
   opacity: 1 !important;
   fill-opacity: 0.8 !important;
   color: currentColor !important;
-  stroke: var(--toolbar-bgcolor) !important;
-  background-color: var(--toolbar-bgcolor) !important;
+  stroke: var(--toolbar-color) !important;
+  background-color: var(--toolbar-color) !important;
 }
 
 .tabbrowser-tab[selected]
   .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
-  stroke: var(--toolbar-bgcolor) !important;
-  background-color: var(--toolbar-bgcolor) !important;
+  stroke: var(--toolbar-color) !important;
+  background-color: var(--toolbar-color) !important;
 }
 
 .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
@@ -2209,13 +2267,14 @@ sidebar-main {
   inset-inline-end: 0 !important;
 }
 
-/* speaker icon hover */
+/* speaker icon hover — accent circle (unconditional accent cue, like the
+   other identity colours) */
 .tab-icon-overlay:not([crashed])[soundplaying]:hover,
 .tab-icon-overlay:not([crashed])[muted]:hover,
 .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover {
   color: currentColor !important;
-  stroke: var(--toolbar-color) !important;
-  background-color: var(--toolbar-color) !important;
+  stroke: var(--uc-color-accent) !important;
+  background-color: var(--uc-color-accent) !important;
   fill-opacity: 0.95 !important;
 }
 
@@ -2223,22 +2282,25 @@ sidebar-main {
 .tabbrowser-tab[selected] .tab-icon-overlay:not([crashed])[muted]:hover,
 .tabbrowser-tab[selected] .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover {
   color: currentColor !important;
-  stroke: var(--toolbar-color) !important;
-  background-color: var(--toolbar-color) !important;
+  stroke: var(--uc-color-accent) !important;
+  background-color: var(--uc-color-accent) !important;
   fill-opacity: 0.95 !important;
 }
 
-/* speaker icon colour fix */
+/* speaker icon colour fix — glyph colours for the inverted badge: theme-dark
+   on the light circle at rest, constant dark on the amber hover circle (the
+   "dark check on amber" pattern; the accent is unconditional, so the glyph
+   on it must not follow the theme either) */
 #TabsToolbar .tab-icon-overlay:not([crashed])[soundplaying],
 #TabsToolbar .tab-icon-overlay:not([crashed])[muted],
 #TabsToolbar .tab-icon-overlay:not([crashed])[activemedia-blocked] {
-  color: var(--toolbar-color) !important;
+  color: var(--toolbar-bgcolor) !important;
 }
 
 #TabsToolbar .tab-icon-overlay:not([crashed])[soundplaying]:hover,
 #TabsToolbar .tab-icon-overlay:not([crashed])[muted]:hover,
 #TabsToolbar .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover {
-  color: var(--toolbar-bgcolor) !important;
+  color: var(--uc-color-base) !important;
 }
 
 /* selected tab: accent text only, no background tint or underline */
