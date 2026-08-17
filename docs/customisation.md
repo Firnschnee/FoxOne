@@ -93,7 +93,7 @@ What it deliberately does not touch:
 
 The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavis/LittleFox) (MIT).
 
-Since 3.5 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. On a fresh tab the bar stays visible until you navigate, so a new tab lands you straight on your bookmarks. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar, or `--uc-dynamic-bookmarks-newtab: 0` to keep fresh tabs hover-only.
+Since 3.5 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. Since 3.5.2 a fresh tab keeps the bar visible until you navigate, so a new tab lands you straight on your bookmarks. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar, or `--uc-dynamic-bookmarks-newtab: 0` to keep fresh tabs hover-only.
 
 ### Adaptive Tab Bar Colour
 
