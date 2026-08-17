@@ -89,10 +89,11 @@ What it deliberately does not touch:
 | `--uc-dynamic-bookmarks` | `1` | Bookmarks bar as an overlay that reveals on URL-bar hover instead of a permanent row (`1` = dynamic, `0` = static row on its own line). Needs Firefox' bookmarks toolbar set to "Always show" |
 | `--uc-dynamic-bookmarks-hover-delay` | `450ms` | Delay before the URL-bar hover reveals the bar |
 | `--uc-dynamic-bookmarks-hide-delay` | `50ms` | Grace period before the bar collapses again, for travelling from the URL bar onto it |
+| `--uc-dynamic-bookmarks-newtab` | `1` | Keep the bar revealed on fresh tabs (new tab, home) without hovering (`1` = show on fresh tabs, `0` = hover only). No effect while `--uc-dynamic-bookmarks` is `0` |
 
 The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavis/LittleFox) (MIT).
 
-Since 3.5 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar.
+Since 3.5 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. On a fresh tab the bar stays visible until you navigate, so a new tab lands you straight on your bookmarks. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar, or `--uc-dynamic-bookmarks-newtab: 0` to keep fresh tabs hover-only.
 
 ### Adaptive Tab Bar Colour
 

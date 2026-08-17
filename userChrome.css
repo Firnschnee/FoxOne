@@ -139,6 +139,12 @@
   --uc-dynamic-bookmarks-hover-delay: 450ms;
   --uc-dynamic-bookmarks-hide-delay: 50ms;
 
+  /* Bookmarks bar on fresh tabs — keep the dynamic bar revealed while the
+   * active tab shows no page yet (new tab, home), no hover needed
+   * (1 = show on fresh tabs, 0 = hover only). Ignored while
+   * --uc-dynamic-bookmarks is 0. */
+  --uc-dynamic-bookmarks-newtab: 1;
+
 }
 
 
@@ -733,7 +739,8 @@ sidebar-main,
    Mechanism adapted from LittleFox (github.com/biglavis/LittleFox, MIT):
    the bar leaves the toolbox flex flow via position:absolute/top:100% and
    hangs below it as an overlay, so it costs no vertical space, then fades
-   in on URL-bar hover.
+   in on URL-bar hover. On fresh tabs (new tab, home) it stays revealed
+   outright — --uc-dynamic-bookmarks-newtab opts out.
 
    Three details carried over from LittleFox because each is a trap:
    - max-height is animated with `0s step-end` DELAYED past the fade, so the
@@ -828,6 +835,32 @@ sidebar-main,
      after the fade instead of after the fade plus hide delay. */
   #navigator-toolbox:has(#urlbar[open]) #PersonalToolbar {
     transition-delay: 0s, 0s, 100ms, 100ms !important;
+  }
+
+  /* Fresh tabs: while the selected tab shows no page — about:newtab, home,
+     blank — pageproxystate sits at "invalid", so keep the bar revealed with
+     no hover and no delay: Ctrl+T straight onto a bookmark. pageproxystate
+     alone is not enough, though: editing the URL bar on a normal page flips
+     it to "invalid" too, and it STAYS there when the edit is abandoned by
+     clicking into the page. :placeholder-shown is the discriminator — a
+     fresh tab's input is empty (placeholder visible), an abandoned edit
+     still holds the typed text. While the edit is live the [open] guard
+     hides the bar anyway. Navigating restores "valid" and the normal
+     fade-out takes over. Nova moved urlbar-input-container from id to
+     class, so match both (same dance as the shield-icon fix further up). */
+  @container style(--uc-dynamic-bookmarks-newtab: 1) {
+    #navigator-toolbox:not(:has(#urlbar[open])):has(
+      #urlbar-input-container[pageproxystate="invalid"],
+      .urlbar-input-container[pageproxystate="invalid"]
+    ):has(#urlbar-input:placeholder-shown, .urlbar-input:placeholder-shown)
+      #PersonalToolbar {
+      opacity: 1 !important;
+      transform: scaleY(1) translateY(0) !important;
+      max-height: 4em !important;
+      /* Mirrors the 6px on #PersonalToolbar above; keep the two in step. */
+      padding-block: 6px !important;
+      transition-delay: 0s, 0s, 0s, 0s !important;
+    }
   }
 }
 
