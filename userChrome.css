@@ -424,6 +424,17 @@
     --button-text-color-ghost-hover: var(--uc-color-accent) !important;
     --button-text-color-active: var(--uc-color-accent) !important;
     --button-text-color-ghost-active: var(--uc-color-accent) !important;
+    /* Firefox 154 moved panel rows (subviewbuttons, panelview toolbarbuttons)
+       to a new --button-*-menu-* token family. At :root those alias the ghost
+       tokens, but custom-property substitution bakes the alias at :root and
+       inherits it down pre-resolved, so the panel-scoped ghost overrides
+       above never reach the rows anymore: same trap the uei tokens fell into
+       (see the gear-button block below). Declare the menu family here too;
+       inert on builds without it. */
+    --button-background-color-menu-hover: transparent !important;
+    --button-background-color-menu-active: transparent !important;
+    --button-text-color-menu-hover: var(--uc-color-accent) !important;
+    --button-text-color-menu-active: var(--uc-color-accent) !important;
     /* Row-level hover/select highlight has its own radius, separate from the
        panel's outer corners: --menuitem-border-radius drives native menuitems
        (context menus), --panel-menuitem-border-radius drives subviewbuttons
@@ -1231,34 +1242,17 @@ sidebar-main,
   fill: var(--uc-color-accent) !important;
 }
 
-/* Type-icon badges on urlbar results (the small glyph overlaid on the
-   favicon): bookmark star (bookmark-12.svg) and pinned-search pin
-   (pin-12.svg). Nova paints them as background-image SVGs and fills via
-   variable (attention amber for the star, light-dark near-white for the pin),
-   but the context-fill channel is dead on this path: even Nova's own colour
-   never arrives and the glyphs render context-fill's black default. Cascade
-   fixes all fell short: ancestor-anchored selectors (#urlbar, .urlbarView)
-   never match because the extended list re-parents outside both, the bare
-   class loses to Nova's 0,4,0 nested rule, and a winning fill plus an
-   explicit -moz-context-properties channel changed nothing. So bypass fill
-   entirely: reuse each row type's own SVG as a mask (shape only) and paint
-   amber underneath. Immune to the glyph's internal fill plumbing. Should the
-   chrome:// masks ever fail to load, inline them as data-URIs
-   (translations-icon precedent). */
-.urlbarView-row[type="bookmark"] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon,
-.urlbarView-row[pinned] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
-  background-image: none !important;
-  background-color: #fabd2f !important;
-  mask-repeat: no-repeat !important;
-  mask-position: center !important;
-  mask-size: contain !important;
-}
-.urlbarView-row[type="bookmark"] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
-  mask-image: url("chrome://browser/skin/bookmark-12.svg") !important;
-}
-.urlbarView-row[pinned] > .urlbarView-row-inner > .urlbarView-type-icon.urlbarView-type-icon {
-  mask-image: url("chrome://browser/skin/pin-12.svg") !important;
-}
+/* Type-icon badges on urlbar results (the small glyph on the favicon):
+   natively handled since Firefox 154. The old FoxOne mask-hack (paint amber
+   under the row type's own SVG used as a mask, built in the bookmark-12.svg
+   era when the context-fill channel was dead on this path) is retired: 154
+   rebuilt the badges as fragment SVGs (badge-bookmark.svg#ltr-icon etc.) on
+   a 24px .urlbarView-type-icon box overlaying the whole favicon, with a
+   working fill channel (fill: var(--toolbarbutton-icon-fill-attention)) and
+   a mask that notches the favicon corner. Under the old rule the star was
+   scaled to that full 24px box and swallowed the favicon. FoxOne already
+   pins --toolbarbutton-icon-fill-attention to the accent (identity block),
+   so the native badge arrives amber with no rule needed here. */
 
 .urlbar-icon,
 #urlbar-go-button {
@@ -2148,6 +2142,28 @@ sidebar-main {
      screen space at a full 1px — placed after scale it would be scaled to
      0.75px. Pure visual shift; the 24x24 layout/click box is untouched. */
   transform: translateY(1px) scale(0.75) !important;
+  /* Firefox 154 (toolkit close-icon.css) switched the X to color: inherit +
+     fill: currentColor, so it wears the tab's text colour: accent on the
+     selected tab before the pointer ever reaches it. Pin the rest state to
+     the base text colour instead; the hover/active rules below re-add colour
+     as the interaction cue. */
+  color: var(--uc-color-text) !important;
+  /* 154 also paints a currentColor chip behind the hovered X, rounded by the
+     Nova tab radius into a circle, plus a toolbarbutton outline. Colour is
+     the only interaction signal in FoxOne (issue #16): kill both. The chip
+     is set in the :hover/:hover:active states, so clear it unconditionally
+     here where !important wins regardless of state. */
+  background-color: transparent !important;
+  outline: none !important;
+}
+/* Same three-step colour model as the toolbar icons (issue #16): rest white
+   (above), hover the X itself hover-yellow, press it accent. fill is
+   currentColor since 154, so color alone recolours the glyph. */
+.tab-close-button:hover {
+  color: var(--uc-tab-hover-text) !important;
+}
+.tab-close-button:hover:active {
+  color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
 /* adaptive tab width */
