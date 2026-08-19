@@ -8,10 +8,9 @@ One-line layout, clean URL bar, hover-reveal icons, dynamic bookmarks bar, float
 
 Want to see it in Action? [This way!](https://firnschnee.github.io/FoxOne/action.html)
 
-> **Which FoxOne release do I need?**
-> - Firefox **154 and newer**: use **3.5.3** or later
-> - Firefox **ESR 153** (with `browser.nova.enabled`): use **3.5.2**
-> - Classic (**pre-Nova**) Firefox: use **2.3** – from 3.0 onward FoxOne targets the Nova UI. The stylesheet is still dual-written (Proton & Nova) and may work, but is untested there.
+I use Firefox ESR, which release should I use? 
+> - **ESR 153** (with `browser.nova.enabled`) – use **3.5.2**
+> - **ESR 140** (with the classic **pre-Nova** UI) – use **2.3**
 
 What about Thunderbird?
 > You are looking for [BirdOne!](https://github.com/Firnschnee/BirdOne)
