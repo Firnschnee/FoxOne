@@ -2,15 +2,16 @@
 
 One-line layout, clean URL bar, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gruvbox colors and ready for **Nova**
 
-> Tested on Firefox 153 with `browser.nova.enabled` and on Windows, macOS, and Linux (GNOME & KDE).
+> Tested on Firefox 154 with `browser.nova.enabled` and on Windows, macOS, and Linux (GNOME & KDE).
 > 
 ![urlbar](assets/preview_cropped.png)
 
 Want to see it in Action? [This way!](https://firnschnee.github.io/FoxOne/action.html)
 
-> Running classic (**pre-Nova**) Firefox?
-> 
-> From release 3.0 onward, FoxOne targets the Nova UI. The stylesheet is dual-written (Proton & Nova) and should still work, but it is no longer tested. For a known-good classic build, use the 2.3 release.
+> **Which FoxOne release do I need?**
+> - Firefox **154 and newer**: use **3.5.3** or later
+> - Firefox **ESR 153** (with `browser.nova.enabled`): use **3.5.2**
+> - Classic (**pre-Nova**) Firefox: use **2.3** – from 3.0 onward FoxOne targets the Nova UI. The stylesheet is still dual-written (Proton & Nova) and may work, but is untested there.
 
 What about Thunderbird?
 > You are looking for [BirdOne!](https://github.com/Firnschnee/BirdOne)
