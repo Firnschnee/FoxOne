@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.5.3 – A minimalistic one-line Firefox theme
+  FoxOne 3.6 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar and dynamic Bookmarks Bar by LittleFox
   (https://github.com/biglavis/LittleFox)
@@ -788,6 +788,18 @@ sidebar-main,
     overflow: visible !important;
   }
 
+  /* F11 fullscreen: Firefox collapses every toolbar without
+     fullscreentoolbar="true" (fullscreen-and-pointerlock.css), and
+     #PersonalToolbar is one: visibility: collapse killed the whole overlay,
+     hover and newtab reveal included (issue #44). The overlay costs no
+     space and is opacity-gated anyway, so hand visibility back and let the
+     normal reveal rules decide. DOM fullscreen (videos) stays excluded:
+     there the toolbox itself is collapsed and the bar must not resurface
+     on its own. */
+  :root[inFullscreen]:not([inDOMFullscreen]) #PersonalToolbar {
+    visibility: visible !important;
+  }
+
   /* Resting state: out of flow, transparent, zero height. overflow:hidden is
      FoxOne's addition — the collapsed box must clip its own rows, otherwise
      they stay hit-testable over the page and re-trigger the reveal. */
@@ -1037,8 +1049,18 @@ sidebar-main,
    removes the toolbox 4px top margin (realigns #PanelUI-button, fixed top:0),
    the sidebar side gaps, and the AI-panel height/strip mismatch. */
 .chrome-block {
-  margin: 0 !important;
+  margin-inline: 0 !important;
+  margin-bottom: 0 !important;
   border-radius: 0 !important;
+}
+
+/* margin-top is split out: Firefox's fullscreen autohide hides the toolbox
+   via a plain inline margin-top, and a blanket !important here overrides it.
+   That killed F11 autohide entirely (issue #44). Keep the !important flatten
+   everywhere except on the toolbox while in fullscreen. */
+:root:not([inFullscreen]) .chrome-block,
+.chrome-block:not(#navigator-toolbox) {
+  margin-top: 0 !important;
 }
 
 /* Nova insets the web content on #browser (the flex hbox wrapping sidebar +
@@ -1162,14 +1184,25 @@ sidebar-main,
   border: 1px solid var(--uc-color-surface) !important;
 }
 
-/* Nova extends the breakout by growing .urlbar-background past the toolbar
-   row on every side (--urlbar-background-inset-breakout resolves to -8px:
-   --urlbar-min-height / 2 - --border-radius-xxlarge, 16 - 24), so in the
-   one-line layout the field overhangs into the page content below AND past
-   the window edge above – the breakout box has no visible top edge at all.
-   Pull both edges back until the box sits flush with the row. Fixes the
-   overhang half of issue #31 and the missing top edge (PR #39, NeroWolfe75);
-   the remaining two-Esc collapse is Nova state logic, not geometry.
+/* Nova extends the breakout by growing .urlbar-background past the popover
+   box on every side (--urlbar-background-inset-breakout resolves to -8px:
+   --urlbar-height / 2 - --urlbarview-border-radius, 16 - 24), so the sheet
+   overhangs into the page content below AND past the row edge above. Pull
+   both edges back until the box sits flush with the row. Fixes the overhang
+   half of issue #31 and the missing top edge (PR #39, NeroWolfe75); the
+   remaining two-Esc collapse is Nova state logic, not geometry.
+
+   FF155 turned the urlbar into a manual popover (.urlbar[breakout] is
+   position: absolute, JS measures the row into --urlbar-container-height and
+   [breakout-extend] re-centres the field via margin-block-start), but the
+   background geometry is unchanged: the popover top sits where the field sat
+   in the row, so the same pull still lands the box on the row edge. What DID
+   change is the variable name – --urlbar-min-height is gone, the height now
+   lives in --urlbar-height (urlbar/variables.css). The old name left the
+   calc() unresolvable, top/bottom fell back to auto and the background
+   collapsed to a zero-height sliver: no fill behind the results (the
+   "transparent dropdown") and Nova's 14px breakout shadow smeared along that
+   sliver as a grey bar on the row's top edge.
 
    The [breakout-extend] scope is the fix for issue #37's stray pixel. The
    note that used to sit here – "unconditional is safe, bottom only acts in
@@ -1181,12 +1214,12 @@ sidebar-main,
 
    The pull is derived, not measured: the row is 44px (the height the
    hamburger is pinned to) and the field is centred in it, so the gap between
-   field and row edge is (--urlbar-min-height - 44px) / 2 on either side.
+   field and row edge is (--urlbar-height - 44px) / 2 on either side.
    That resolves to -6px for the normal 32px field and -5px at touch
    density's 34px – one expression that tracks the density by itself. */
 #urlbar[breakout-extend] > .urlbar-background {
-  top: calc((var(--urlbar-min-height) - 44px) / 2) !important;
-  bottom: calc((var(--urlbar-min-height) - 44px) / 2) !important;
+  top: calc((var(--urlbar-height) - 44px) / 2) !important;
+  bottom: calc((var(--urlbar-height) - 44px) / 2) !important;
 }
 
 .urlbarView-row:hover > .urlbarView-row-inner {
@@ -2009,6 +2042,18 @@ sidebar-main {
   }
 }
 
+/* Fullscreen (F11): position:fixed pins the hamburger to the viewport, so it
+   stayed on screen while the toolbox autohid (issue #44). A neutral transform
+   makes the toolbox the containing block for FIXED descendants (position:
+   absolute would grab the nearest positioned ancestor instead, which is
+   #nav-bar and parked the hamburger on the puzzle button), so the button
+   rides the autohide margin. Everything else stays untouched: the window
+   controls ARE shown in fullscreen reveal, so the anchor() from issue #9
+   keeps placing the hamburger beside them. */
+:root[inFullscreen] #navigator-toolbox {
+  transform: translateY(0) !important;
+}
+
 /* ==========================================================================
    TOOLBAR EXTENSION BUTTONS — push to right, next to hamburger.
    Only targets <toolbarbutton> and <toolbaritem> children of #TabsToolbar
@@ -2099,70 +2144,79 @@ sidebar-main {
 }
 
 /* Tabs as size containers, so rules can react to the actual tab width. Only
-   matters once --uc-tab-min-width drops below ~50px (favicon-only tabs):
-   close button and audio button then no longer fit and get clipped at the
-   tab edge. inline-size containment is safe here because tab widths come
-   from the strip's flexbox and the min/max-width clamps, not from content. */
+   matters once --uc-tab-min-width drops below ~50px (favicon-only tabs): the
+   audio button then no longer fits and gives way to the favicon badge below.
+   inline-size containment is safe here because tab widths come from the
+   strip's flexbox and the min/max-width clamps, not from content. */
 .tabbrowser-tab:not([pinned]) {
   container-type: inline-size;
 }
 
-/* tab close button: hidden by default, visible on hover */
+/* Tab close button: an overlay in the tab's top layer, not a flex child.
+   Idea and base code from NeroWolfe75 (comment on 22020af): lifting the X
+   out of the tab's flex row means it exists at EVERY tab width, replacing
+   the old sub-50px hiding and its container query (the container-type above
+   stays for the audio badge). FoxOne twist on the original: the X slides in
+   from the right, vertically centred on the label line, so nothing moves
+   vertically in the one-line layout. */
+.tabbrowser-tab:not([pinned]) .tab-content {
+  /* anchor for the absolutely positioned X */
+  position: relative !important;
+}
 .tabbrowser-tab:not([pinned]) .tab-close-button {
-  display: none !important;
-}
-/* Below 50px the X cannot fit next to the favicon, so it stays hidden even
-   on hover; close via Ctrl+W or the context menu instead. */
-@container (min-width: 50px) {
-  .tabbrowser-tab:not([pinned]):hover .tab-close-button {
-    /* revert (not -moz-inline-block: a removed alias that parses as invalid
-       and gets dropped, leaving the base display:none). revert restores the
-       native close-button display so it reappears on hover. */
-    display: revert !important;
-  }
-}
-
-/* Close X sat ~2px low: it's a 24x24 border-box <image> and the icon scales
-   to its content box. Native 6px padding all round left a 12x12 content box,
-   so the 16px X drew low. Zeroing only the block padding (first attempt)
-   recentred it but made the box 24x12 and stretched the X vertically. The
-   icon must keep a SQUARE content box to stay proportional: 4px symmetric
-   padding gives a 16x16 content box — the 16px X fits exactly, unstretched,
-   and centres on the tab-label line (box centre is already at centerY 22). */
-.tab-close-button {
-  padding: 4px !important;
-  /* The icon won't scale below its 16px intrinsic size via padding (it
-     overflows instead), and 16px reads too large. transform: scale shrinks
-     the rendered X around its centre without touching the layout box, so the
-     24x24 click target and the centerY-22 alignment are preserved. Tune the
-     factor for size: 0.75 ≈ 12px.
-     Nova shifted the tab-label line down ~1px, leaving the X reading 1px high
-     against the label. translateY nudges the rendered icon back onto the line.
-     Order matters: translateY is the LEFTMOST transform so it applies in
-     screen space at a full 1px — placed after scale it would be scaled to
-     0.75px. Pure visual shift; the 24x24 layout/click box is untouched. */
-  transform: translateY(1px) scale(0.75) !important;
-  /* Firefox 154 (toolkit close-icon.css) switched the X to color: inherit +
-     fill: currentColor, so it wears the tab's text colour: accent on the
-     selected tab before the pointer ever reaches it. Pin the rest state to
-     the base text colour instead; the hover/active rules below re-add colour
-     as the interaction cue. */
+  /* revert (not -moz-inline-block: a removed alias that parses as invalid
+     and gets dropped): restores the native close-button display. */
+  display: revert !important;
+  position: absolute !important;
+  inset-inline-end: 3px !important;
+  /* Box centred on the line, then 1px down: Nova's label line sits ~1px
+     below the geometric centre (same nudge the pre-overlay X needed). */
+  inset-block-start: calc(50% - 9px) !important;
+  z-index: 100 !important;
+  /* 20px box, 2px padding -> 16x16 content box: the 16px icon fits exactly,
+     unstretched (it won't scale below its intrinsic size via padding, it
+     overflows instead). scale(0.75) in the transform below renders the glyph
+     at 12px, the size the pre-overlay X used, and the plate at 15px, leaving
+     ~1.5px of air around the glyph. */
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  margin: 0 !important;
+  padding: 2px !important;
+  /* The plate is a constant surface chip in every state; the glyph's colour
+     change below is the only interaction cue (issue #16). Rest state pins
+     the base text colour: since 154 the X wears the tab's text colour via
+     fill: currentColor, which would read accent on the selected tab. The
+     outline kill drops 154's toolbarbutton focus/hover outline. */
+  background-color: var(--uc-color-surface) !important;
   color: var(--uc-color-text) !important;
-  /* 154 also paints a currentColor chip behind the hovered X, rounded by the
-     Nova tab radius into a circle, plus a toolbarbutton outline. Colour is
-     the only interaction signal in FoxOne (issue #16): kill both. The chip
-     is set in the :hover/:hover:active states, so clear it unconditionally
-     here where !important wins regardless of state. */
-  background-color: transparent !important;
+  border: none !important;
+  border-radius: 2px !important;
   outline: none !important;
+  /* Rest: parked outside the right tab edge, invisible; slides in on tab
+     hover. scale is part of the transform list so it must repeat in every
+     state that sets transform. */
+  transform: translateX(200%) scale(0.75) !important;
+  opacity: 0 !important;
+  transition:
+    transform 140ms ease-out,
+    opacity 100ms ease-out !important;
+  flex: none !important;
+  overflow: hidden !important;
+}
+.tabbrowser-tab:not([pinned]):hover .tab-close-button {
+  opacity: 0.9 !important;
+  transform: translateX(0) scale(0.75) !important;
 }
 /* Same three-step colour model as the toolbar icons (issue #16): rest white
-   (above), hover the X itself hover-yellow, press it accent. fill is
+   (above), hover the X itself hover-yellow, press it amber. fill is
    currentColor since 154, so color alone recolours the glyph. */
-.tab-close-button:hover {
+.tabbrowser-tab:not([pinned]) .tab-close-button:hover {
+  opacity: 1 !important;
   color: var(--uc-tab-hover-text) !important;
 }
-.tab-close-button:hover:active {
+.tabbrowser-tab:not([pinned]) .tab-close-button:hover:active {
   color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
