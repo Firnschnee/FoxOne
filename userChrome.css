@@ -788,6 +788,18 @@ sidebar-main,
     overflow: visible !important;
   }
 
+  /* F11 fullscreen: Firefox collapses every toolbar without
+     fullscreentoolbar="true" (fullscreen-and-pointerlock.css), and
+     #PersonalToolbar is one: visibility: collapse killed the whole overlay,
+     hover and newtab reveal included (issue #44). The overlay costs no
+     space and is opacity-gated anyway, so hand visibility back and let the
+     normal reveal rules decide. DOM fullscreen (videos) stays excluded:
+     there the toolbox itself is collapsed and the bar must not resurface
+     on its own. */
+  :root[inFullscreen]:not([inDOMFullscreen]) #PersonalToolbar {
+    visibility: visible !important;
+  }
+
   /* Resting state: out of flow, transparent, zero height. overflow:hidden is
      FoxOne's addition — the collapsed box must clip its own rows, otherwise
      they stay hit-testable over the page and re-trigger the reveal. */
@@ -1037,8 +1049,18 @@ sidebar-main,
    removes the toolbox 4px top margin (realigns #PanelUI-button, fixed top:0),
    the sidebar side gaps, and the AI-panel height/strip mismatch. */
 .chrome-block {
-  margin: 0 !important;
+  margin-inline: 0 !important;
+  margin-bottom: 0 !important;
   border-radius: 0 !important;
+}
+
+/* margin-top is split out: Firefox's fullscreen autohide hides the toolbox
+   via a plain inline margin-top, and a blanket !important here overrides it.
+   That killed F11 autohide entirely (issue #44). Keep the !important flatten
+   everywhere except on the toolbox while in fullscreen. */
+:root:not([inFullscreen]) .chrome-block,
+.chrome-block:not(#navigator-toolbox) {
+  margin-top: 0 !important;
 }
 
 /* Nova insets the web content on #browser (the flex hbox wrapping sidebar +
@@ -2018,6 +2040,18 @@ sidebar-main {
   #PanelUI-button {
     right: anchor(--uc-winbtns left, var(--uc-window-buttons-width)) !important;
   }
+}
+
+/* Fullscreen (F11): position:fixed pins the hamburger to the viewport, so it
+   stayed on screen while the toolbox autohid (issue #44). A neutral transform
+   makes the toolbox the containing block for FIXED descendants (position:
+   absolute would grab the nearest positioned ancestor instead, which is
+   #nav-bar and parked the hamburger on the puzzle button), so the button
+   rides the autohide margin. Everything else stays untouched: the window
+   controls ARE shown in fullscreen reveal, so the anchor() from issue #9
+   keeps placing the hamburger beside them. */
+:root[inFullscreen] #navigator-toolbox {
+  transform: translateY(0) !important;
 }
 
 /* ==========================================================================
