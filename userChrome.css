@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.6 – A minimalistic one-line Firefox theme
+  FoxOne 3.6.1 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/andreasgrafen/cascade)
   Floating Find Bar and dynamic Bookmarks Bar by LittleFox
   (https://github.com/biglavis/LittleFox)
@@ -798,6 +798,17 @@ sidebar-main,
      on its own. */
   :root[inFullscreen]:not([inDOMFullscreen]) #PersonalToolbar {
     visibility: visible !important;
+  }
+
+  /* Travelling from the urlbar DOWN onto the revealed bar collapsed both:
+     the overlay hangs at top:100%, outside the toolbox border box, and
+     Firefox's fullscreen autohide hides as soon as the pointer leaves that
+     box — via a plain inline margin-top. While the bar is hovered (or one
+     of its folder menus is open), out-shout the inline style and pin the
+     toolbox down; leaving the bar hands control straight back. */
+  :root[inFullscreen]:not([inDOMFullscreen])
+    #navigator-toolbox:has(#PersonalToolbar:is(:hover, :has(toolbarbutton[open]))) {
+    margin-top: 0 !important;
   }
 
   /* Resting state: out of flow, transparent, zero height. overflow:hidden is
@@ -2052,6 +2063,21 @@ sidebar-main {
    keeps placing the hamburger beside them. */
 :root[inFullscreen] #navigator-toolbox {
   transform: translateY(0) !important;
+}
+
+/* The #44 fix left the toolbox in flex flow, so the top-edge reveal (Firefox
+   restoring the autohide margin-top) pushed #browser and the page down with
+   it (issue #46, fix by NeroWolfe75). Take the toolbox out of flow in F11:
+   Firefox still drives margin-top for hide/reveal, but the toolbar now
+   overlays the page instead of displacing it. DOM fullscreen (videos) stays
+   excluded — the toolbox is fully hidden there anyway. */
+:root[inFullscreen]:not([inDOMFullscreen]) #navigator-toolbox {
+  position: fixed !important;
+  top: 0 !important;
+  inset-inline-start: 0 !important;
+  width: 100vw !important;
+  z-index: 9999 !important;
+  overflow: visible !important;
 }
 
 /* ==========================================================================
