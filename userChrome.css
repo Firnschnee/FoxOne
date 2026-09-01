@@ -2499,6 +2499,15 @@ sidebar-main {
 
 findbar {
   position: absolute !important;
+  /* FF155 turned .browserContainer into a CSS grid with a dedicated
+     "findbar" row at the very bottom (content-area.css). An absolutely
+     positioned grid item takes its containing block from its grid area, not
+     from the container, so top: 8px suddenly measured from a zero-height row
+     below the page and the bar landed outside the clipped container:
+     invisible. grid-area: auto drops the placement, and per spec an auto
+     placement hands the containing block back to the container's padding
+     box, which is the pre-155 geometry. */
+  grid-area: auto !important;
   top: var(--findbar-top) !important;
   left: var(--findbar-right) !important;
   right: var(--findbar-right) !important;
