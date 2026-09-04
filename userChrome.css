@@ -2101,6 +2101,17 @@ sidebar-main {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
 
+/* Private windows: Firefox puts a mask toolbarbutton at the end of #TabsToolbar,
+   right where the fixed hamburger sits, so the two overlapped. Give the mask
+   the hamburger clearance instead of the extension cluster, so the strip reads
+   [extensions][mask][hamburger][window controls]. */
+#TabsToolbar .private-browsing-indicator-button {
+  margin-inline-end: var(--uc-hamburger-width) !important;
+}
+:root[privatebrowsingmode] #TabsToolbar-customization-target > toolbaritem:last-of-type {
+  margin-inline-end: 0 !important;
+}
+
 /* Opt-in: hide the pinned extension icons and reveal them on hamburger hover.
    The hamburger is position:fixed in a separate toolbar, so there is no plain
    combinator to the icons; the reveal is driven via :root:has(). The second
