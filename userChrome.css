@@ -719,9 +719,12 @@ sidebar-main,
 }
 
 /* The unified-extensions (puzzle) button sits 1px too high in the nav-bar
-   since the FF153 final. Same family as the trust-icon corrections above. */
+   since the FF153 final. Same family as the trust-icon corrections above.
+   3.4.3 used 1px, which on FF155 still leaves the puzzle ~1px above the
+   other icons. The nav-bar centres the button's margin box, so a top margin
+   only moves the icon by half its value: 2px margin = 1px visible shift. */
 #unified-extensions-button {
-  margin-top: 1px !important;
+  margin-top: 2px !important;
 }
 
 #TabsToolbar { order: 2; }
