@@ -49,6 +49,8 @@ Every surface FoxOne squares then takes `--uc-border-radius` (`8px`), and the ro
 
 Change the radius itself with `--uc-border-radius`; `--uc-rounded` only decides whether it is applied or zeroed.
 
+The in-content pages (`about:preferences`, `about:addons`, `about:logins` and the rest of `about:`) are styled by `userContent.css`, which cannot read `userChrome.css`'s variables. Its CONFIG block carries the same two variables; set `--uc-rounded: 1` there as well and the cards, rows, buttons, fields, dropdowns, message bars and the category nav on those pages follow. The pages use one radius (`--uc-border-radius`) for everything rather than the three stock Firefox runs there, so they share one shape language with the chrome.
+
 What it deliberately does not touch:
 
 * **Layout.** The content area and the frames around toolbox, sidebar and browser stay square. Firefox only rounds those because it insets them by 4px first; FoxOne is edge-to-edge, and rounding them without the inset cuts notches into the page and alongside the sidebar. That is a layout change, not a corner.
