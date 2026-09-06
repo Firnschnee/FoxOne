@@ -5,6 +5,3 @@ tools/
 Thumbs.db
 Desktop.ini
 .DS_Store
-
-# superpowers plugin planning docs, local only
-docs/superpowers/
