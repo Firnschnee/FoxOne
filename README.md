@@ -13,7 +13,7 @@ _I want to see it in action!_
 > Take a look over [here](https://firnschnee.github.io/FoxOne/action.html)
 
 _I want to change something!_
-> Over 40 variables for colors, layout and toggles can be found <a href="customisation">here</a>    
+> Over 40 variables for colors, layout and toggles can be found [here](docs/customisation.md)  
 
 _I use Firefox ESR, which release should I use?_
 > - **ESR 153** (with `browser.nova.enabled`) – use **3.5.2**
