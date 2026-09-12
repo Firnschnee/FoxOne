@@ -78,6 +78,17 @@
   /* Hamburger button width — reserved in tab bar to prevent overlap */
   --uc-hamburger-width: 44px;
 
+  /* Extensions (puzzle) button — pin it to the right edge, next to the
+   * hamburger, instead of leaving it in the nav-bar after the URL bar
+   * (1 = right, beside the hamburger, 0 = Firefox default in the nav-bar).
+   * Firefox locks the button to the nav-bar in Customize Toolbar, so this is
+   * the only way to get it there. (issue #48) */
+  --uc-extensions-button-right: 1;
+  /* Width reserved for the pinned puzzle button. Also its distance from the
+   * window controls beyond the hamburger, so it doubles as the gap knob:
+   * lower it to pull the two buttons closer, raise it to space them out. */
+  --uc-extensions-button-width: 36px;
+
   /* Extra toolbar button width (extensions, uBlock etc.) */
   --uc-toolbar-button-width: 36px;
   
@@ -956,8 +967,11 @@ sidebar-main,
   width: 100%;
 }
 
+/* The last term reserves the pinned puzzle button (#48); it is a 0/1 toggle,
+   so the product is 0 while the button stays in the nav-bar. */
 #tabbrowser-tabs:not([orient="vertical"]) {
-  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-toolbar-button-width) - var(--uc-drag-space) - var(--uc-newtab-width)) !important;
+  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-toolbar-button-width) - var(--uc-drag-space) - var(--uc-newtab-width)
+                  - var(--uc-extensions-button-width) * var(--uc-extensions-button-right)) !important;
 }
 
 #navigator-toolbox:focus-within #nav-bar {
@@ -2137,9 +2151,14 @@ sidebar-main {
     margin-inline-end: 0 !important;
   }
 
-  /* Reveal: hovering the hamburger, or an extension item itself (the bridge). */
-  :root:has(#PanelUI-button:hover) #TabsToolbar-customization-target > toolbaritem,
-  :root:has(#TabsToolbar-customization-target > toolbaritem:hover) #TabsToolbar-customization-target > toolbaritem {
+  /* Reveal: hovering the hamburger, an extension item itself (the bridge), or
+     in private windows the mask button, which sits between the two and would
+     otherwise break the bridge on the way across. */
+  :root:is(
+    :has(#PanelUI-button:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar .private-browsing-indicator-button:hover)
+  ) #TabsToolbar-customization-target > toolbaritem {
     max-width: 60px !important;
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -2151,10 +2170,104 @@ sidebar-main {
      :hover bridge now spans the whole gap, so the icons stay open while the
      pointer travels from the hamburger onto them. max-width grows by the same
      amount so the icon is not squeezed by the padding (border-box). (#13) */
-  :root:has(#PanelUI-button:hover) #TabsToolbar-customization-target > toolbaritem:last-of-type,
-  :root:has(#TabsToolbar-customization-target > toolbaritem:hover) #TabsToolbar-customization-target > toolbaritem:last-of-type {
+  :root:is(
+    :has(#PanelUI-button:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar .private-browsing-indicator-button:hover)
+  ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
     max-width: calc(60px + var(--uc-hamburger-width)) !important;
     padding-inline-end: var(--uc-hamburger-width) !important;
+  }
+  /* Private windows: the mask already carries the hamburger clearance as its
+     own margin (above), so the revealed cluster must not add it again or the
+     gap doubles. The mask's :hover in the lists above is the bridge here. */
+  :root[privatebrowsingmode]:is(
+    :has(#PanelUI-button:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar .private-browsing-indicator-button:hover)
+  ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
+    max-width: 60px !important;
+    padding-inline-end: revert !important;
+  }
+}
+
+/* ==========================================================================
+   EXTENSIONS BUTTON RIGHT (opt-in, --uc-extensions-button-right: 1)
+   Firefox locks the puzzle button to the nav-bar, so Customize Toolbar can't
+   drag it beside the hamburger. Same mechanism as the hamburger above:
+   position:fixed, anchored to the window controls, --uc-extensions-button-
+   width further left. Leaving the nav-bar flow hands its slot to the URL bar.
+   Fullscreen and vertical tabs follow the hamburger's handling. (#48)
+   ========================================================================== */
+@container style(--uc-extensions-button-right: 1) {
+  #unified-extensions-button {
+    position: fixed !important;
+    right: calc(var(--uc-window-buttons-width) + var(--uc-extensions-button-width)) !important;
+    top: 0 !important;
+    height: 44px !important;
+    /* the nav-bar 1px nudge from the trust-icon family no longer applies */
+    margin-top: 0 !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  @media not (-moz-platform: macos) {
+    #unified-extensions-button {
+      right: calc(anchor(--uc-winbtns left, var(--uc-window-buttons-width)) + var(--uc-extensions-button-width)) !important;
+    }
+  }
+  :root:has(#tabbrowser-tabs[orient="vertical"]) #unified-extensions-button {
+    position: static !important;
+  }
+
+  /* The extension cluster and the private-window mask now clear two fixed
+     buttons instead of one. The private-window zeroing of the cluster margin
+     above outranks this by specificity, so it keeps working. */
+  #TabsToolbar-customization-target > toolbaritem:last-of-type,
+  #TabsToolbar .private-browsing-indicator-button {
+    margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
+  }
+
+  /* Hover-reveal (#13) with the puzzle in between: the collapsed cluster
+     drops the clearance again (restated, since the rule above is later in
+     source than the #13 collapse), and the puzzle's own hover joins the
+     reveal, because the pointer now crosses it on the way from the hamburger
+     to the icons and the bridge would otherwise break there. */
+  @container style(--uc-hide-extension-icons: 1) {
+    #TabsToolbar-customization-target > toolbaritem:last-of-type {
+      margin-inline-end: 0 !important;
+    }
+    :root:is(
+      :has(#PanelUI-button:hover),
+      :has(#unified-extensions-button:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar .private-browsing-indicator-button:hover)
+    ) #TabsToolbar-customization-target > toolbaritem {
+      max-width: 60px !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      padding-inline: revert !important;
+    }
+    :root:is(
+      :has(#PanelUI-button:hover),
+      :has(#unified-extensions-button:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar .private-browsing-indicator-button:hover)
+    ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
+      max-width: calc(60px + var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
+      padding-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
+    }
+    /* Private windows: the mask carries the two-button clearance (margin
+       above), the cluster adds none. Same reasoning as the #13 base block. */
+    :root[privatebrowsingmode]:is(
+      :has(#PanelUI-button:hover),
+      :has(#unified-extensions-button:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar .private-browsing-indicator-button:hover)
+    ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
+      max-width: 60px !important;
+      padding-inline-end: revert !important;
+    }
   }
 }
 
