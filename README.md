@@ -12,13 +12,17 @@ One-line layout, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gr
 _I want to see it in action!_ 
 > Take a look over [here](https://firnschnee.github.io/FoxOne/action.html)
 
+_I want to change something!_
+> Over 40 variables for colors, layout and toggles can be found <a href="customisation">here</a>    
+
 _I use Firefox ESR, which release should I use?_
 > - **ESR 153** (with `browser.nova.enabled`) – use **3.5.2**
 > - **ESR 140** (with the classic **pre-Nova** UI) – use **2.3**
 
 _And what about Thunderbird?_
 > You are looking for [BirdOne](https://github.com/Firnschnee/BirdOne)
-
+<br>
+    
 Special shoutout to [@NeroWolfe75](https://github.com/NeroWolfe75) for all the bug hunting & ideas!
 
 ---
