@@ -581,6 +581,17 @@
     color: var(--uc-color-accent) !important;
     background: transparent !important;
   }
+
+  /* Result URLs take var(--link-color) natively, which resolves to
+     --color-accent-primary – pinned to the FoxOne accent by the violet purge,
+     so URL and selected title ended up the same amber. Only profiles with
+     browser.theme.native-theme = true dodged that (the token layer is skipped
+     there and the link colour stays cyan). Pin the cyan (--color-cyan-30) so
+     the dropdown looks the same either way. Same :not([selected]) scope as
+     the native rule: the selected row's URL follows the accent title. */
+  .urlbarView-row:not([selected]) :is(.urlbarView-url, .urlbarView-explanation) {
+    color: #00cadb !important;
+  }
 }
 
 
@@ -1248,6 +1259,31 @@ sidebar-main,
 #urlbar[breakout-extend] > .urlbar-background {
   top: calc((var(--urlbar-height) - 44px) / 2) !important;
   bottom: calc((var(--urlbar-height) - 44px) / 2) !important;
+}
+
+/* FF157 dropped the breakout: the results are their own popover anchored
+   below the field, and the sheet behind them is a "joint background" in two
+   halves. .urlbar-background paints the part behind the field, the new
+   .urlbarView-background paints the part behind the rows, each clipped at the
+   seam. [breakout-extend] is gone ([popover-open] replaces it), so the rule
+   above is inert there, and the new half took Nova's focus tone
+   (--urlbar-background-color-focus) because nothing of FoxOne's addressed it:
+   the dropdown went near-black (#171519). Both selectors below match nothing
+   before 157.
+
+   Upper half: only the top edge needs the pull back to the row now, the
+   bottom edge is Nova's seam overlap and must stay. Lower half: same fill and
+   1px outline as the upper half, and the bottom corners for the
+   rounded-corners toggle, which land here since the upper half ends square at
+   the seam. */
+#urlbar[popover-open] > .urlbar-background {
+  top: calc((var(--urlbar-height) - 44px) / 2) !important;
+}
+
+#urlbar .urlbarView-background {
+  background: var(--toolbar-field-background-color) !important;
+  border: 1px solid var(--uc-color-surface) !important;
+  border-radius: 0 0 var(--uc-radius-surface) var(--uc-radius-surface) !important;
 }
 
 .urlbarView-row:hover > .urlbarView-row-inner {
@@ -2192,7 +2228,7 @@ sidebar-main {
 }
 
 /* ==========================================================================
-   EXTENSIONS BUTTON RIGHT (opt-in, --uc-extensions-button-right: 1)
+   EXTENSIONS BUTTON RIGHT (default on, --uc-extensions-button-right: 1)
    Firefox locks the puzzle button to the nav-bar, so Customize Toolbar can't
    drag it beside the hamburger. Same mechanism as the hamburger above:
    position:fixed, anchored to the window controls, --uc-extensions-button-
