@@ -964,9 +964,15 @@ sidebar-main,
   }
 }
 
+/* FF157 drops the urlbar's breakout popover, so #urlbar lays out in flow and
+   its content width becomes the container's flex basis. Firefox's
+   flex: 400 0 auto forbids shrinking, so on narrow windows the urlbar spilled
+   over the tab strip. inline-size containment zeroes the intrinsic width
+   again, as the out-of-flow popover did up to 156; flex-grow fills the rest. */
 #nav-bar #urlbar-container {
   min-width: 0px !important;
   width: auto !important;
+  contain: inline-size !important;
 }
 
 #titlebar {
