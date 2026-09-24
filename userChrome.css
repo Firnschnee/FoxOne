@@ -543,6 +543,11 @@
   :root {
     --lwt-tab-line-color: var(--uc-color-accent) !important;
     --tab-selected-textcolor: var(--uc-color-accent) !important;
+    /* 157 colours .tab-content itself from split tokens instead of letting it
+       inherit from .tabbrowser-tab, which bypasses the tab title rules below.
+       Feed FoxOne's colours into the new tokens (tab.tokens.css). */
+    --tab-text-color-selected: var(--uc-color-accent) !important;
+    --tab-text-color-hover: var(--uc-tab-hover-text) !important;
     /* Kill native grey hover background – hover is a title-colour cue (issue #16).
        Nova renamed the token to --tab-background-color-hover (word order
        flipped, tab.tokens.css); override both names. */
