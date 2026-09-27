@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 3.7 – userContent.css
+  FoxOne 3.8 – userContent.css
   Styles for browser content pages (new tab, home).
 
 *==============================================================================================*/
@@ -82,7 +82,7 @@
 
 
 /* ==========================================================================
-   PRIVILEGED PAGES — all of about: (Gruvbox Dark, dark mode only)
+   PRIVILEGED PAGES — all of about: (Gruvbox Dark / Gruvbox Light)
 
    One block for every about: page instead of per-page rules: the in-content
    pages (preferences, addons, logins, support, protections, downloads/
@@ -104,181 +104,200 @@
    are separate documents in an iframe, so the about: prefix never matches
    them, and they kept the full Nova violet. Same token system, same cure. */
 @-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/") {
-  @media (prefers-color-scheme: dark) {
+  /* FoxOne palette (userContent has no shared config with userChrome;
+     keep in sync with the CONFIG block there). Dark set first, the light
+     scheme swaps in Gruvbox Light (issue #19); every rule below reads
+     --uc-color-* and follows. */
+  :root {
+    --uc-color-base:    #282828;
+    --uc-color-surface: #3c3836;
+    --uc-color-accent:  #fabd2f;
+    --uc-color-text:    #FFFFFF;
+    --uc-color-hover:   #7c6f64;
+  }
+  @media (prefers-color-scheme: light) {
     :root {
-      /* FoxOne palette (userContent has no shared config with userChrome;
-         keep in sync with the CONFIG block there) */
-      --uc-color-base:    #282828;
-      --uc-color-surface: #3c3836;
-      --uc-color-accent:  #fabd2f;
-      --uc-color-text:    #FFFFFF;
-      --uc-color-hover:   #7c6f64;
-
-      /* Page backgrounds */
-      --in-content-page-background: var(--uc-color-base) !important;
-      --background-color-canvas: var(--uc-color-base) !important;
-      /* Cards, message bars and info boxes sit flat on the canvas, same
-         tone as the page; borders do the grouping. Under Nova the message
-         bar host maps its background to --background-color-box, the
-         sponsor / sync info boxes read --background-color-box-info. */
-      --background-color-box: var(--uc-color-base) !important;
-      --background-color-box-info: var(--uc-color-base) !important;
-      --background-color-information: var(--uc-color-base) !important;
-
-      /* The central lever: everything accent-coloured (links, focus rings,
-         toggles, primary buttons, selected borders, table headers) derives
-         from the semantic accent family. */
-      --color-accent-primary: var(--uc-color-accent) !important;
-      --color-accent-primary-hover: var(--uc-color-accent) !important;
-      --color-accent-primary-active: var(--uc-color-accent) !important;
-      --color-accent-primary-selected: var(--uc-color-accent) !important;
-
-      /* Tables (about:support, about:unloads, about:profiles, …): the body
-         colour is hardcoded in the token layer (light-dark(#f8f8fa,
-         rgb(35,34,43))), not derived from anything we already override.
-         Base for the cells, surface for the zebra rows. */
-      --table-background-color: var(--uc-color-base) !important;
-      --table-row-background-color-alternate: var(--uc-color-surface) !important;
-
-      /* Text/search inputs: tokens-platform.css maps them to the Field
-         SYSTEM colour (dark standin: compiled-in #2b2a33). The consuming
-         input lives in the shadow DOM of moz-input-search/moz-input-text,
-         out of selector reach, but the custom property inherits across the
-         shadow boundary, so overriding it at :root lands inside. */
-      --input-text-background-color: var(--uc-color-base) !important;
-      --input-text-color: var(--uc-color-text) !important;
-
-      /* Direct violet references (same satellites as in userChrome) */
-      --icon-color-information: var(--uc-color-accent) !important;
-      --icon-color-accent-primary-desaturated: var(--uc-color-accent) !important;
-      /* Button hover like the hamburger menu rows: no background block,
-         accent text. Ghost and menu variants alias these at :root, so the
-         one pair covers plain, ghost and menu buttons; primary buttons keep
-         their accent fill via the separate -primary-hover token. The :active
-         pair too, so a click doesn't flash a block back in. */
-      --button-background-color-hover: transparent !important;
-      --button-background-color-active: transparent !important;
-      --button-text-color-hover: var(--uc-color-accent) !important;
-      --button-text-color-active: var(--uc-color-accent) !important;
-      --button-background-color-primary-disabled: color-mix(in srgb, var(--uc-color-accent) 40%, var(--uc-color-base)) !important;
-      --text-color: var(--uc-color-text) !important;
-
-      /* Legacy in-content names (pre-token pages) */
-      --in-content-accent-color: var(--uc-color-accent) !important;
-      --in-content-accent-color-active: var(--uc-color-accent) !important;
-      --in-content-item-selected: var(--uc-color-accent) !important;
-      --in-content-item-selected-text: var(--uc-color-base) !important;
+      --uc-color-base:    #fbf1c7;
+      --uc-color-surface: #ebdbb2;
+      --uc-color-accent:  #b57614;
+      --uc-color-text:    #3c3836;
+      --uc-color-hover:   #bdae93;
     }
+  }
 
-    /* Highlighted text */
-    ::selection {
-      background-color: #fabd2f !important;
-      color: #282828 !important;
-    }
+  :root {
+    /* Page backgrounds */
+    --in-content-page-background: var(--uc-color-base) !important;
+    --background-color-canvas: var(--uc-color-base) !important;
+    /* Cards, message bars and info boxes sit flat on the canvas, same
+       tone as the page; borders do the grouping. Under Nova the message
+       bar host maps its background to --background-color-box, the
+       sponsor / sync info boxes read --background-color-box-info. */
+    --background-color-box: var(--uc-color-base) !important;
+    --background-color-box-info: var(--uc-color-base) !important;
+    --background-color-information: var(--uc-color-base) !important;
 
-    /* Search/text boxes (about:preferences, about:addons, subdialogs): the
-       visible input lives in the SHADOW root of moz-input-search and reads
-       --input-text-background-color, which resolves to the Field system
-       colour (compiled-in dark standin #2b2a33) in there; the :root token
-       override above never arrives. Escape hatch: user sheets, unlike page
-       CSS, also match inside shadow trees (confirmed via toolbox: FoxOne's
-       ::selection rule lists on the shadow input), so style the input
-       element directly and skip the token plumbing. */
-    input:where([type="search"], [type="text"], [type="password"], [type="email"], [type="url"], [type="number"], [type="tel"]) {
-      /* Base in every state: with the cards flat on the canvas, any lighter
-         field (at rest or focused) was the one raised surface left on the
-         page. The accent border carries the focus cue. */
-      background-color: var(--uc-color-base, #282828) !important;
-      color: var(--uc-color-text, #FFFFFF) !important;
-    }
+    /* The central lever: everything accent-coloured (links, focus rings,
+       toggles, primary buttons, selected borders, table headers) derives
+       from the semantic accent family. */
+    --color-accent-primary: var(--uc-color-accent) !important;
+    --color-accent-primary-hover: var(--uc-color-accent) !important;
+    --color-accent-primary-active: var(--uc-color-accent) !important;
+    --color-accent-primary-selected: var(--uc-color-accent) !important;
 
-    /* Corner radius, driven by --uc-radius-surface (the --uc-rounded toggle
-       in the CONFIG block). Cards (setting-group / moz-card), the moz-box rows
-       inside them and the moz-page-nav pills all read their radius from a
-       token; the box and page-nav families are re-declared on the component
-       HOST (`:root, :host` in the shadow token sheets), so a :root override
-       never reaches them. Setting the tokens on the host elements themselves
-       in the light DOM does: user-origin !important beats the author :host
-       rule on the same element. */
-    :root {
-      --card-border-radius: var(--uc-radius-surface) !important;
-      --card-border-radius-compact: var(--uc-radius-surface) !important;
-      /* Cards sit flat on the canvas: no raised surface, no shadow, a 1px
-         surface-tone border keeps the grouping legible. */
-      --card-background-color: var(--uc-color-base) !important;
-      --card-box-shadow: none !important;
-      --card-box-shadow-hover: none !important;
-      --card-border-color: var(--uc-color-surface) !important;
-      /* Buttons (moz-button, plain in-content button) and text/search
-         fields (moz-input-text, moz-input-search) read their radius from
-         these global tokens without a :host re-declaration, so :root is
-         enough. --toolbarbutton-border-radius aliases the button radius at
-         :root and inherits pre-resolved, hence the explicit line. */
-      --button-border-radius: var(--uc-radius-surface) !important;
-      --toolbarbutton-border-radius: var(--uc-radius-surface) !important;
-      --input-text-border-radius: var(--uc-radius-surface) !important;
-      --input-search-border-radius: var(--uc-radius-surface) !important;
-    }
-    /* Dropdowns re-declare their radius on the host (moz-select.tokens.css),
-       same host-level treatment as the box family below. */
-    moz-select,
-    menulist {
-      --select-border-radius: var(--uc-radius-surface) !important;
-    }
-    /* Message bars re-declare their tokens on the host (moz-message-bar
-       .tokens.css); the background follows --background-color-box from
-       :root, the radius needs the host. */
-    moz-message-bar {
-      --message-bar-border-radius: var(--uc-radius-surface) !important;
-    }
-    /* Info boxes in preferences.css (sponsor note, sync info, QR box) get
-       their radius and a transparent border straight on the element. */
-    .info-box-container,
-    .sync-info-box,
-    .qr-code-box {
-      border-radius: var(--uc-radius-surface) !important;
-      border-color: var(--uc-color-surface) !important;
-    }
-    moz-box-item,
-    moz-box-group,
-    moz-box-button,
-    moz-box-link {
-      --box-border-radius: var(--uc-radius-surface) !important;
-      --box-border-color: var(--uc-color-surface) !important;
-      /* Row hover like the hamburger menu: no background block, accent
-         text. The :active pair too, so a click doesn't flash the grey back. */
-      --box-button-background-color-hover: transparent !important;
-      --box-button-background-color-active: transparent !important;
-      --box-button-text-color-hover: var(--uc-color-accent) !important;
-      --box-button-text-color-active: var(--uc-color-accent) !important;
-    }
+    /* Tables (about:support, about:unloads, about:profiles, …): the body
+       colour is hardcoded in the token layer (light-dark(#f8f8fa,
+       rgb(35,34,43))), not derived from anything we already override.
+       Base for the cells, surface for the zebra rows. */
+    --table-background-color: var(--uc-color-base) !important;
+    --table-row-background-color-alternate: var(--uc-color-surface) !important;
 
-    /* Category nav (moz-page-nav): FoxOne's radius, no pill fill. Under Nova the
-       selected entry is an accent-filled circle with dark text; here the
-       selected and hovered entries mark with accent text on a transparent
-       background, the same cue as toolbar icons and panel rows. */
-    moz-page-nav {
-      --page-nav-button-border-radius: var(--uc-radius-surface) !important;
-      --page-nav-button-border-radius-focused: var(--uc-radius-surface) !important;
-      --page-nav-button-background-color-hover: transparent !important;
-      --page-nav-button-background-color-active: transparent !important;
-      --page-nav-button-background-color-selected: transparent !important;
-      --page-nav-button-text-color-hover: var(--uc-color-accent) !important;
-      --page-nav-button-text-color-active: var(--uc-color-accent) !important;
-      --page-nav-button-text-color-selected: var(--uc-color-accent) !important;
-      --page-nav-hr-background-color: var(--uc-color-surface) !important;
-    }
+    /* Text/search inputs: tokens-platform.css maps them to the Field
+       SYSTEM colour (dark standin: compiled-in #2b2a33). The consuming
+       input lives in the shadow DOM of moz-input-search/moz-input-text,
+       out of selector reach, but the custom property inherits across the
+       shadow boundary, so overriding it at :root lands inside. */
+    --input-text-background-color: var(--uc-color-base) !important;
+    --input-text-color: var(--uc-color-text) !important;
 
-    /* Two element-level canvas overrides in preferences.css that a :root
-       token can't reach: the in-content subdialog frame is hardcoded to
-       #42414d in dark mode, and the AI-controls card paints itself violet. */
-    dialog,
-    .dialogBox,
-    .ai-controls-description {
-      --background-color-canvas: var(--uc-color-base) !important;
-      --card-background-color: var(--uc-color-base) !important;
-      --ai-controls-description-background-color: var(--uc-color-base) !important;
-    }
+    /* Direct violet references (same satellites as in userChrome) */
+    --icon-color-information: var(--uc-color-accent) !important;
+    --icon-color-accent-primary-desaturated: var(--uc-color-accent) !important;
+    /* Button hover like the hamburger menu rows: no background block,
+       accent text. Ghost and menu variants alias these at :root, so the
+       one pair covers plain, ghost and menu buttons; primary buttons keep
+       their accent fill via the separate -primary-hover token. The :active
+       pair too, so a click doesn't flash a block back in. */
+    --button-background-color-hover: transparent !important;
+    --button-background-color-active: transparent !important;
+    --button-text-color-hover: var(--uc-color-accent) !important;
+    --button-text-color-active: var(--uc-color-accent) !important;
+    --button-background-color-primary-disabled: color-mix(in srgb, var(--uc-color-accent) 40%, var(--uc-color-base)) !important;
+    --text-color: var(--uc-color-text) !important;
+
+    /* Legacy in-content names (pre-token pages) */
+    --in-content-accent-color: var(--uc-color-accent) !important;
+    --in-content-accent-color-active: var(--uc-color-accent) !important;
+    --in-content-item-selected: var(--uc-color-accent) !important;
+    --in-content-item-selected-text: var(--uc-color-base) !important;
+  }
+
+  /* Highlighted text */
+  ::selection {
+    background-color: #fabd2f !important;
+    color: #282828 !important;
+  }
+
+  /* Search/text boxes (about:preferences, about:addons, subdialogs): the
+     visible input lives in the SHADOW root of moz-input-search and reads
+     --input-text-background-color, which resolves to the Field system
+     colour (compiled-in dark standin #2b2a33) in there; the :root token
+     override above never arrives. Escape hatch: user sheets, unlike page
+     CSS, also match inside shadow trees (confirmed via toolbox: FoxOne's
+     ::selection rule lists on the shadow input), so style the input
+     element directly and skip the token plumbing. */
+  input:where([type="search"], [type="text"], [type="password"], [type="email"], [type="url"], [type="number"], [type="tel"]) {
+    /* Base in every state: with the cards flat on the canvas, any lighter
+       field (at rest or focused) was the one raised surface left on the
+       page. The accent border carries the focus cue. */
+    background-color: var(--uc-color-base, #282828) !important;
+    color: var(--uc-color-text, #FFFFFF) !important;
+  }
+
+  /* Corner radius, driven by --uc-radius-surface (the --uc-rounded toggle
+     in the CONFIG block). Cards (setting-group / moz-card), the moz-box rows
+     inside them and the moz-page-nav pills all read their radius from a
+     token; the box and page-nav families are re-declared on the component
+     HOST (`:root, :host` in the shadow token sheets), so a :root override
+     never reaches them. Setting the tokens on the host elements themselves
+     in the light DOM does: user-origin !important beats the author :host
+     rule on the same element. */
+  :root {
+    --card-border-radius: var(--uc-radius-surface) !important;
+    --card-border-radius-compact: var(--uc-radius-surface) !important;
+    /* Cards sit flat on the canvas: no raised surface, no shadow, a 1px
+       surface-tone border keeps the grouping legible. */
+    --card-background-color: var(--uc-color-base) !important;
+    --card-box-shadow: none !important;
+    --card-box-shadow-hover: none !important;
+    --card-border-color: var(--uc-color-surface) !important;
+    /* Buttons (moz-button, plain in-content button) and text/search
+       fields (moz-input-text, moz-input-search) read their radius from
+       these global tokens without a :host re-declaration, so :root is
+       enough. --toolbarbutton-border-radius aliases the button radius at
+       :root and inherits pre-resolved, hence the explicit line. */
+    --button-border-radius: var(--uc-radius-surface) !important;
+    --toolbarbutton-border-radius: var(--uc-radius-surface) !important;
+    --input-text-border-radius: var(--uc-radius-surface) !important;
+    --input-search-border-radius: var(--uc-radius-surface) !important;
+  }
+  /* Dropdowns re-declare their radius on the host (moz-select.tokens.css),
+     same host-level treatment as the box family below. */
+  moz-select,
+  menulist {
+    --select-border-radius: var(--uc-radius-surface) !important;
+  }
+  /* Message bars re-declare their tokens on the host (moz-message-bar
+     .tokens.css); the background follows --background-color-box from
+     :root, the radius needs the host. */
+  moz-message-bar {
+    --message-bar-border-radius: var(--uc-radius-surface) !important;
+  }
+  /* Segmented control (about:addons light/dark/system picker, 157+):
+     re-declared on the host, and the outer radius adds focus-ring width,
+     ring offset and border on top of the button radius, so a zero button
+     radius still left a 5px rounded frame. Multiplied by --uc-rounded:
+     square at 0, concentric with the inner buttons at 1. */
+  moz-segmented-control {
+    --segmented-control-border-radius: calc(var(--uc-rounded) * (var(--uc-radius-surface) + var(--focus-outline-width) + var(--focus-outline-offset) + var(--border-width))) !important;
+  }
+  /* Info boxes in preferences.css (sponsor note, sync info, QR box) get
+     their radius and a transparent border straight on the element. */
+  .info-box-container,
+  .sync-info-box,
+  .qr-code-box {
+    border-radius: var(--uc-radius-surface) !important;
+    border-color: var(--uc-color-surface) !important;
+  }
+  moz-box-item,
+  moz-box-group,
+  moz-box-button,
+  moz-box-link {
+    --box-border-radius: var(--uc-radius-surface) !important;
+    --box-border-color: var(--uc-color-surface) !important;
+    /* Row hover like the hamburger menu: no background block, accent
+       text. The :active pair too, so a click doesn't flash the grey back. */
+    --box-button-background-color-hover: transparent !important;
+    --box-button-background-color-active: transparent !important;
+    --box-button-text-color-hover: var(--uc-color-accent) !important;
+    --box-button-text-color-active: var(--uc-color-accent) !important;
+  }
+
+  /* Category nav (moz-page-nav): FoxOne's radius, no pill fill. Under Nova the
+     selected entry is an accent-filled circle with dark text; here the
+     selected and hovered entries mark with accent text on a transparent
+     background, the same cue as toolbar icons and panel rows. */
+  moz-page-nav {
+    --page-nav-button-border-radius: var(--uc-radius-surface) !important;
+    --page-nav-button-border-radius-focused: var(--uc-radius-surface) !important;
+    --page-nav-button-background-color-hover: transparent !important;
+    --page-nav-button-background-color-active: transparent !important;
+    --page-nav-button-background-color-selected: transparent !important;
+    --page-nav-button-text-color-hover: var(--uc-color-accent) !important;
+    --page-nav-button-text-color-active: var(--uc-color-accent) !important;
+    --page-nav-button-text-color-selected: var(--uc-color-accent) !important;
+    --page-nav-hr-background-color: var(--uc-color-surface) !important;
+  }
+
+  /* Two element-level canvas overrides in preferences.css that a :root
+     token can't reach: the in-content subdialog frame is hardcoded to
+     #42414d in dark mode, and the AI-controls card paints itself violet. */
+  dialog,
+  .dialogBox,
+  .ai-controls-description {
+    --background-color-canvas: var(--uc-color-base) !important;
+    --card-background-color: var(--uc-color-base) !important;
+    --ai-controls-description-background-color: var(--uc-color-base) !important;
   }
 }
 
@@ -293,13 +312,11 @@
    paints hardcoded Windows-blue bevel gradients plus a blue outline over it.
    Flatten the focused state back to the selection tokens. */
 @-moz-document url-prefix("about:downloads") {
-  @media (prefers-color-scheme: dark) {
-    #downloadsListBox:focus > richlistitem[selected] {
-      background-image: none !important;
-      background-color: var(--in-content-item-selected, #fabd2f) !important;
-      color: var(--in-content-item-selected-text, #282828) !important;
-      outline: none !important;
-    }
+  #downloadsListBox:focus > richlistitem[selected] {
+    background-image: none !important;
+    background-color: var(--in-content-item-selected, #fabd2f) !important;
+    color: var(--in-content-item-selected-text, #282828) !important;
+    outline: none !important;
   }
 }
 
@@ -308,27 +325,27 @@
    (--theme-focus-textinput-outline-color ← --blue-50, variables.css) and
    the primary button ("Hinzufügen"), which resolves outside the amber
    override. Repoint the local blues and cover the primary-button classes
-   directly. Scoped to the page, so DevTools proper keeps its blues. */
+   directly. Scoped to the page, so DevTools proper keeps its blues. Reads
+   the palette from the PRIVILEGED PAGES block (about:debugging matches its
+   about: prefix), so both schemes are covered. */
 @-moz-document url-prefix("about:debugging") {
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --blue-50: #fabd2f !important;
-      --blue-55: #fabd2f !important;
-      --blue-60: #fabd2f !important;
-      --theme-focus-outline-color: #fabd2f !important;
-      --theme-focus-textinput-outline-color: #fabd2f !important;
-      --theme-link-color: #fabd2f !important;
-    }
-    button.primary,
-    .primary-button,
-    .default-button.primary-button {
-      background-color: #fabd2f !important;
-      color: #282828 !important;
-    }
-    button.primary:enabled:hover,
-    .primary-button:enabled:hover {
-      background-color: color-mix(in srgb, #fabd2f 85%, #282828) !important;
-    }
+  :root {
+    --blue-50: var(--uc-color-accent) !important;
+    --blue-55: var(--uc-color-accent) !important;
+    --blue-60: var(--uc-color-accent) !important;
+    --theme-focus-outline-color: var(--uc-color-accent) !important;
+    --theme-focus-textinput-outline-color: var(--uc-color-accent) !important;
+    --theme-link-color: var(--uc-color-accent) !important;
+  }
+  button.primary,
+  .primary-button,
+  .default-button.primary-button {
+    background-color: var(--uc-color-accent) !important;
+    color: var(--uc-color-base) !important;
+  }
+  button.primary:enabled:hover,
+  .primary-button:enabled:hover {
+    background-color: color-mix(in srgb, var(--uc-color-accent) 85%, var(--uc-color-base)) !important;
   }
 }
 
@@ -338,10 +355,10 @@
    stays untouched; only the colours convert. */
 @-moz-document url("about:mozilla") {
   html {
-    background: #282828 !important;
-    color: #fabd2f !important;
+    background: var(--uc-color-base) !important;
+    color: var(--uc-color-accent) !important;
   }
   a {
-    color: #fabd2f !important;
+    color: var(--uc-color-accent) !important;
   }
 }

@@ -27,6 +27,18 @@ All configuration lives in the `:root` block at the top of `userChrome.css`.
 | `--uc-color-text` | `#FFFFFF` | Primary text |
 | `--uc-color-hover` | `#7c6f64` | Hover / highlight backgrounds |
 
+These five drive the dark colour scheme. A light scheme (about:addons → Themes → Light, or System on a light OS) swaps in a second set with the same roles, Gruvbox Light by default. Its accent is a darker amber, because FoxOne uses the accent as a text colour and bright amber is unreadable on a light ground.
+
+| Variable | Default | Description |
+|---|---|---|
+| `--uc-light-color-base` | `#fbf1c7` | Main background, light scheme |
+| `--uc-light-color-surface` | `#ebdbb2` | Secondary tone, light scheme |
+| `--uc-light-color-accent` | `#b57614` | Accent color, light scheme |
+| `--uc-light-color-text` | `#3c3836` | Primary text, light scheme |
+| `--uc-light-color-hover` | `#bdae93` | Hover / highlight backgrounds, light scheme |
+
+`userContent.css` carries its own copy of both sets for the about: pages. Change them there too if you retheme.
+
 ### Layout
 
 | Variable | Default | Description |
@@ -65,6 +77,7 @@ What it deliberately does not touch:
 | `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
 | `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow). The hover close button is an overlay that slides in from the right and works at any tab width; below `50px` tabs go favicon-only and the audio button gives way to a small badge on the favicon |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
+| `--uc-light-tab-hover-text` | `#855d22` | Inactive tab title color on hover, light scheme |
 
 ### Window Controls
 
@@ -72,7 +85,7 @@ What it deliberately does not touch:
 |---|---|---|
 | `--uc-window-buttons-width` | `138px` | Window control button width. Fallback only: on non-macOS the hamburger auto-tracks the real control box via CSS anchor positioning; used on macOS and on Firefox builds without anchor support (auto `0px` on macOS) |
 | `--uc-hamburger-width` | `44px` | Hamburger menu reserved width |
-| `--uc-extensions-button-right` | `0` | Pin the extensions (puzzle) button to the right edge next to the hamburger instead of the nav-bar after the URL bar (`1` = right, `0` = Firefox default). Firefox locks the button to the nav-bar in Customize Toolbar, so this is the only way to get it there |
+| `--uc-extensions-button-right` | `1` | Pin the extensions (puzzle) button to the right edge next to the hamburger instead of the nav-bar after the URL bar (`1` = right, `0` = Firefox default). Firefox locks the button to the nav-bar in Customize Toolbar, so this is the only way to get it there |
 | `--uc-extensions-button-width` | `36px` | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
 | `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
 | `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |
