@@ -41,7 +41,7 @@ The theme applies on restart.
 
 ### 6. Color Theme
 
-FoxOne now includes a built-in Gruvbox inspired Dark color theme that activates automatically in dark mode. No separate extension needed.
+FoxOne includes a built-in Gruvbox color theme that follows Firefox' colour scheme: Gruvbox Dark in dark mode, Gruvbox Light in light mode. No separate extension needed.
 
 ### 7. Bookmarks toolbar
 
