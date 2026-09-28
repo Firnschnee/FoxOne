@@ -82,6 +82,34 @@
 
 
 /* ==========================================================================
+   PALETTE – Gruvbox Dark / Gruvbox Light
+   userContent has no shared config with userChrome; keep in sync with the
+   CONFIG block there. Dark set first, the light scheme swaps in Gruvbox
+   Light (issue #19). Top level instead of inside one @-moz-document block,
+   because the pdf.js viewer can't be matched by URL and reads it too.
+   ========================================================================== */
+
+:root {
+  --uc-color-base:    #282828;
+  --uc-color-surface: #3c3836;
+  --uc-color-accent:  #fabd2f;
+  --uc-color-text:    #FFFFFF;
+  --uc-color-hover:   #7c6f64;
+  --uc-tab-hover-text: #ffda85;   /* tab title hover, between text and accent */
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --uc-color-base:    #fbf1c7;
+    --uc-color-surface: #ebdbb2;
+    --uc-color-accent:  #b57614;
+    --uc-color-text:    #3c3836;
+    --uc-color-hover:   #bdae93;
+    --uc-tab-hover-text: #855d22;
+  }
+}
+
+
+/* ==========================================================================
    PRIVILEGED PAGES — all of about: (Gruvbox Dark / Gruvbox Light)
 
    One block for every about: page instead of per-page rules: the in-content
@@ -104,27 +132,8 @@
    are separate documents in an iframe, so the about: prefix never matches
    them, and they kept the full Nova violet. Same token system, same cure. */
 @-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/") {
-  /* FoxOne palette (userContent has no shared config with userChrome;
-     keep in sync with the CONFIG block there). Dark set first, the light
-     scheme swaps in Gruvbox Light (issue #19); every rule below reads
-     --uc-color-* and follows. */
-  :root {
-    --uc-color-base:    #282828;
-    --uc-color-surface: #3c3836;
-    --uc-color-accent:  #fabd2f;
-    --uc-color-text:    #FFFFFF;
-    --uc-color-hover:   #7c6f64;
-  }
-  @media (prefers-color-scheme: light) {
-    :root {
-      --uc-color-base:    #fbf1c7;
-      --uc-color-surface: #ebdbb2;
-      --uc-color-accent:  #b57614;
-      --uc-color-text:    #3c3836;
-      --uc-color-hover:   #bdae93;
-    }
-  }
-
+  /* Every rule below reads --uc-color-* from the PALETTE block and follows
+     the light scheme with it. */
   :root {
     /* Page backgrounds */
     --in-content-page-background: var(--uc-color-base) !important;
@@ -326,8 +335,7 @@
    the primary button ("Hinzufügen"), which resolves outside the amber
    override. Repoint the local blues and cover the primary-button classes
    directly. Scoped to the page, so DevTools proper keeps its blues. Reads
-   the palette from the PRIVILEGED PAGES block (about:debugging matches its
-   about: prefix), so both schemes are covered. */
+   the PALETTE block, so both schemes are covered. */
 @-moz-document url-prefix("about:debugging") {
   :root {
     --blue-50: var(--uc-color-accent) !important;
@@ -361,4 +369,77 @@
   a {
     color: var(--uc-color-accent) !important;
   }
+}
+
+
+/* ==========================================================================
+   PDF VIEWER – Firefox's built-in pdf.js (Gruvbox Dark / Gruvbox Light)
+
+   The viewer document carries the PDF's own URL (https://…/file.pdf, or
+   no .pdf at all behind a download script), so no @-moz-document rule can
+   catch it. Its root does carry a fixed attribute from viewer.html,
+   `mozdisallowselectionprint`, which viewer.mjs never touches: scope on
+   that. Under Nova the viewer imports the same tokens-brand.css as the
+   about: pages, and its own variables (thumbnail frame, page badge,
+   checkboxes, progress bar, focus rings, primary buttons) all derive from
+   --color-accent-primary, so the central lever works here too.
+   ::selection stays untouched on purpose: the text layer is transparent
+   text over the rendered canvas, an opaque amber fill would cover exactly
+   the glyphs it selects.
+   ========================================================================== */
+
+html[mozdisallowselectionprint] {
+  --color-accent-primary: var(--uc-color-accent) !important;
+  --color-accent-primary-hover: var(--uc-color-accent) !important;
+  --color-accent-primary-active: var(--uc-color-accent) !important;
+  --color-accent-primary-selected: var(--uc-color-accent) !important;
+
+  /* Nova tints the text colour violet (violet-desaturated-0 in dark). */
+  --text-color: var(--uc-color-text) !important;
+
+  /* Surfaces: toolbar, sidebar, menus, fields and the canvas behind the
+     pages. Flat base like the about: pages, borders do the grouping. The
+     page badges on the thumbnails read box-info and sit on the white page
+     image, so base keeps them legible. */
+  --background-color-canvas: var(--uc-color-base) !important;
+  --background-color-box: var(--uc-color-base) !important;
+  --background-color-box-info: var(--uc-color-base) !important;
+  --toolbar-background-color: var(--uc-color-base) !important;
+  --body-bg-color: var(--uc-color-base) !important;
+
+  /* Toolbar icons: Nova maps them to --toolbarbutton-icon-fill, a dimmed
+     grey. Full text colour instead, at rest and on hover. */
+  --toolbar-icon-bg-color: var(--uc-color-text) !important;
+  --toolbar-icon-hover-bg-color: var(--uc-color-text) !important;
+  /* Toggled buttons (sidebar open, an editor tool active): Nova sets them
+     in a grey filled circle. Like the chrome's active states, no block,
+     just the accent on the icon. */
+  --toggled-btn-color: var(--uc-color-accent) !important;
+  --toggled-btn-bg-color: transparent !important;
+  --toggled-hover-active-btn-color: transparent !important;
+
+  /* Popup menu rows ("Verwalten" menu, view selector): Nova fills the
+     hovered/pressed row with violet-desaturated. Amber fill, base text on
+     top for contrast. */
+  --button-background-color-menu-hover: var(--uc-color-accent) !important;
+  --button-background-color-menu-active: var(--uc-color-accent) !important;
+  --button-text-color-menu-hover: var(--uc-color-base) !important;
+  --button-text-color-menu-active: var(--uc-color-base) !important;
+}
+
+/* Thumbnail hover frame: Nova draws it in --border-color-interactive, a
+   white-grey. Same lighter amber as the tab title hover, so the current
+   page (full accent) stays the stronger mark; the keyboard-focus frame
+   reads the same token. Unlike the tokens above, pdf.js declares this one
+   on #viewsManager itself (and resolves --image-hover-shadow there), so a
+   value inherited from the root loses to it: override on the element. */
+html[mozdisallowselectionprint] #viewsManager {
+  --image-hover-border-color: var(--uc-tab-hover-text) !important;
+  /* Sidebar buttons ("Verwalten", view selector, +, close): hover and
+     press fill violet-desaturated under Nova. Amber like the menu rows;
+     the icons are masks painted in the -fg colour, so they turn base too. */
+  --button-hover-bg: var(--uc-color-accent) !important;
+  --button-hover-fg: var(--uc-color-base) !important;
+  --button-active-bg: var(--uc-color-accent) !important;
+  --button-active-fg: var(--uc-color-base) !important;
 }
