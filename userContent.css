@@ -67,7 +67,7 @@
 
 
 /* ==========================================================================
-   NEW TAB / HOME — Gruvbox Dark (dark mode only)
+   NEW TAB / HOME – Gruvbox Dark (dark mode only)
    ========================================================================== */
 
 
@@ -112,7 +112,7 @@
 
 
 /* ==========================================================================
-   PRIVILEGED PAGES — all of about: (Gruvbox Dark / Gruvbox Light)
+   PRIVILEGED PAGES – all of about: (Gruvbox Dark / Gruvbox Light)
 
    One block for every about: page instead of per-page rules: the in-content
    pages (preferences, addons, logins, support, protections, downloads/
@@ -314,11 +314,11 @@
 
 
 /* ==========================================================================
-   PER-PAGE STRAGGLERS — pages with colours outside the token system.
+   PER-PAGE STRAGGLERS – pages with colours outside the token system.
    Collected while walking about:about; one block per page.
    ========================================================================== */
 
-/* about:downloads — the SELECTED row is amber only while the window is
+/* about:downloads – the SELECTED row is amber only while the window is
    inactive. With focus, browser/themes/windows/downloads/allDownloadsView.css
    paints hardcoded Windows-blue bevel gradients plus a blue outline over it.
    Flatten the focused state back to the selection tokens. */
@@ -331,7 +331,7 @@
   }
 }
 
-/* about:debugging — a devtools page with its own Photon palette on top of
+/* about:debugging – a devtools page with its own Photon palette on top of
    the design tokens. Two stragglers: the text-input focus ring
    (--theme-focus-textinput-outline-color ← --blue-50, variables.css) and
    the primary button ("Hinzufügen"), which resolves outside the amber
@@ -359,7 +359,7 @@
   }
 }
 
-/* about:mozilla — the Book of Mozilla easter egg ships its own maroon
+/* about:mozilla – the Book of Mozilla easter egg ships its own maroon
    radial gradient and white serif text (toolkit aboutMozilla.css). Rebind
    the scripture to the palette: base background, amber verse. Typography
    stays untouched; only the colours convert. */

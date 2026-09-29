@@ -32,8 +32,8 @@ In Firefox, go to `about:support` and click **Open Profile Folder**.
 
 Create a `chrome` folder inside your profile folder if it doesn't exist, then copy these files into it:
 
-- [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) — browser UI styling
-- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) — new tab / home page colors
+- [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) – browser UI styling
+- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) – new tab / home page colors
 
 ### 5. Restart Firefox
 
@@ -47,6 +47,6 @@ FoxOne includes a built-in Gruvbox color theme that follows Firefox' colour sche
 
 Right-click an empty spot on the toolbar and pick **Bookmarks Toolbar → Always Show**.
 
-Sounds backwards for a one-line theme, but that is what hands the bar to FoxOne: since 3.5 it no longer sits on a row of its own. It hangs below the toolbar, out of sight, and fades in when you reach for the URL bar — move the pointer down onto it and it stays open until you leave. The page keeps the line. Since 3.5.2 a fresh tab shows the bar outright, no hover needed, until you navigate somewhere.
+Sounds backwards for a one-line theme, but that is what hands the bar to FoxOne: since 3.5 it no longer sits on a row of its own. It hangs below the toolbar, out of sight, and fades in when you reach for the URL bar – move the pointer down onto it and it stays open until you leave. The page keeps the line. Since 3.5.2 a fresh tab shows the bar outright, no hover needed, until you navigate somewhere.
 
-Leave the setting alone and nothing changes; Firefox keeps the bar collapsed and there is nothing to reveal. If you would rather have the classic permanent row, set `--uc-dynamic-bookmarks: 0` in `userChrome.css` — see [Customisation](customisation.html).
+Leave the setting alone and nothing changes; Firefox keeps the bar collapsed and there is nothing to reveal. If you would rather have the classic permanent row, set `--uc-dynamic-bookmarks: 0` in `userChrome.css` – see [Customisation](customisation.html).
