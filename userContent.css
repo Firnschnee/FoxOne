@@ -472,6 +472,17 @@ html[mozdisallowselectionprint] .dropdownToolbarButton {
   --button-text-color-hover: var(--uc-tab-hover-text) !important;
 }
 
+/* Editor toolbars: the floating comment/highlight pair under a text
+   selection and the toolbar on a selected annotation. Nova hovers them
+   with a violet wash (--toolbarbutton-background-color-hover) and paints
+   the icons dimmed grey. Text colour at rest, no fill, tab title hover
+   colour on the icon. Declared on .editToolbar itself, so override there. */
+html[mozdisallowselectionprint] .editToolbar {
+  --editor-toolbar-fg-color: var(--uc-color-text) !important;
+  --editor-toolbar-hover-bg-color: transparent !important;
+  --editor-toolbar-hover-fg-color: var(--uc-tab-hover-text) !important;
+}
+
 /* Doorhanger menu rows (the » menu, editor menus): the fill is gone with
    --button-hover-color above, the label follows the icon into the tab
    title hover colour. */
