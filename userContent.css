@@ -95,6 +95,7 @@
   --uc-color-accent:  #fabd2f;
   --uc-color-text:    #FFFFFF;
   --uc-color-hover:   #7c6f64;
+  --uc-color-border:  #504945;   /* Gruvbox bg2, neutral control hairline */
   --uc-tab-hover-text: #ffda85;   /* tab title hover, between text and accent */
 }
 @media (prefers-color-scheme: light) {
@@ -104,6 +105,7 @@
     --uc-color-accent:  #b57614;
     --uc-color-text:    #3c3836;
     --uc-color-hover:   #bdae93;
+    --uc-color-border:  #d5c4a1;
     --uc-tab-hover-text: #855d22;
   }
 }
@@ -408,9 +410,13 @@ html[mozdisallowselectionprint] {
   --body-bg-color: var(--uc-color-base) !important;
 
   /* Toolbar icons: Nova maps them to --toolbarbutton-icon-fill, a dimmed
-     grey. Full text colour instead, at rest and on hover. */
+     grey. Full text colour at rest. Hover drops the grey fill
+     (--button-hover-color, read only by toolbar buttons, menu rows and the
+     zoom selector) and tints the icon in the tab title hover colour, so a
+     toggled button (full accent) still reads as the stronger state. */
   --toolbar-icon-bg-color: var(--uc-color-text) !important;
-  --toolbar-icon-hover-bg-color: var(--uc-color-text) !important;
+  --toolbar-icon-hover-bg-color: var(--uc-tab-hover-text) !important;
+  --button-hover-color: transparent !important;
   /* Toggled buttons (sidebar open, an editor tool active): Nova sets them
      in a grey filled circle. Like the chrome's active states, no block,
      just the accent on the icon. */
@@ -419,12 +425,21 @@ html[mozdisallowselectionprint] {
   --toggled-hover-active-btn-color: transparent !important;
 
   /* Popup menu rows ("Verwalten" menu, view selector): Nova fills the
-     hovered/pressed row with violet-desaturated. Amber fill, base text on
-     top for contrast. */
-  --button-background-color-menu-hover: var(--uc-color-accent) !important;
-  --button-background-color-menu-active: var(--uc-color-accent) !important;
-  --button-text-color-menu-hover: var(--uc-color-base) !important;
-  --button-text-color-menu-active: var(--uc-color-base) !important;
+     hovered/pressed row with violet-desaturated. No fill, like the
+     toolbar and the doorhanger rows: the label takes the tab title hover
+     colour. */
+  --button-background-color-menu-hover: transparent !important;
+  --button-background-color-menu-active: transparent !important;
+  --button-text-color-menu-hover: var(--uc-tab-hover-text) !important;
+  --button-text-color-menu-active: var(--uc-tab-hover-text) !important;
+
+  /* Button outlines: Nova draws every secondary button's border in
+     --color-accent-primary, so the accent lever above rings the sidebar
+     controls and the zoom selector in amber and they compete with the
+     selected thumbnail. Neutral hairline instead, amber stays a state. */
+  --button-border-color: var(--uc-color-border) !important;
+  --button-border-color-hover: var(--uc-color-hover) !important;
+  --button-border-color-active: var(--uc-color-hover) !important;
 }
 
 /* Thumbnail hover frame: Nova draws it in --border-color-interactive, a
@@ -436,10 +451,30 @@ html[mozdisallowselectionprint] {
 html[mozdisallowselectionprint] #viewsManager {
   --image-hover-border-color: var(--uc-tab-hover-text) !important;
   /* Sidebar buttons ("Verwalten", view selector, +, close): hover and
-     press fill violet-desaturated under Nova. Amber like the menu rows;
-     the icons are masks painted in the -fg colour, so they turn base too. */
-  --button-hover-bg: var(--uc-color-accent) !important;
-  --button-hover-fg: var(--uc-color-base) !important;
-  --button-active-bg: var(--uc-color-accent) !important;
-  --button-active-fg: var(--uc-color-base) !important;
+     press fill violet-desaturated under Nova. No fill, like the toolbar:
+     label and mask icons (painted in the -fg colour) take the tab title
+     hover colour, the hairline steps up to the hover grey. */
+  --button-hover-bg: transparent !important;
+  --button-hover-fg: var(--uc-tab-hover-text) !important;
+  --button-hover-border-color: var(--uc-color-hover) !important;
+  --button-active-bg: transparent !important;
+  --button-active-fg: var(--uc-tab-hover-text) !important;
+  --button-active-border-color: var(--uc-color-hover) !important;
+}
+
+/* Zoom selector ("Automatischer Zoom"): Nova fills it violet on hover
+   (--button-background-color-hover, also laid over the <select> as a
+   gradient). No fill, the label and its arrow (currentColor) take the
+   tab title hover colour instead. Scoped to the element: the same tokens
+   drive the dialog buttons. */
+html[mozdisallowselectionprint] .dropdownToolbarButton {
+  --button-background-color-hover: var(--uc-color-base) !important;
+  --button-text-color-hover: var(--uc-tab-hover-text) !important;
+}
+
+/* Doorhanger menu rows (the » menu, editor menus): the fill is gone with
+   --button-hover-color above, the label follows the icon into the tab
+   title hover colour. */
+html[mozdisallowselectionprint] .toolbarButton.labeled {
+  --doorhanger-hover-color: var(--uc-tab-hover-text) !important;
 }
