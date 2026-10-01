@@ -14,7 +14,17 @@
    ========================================================================== */
 
 :root {
-  /* Color palette – change these five values to retheme FoxOne (dark scheme) */
+  /* Color palette – change these five values to retheme FoxOne (dark scheme).
+     Retheming takes more than this block (issue #50):
+     - userContent.css carries its own copy of both sets (PALETTE block) for
+       the about: pages, new tab included. The two files cannot share
+       variables, so change the values there too.
+     - The tab hover colour is separate: --uc-tab-hover-text and
+       --uc-light-tab-hover-text, further down in this block.
+     - A few rules cannot read variables and hold literals: the accent
+       (#fabd2f dark / #b57614 light) on the sidebar's selected rows and in
+       the Library window, the field ground (#1f1f1f / #f9f5d7) on the
+       sidebar search boxes. Search this file for those hex values. */
   --uc-color-base:    #282828;   /* main background (toolbar, frame) */
   --uc-color-surface: #3c3836;   /* secondary tone (borders, separators, focused URL field) */
   --uc-color-accent:  #fabd2f;   /* accent color (active tab, focus ring) */

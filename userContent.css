@@ -84,7 +84,9 @@
 /* ==========================================================================
    PALETTE – Gruvbox Dark / Gruvbox Light
    userContent has no shared config with userChrome; keep in sync with the
-   CONFIG block there. Dark set first, the light scheme swaps in Gruvbox
+   CONFIG block there. A retheme that only touches userChrome leaves every
+   about: page and the new tab page in Gruvbox (issue #50), so change these
+   values as well. Dark set first, the light scheme swaps in Gruvbox
    Light (issue #19). Top level instead of inside one @-moz-document block,
    because the pdf.js viewer can't be matched by URL and reads it too.
    ========================================================================== */
@@ -123,8 +125,10 @@
    rings, toggles, primary buttons, selected borders and table headers all
    derive from it. Pages with hardcoded colours outside the token system
    get individual rules appended below as they turn up.
-   Known unreachable: about:newtab / about:home / about:blank (separate
-   privileged process / compiled-in canvas colour; see memory).
+   about:newtab / about:home do match the about: prefix: their token-driven
+   parts (customise panel, search field, selection ring) follow the palette
+   (seen in issue #50); the page ground itself is set in the NEW TAB block
+   above. Known unreachable: about:blank (compiled-in canvas colour).
    Both the legacy --in-content-* names and the design tokens are set, so
    older pages and token renames stay covered.
    ========================================================================== */
@@ -195,8 +199,8 @@
 
   /* Highlighted text */
   ::selection {
-    background-color: #fabd2f !important;
-    color: #282828 !important;
+    background-color: var(--uc-color-accent) !important;
+    color: var(--uc-color-base) !important;
   }
 
   /* Search/text boxes (about:preferences, about:addons, subdialogs): the

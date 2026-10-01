@@ -37,7 +37,11 @@ These five drive the dark colour scheme. A light scheme (about:addons → Themes
 | `--uc-light-color-text` | `#3c3836` | Primary text, light scheme |
 | `--uc-light-color-hover` | `#bdae93` | Hover / highlight backgrounds, light scheme |
 
-`userContent.css` carries its own copy of both sets for the about: pages. Change them there too if you retheme.
+Retheming takes more than these ten values:
+
+* **`userContent.css` carries its own copy of both sets** in its PALETTE block. It styles the about: pages (settings, add-ons, the new tab page and the rest), and it cannot read `userChrome.css`'s variables. Change the values there too, or those pages stay Gruvbox.
+* **The tab hover colour is separate:** `--uc-tab-hover-text` and `--uc-light-tab-hover-text`, see [Tabs](#tabs).
+* **A few rules hold colours as literals,** because they cannot read variables: the accent on the sidebar's selected rows and in the Library window (`#fabd2f` dark, `#b57614` light), and the sidebar search boxes' field ground (`#1f1f1f` dark, `#f9f5d7` light). Search `userChrome.css` for those values and replace them.
 
 ### Layout
 
