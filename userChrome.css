@@ -2723,6 +2723,26 @@ sidebar-main {
   transform: translateY(1px) !important; /* centre the pill on the label text (was 8px top / 6px bottom) */
 }
 
+/* drag-to-group target – dragging a tab onto another tab (or a split-view
+   pair) previews the group about to be created. drag-and-drop.js writes the
+   colour inline on #tabbrowser-tabs as --dragover-tab-group-color (the next
+   unused group colour, or the existing group's colour), and Nova paints it as
+   the pale -invert fill plus a 2px outline in the full colour, which reads as
+   a pink frame around a pastel block. Repaint it as a FoxOne chip instead:
+   accent fill, base-coloured text, no outline. Deliberate trade-off: the
+   target no longer previews the colour the new group will get (that still
+   comes from Firefox's palette), it only marks where the drop lands. */
+#tabbrowser-tabs[movingtab-group] .tabbrowser-tab[dragover-groupTarget] > .tab-stack > .tab-background,
+#tabbrowser-tabs[movingtab-group] tab-split-view-wrapper[dragover-groupTarget] {
+  background-color: var(--uc-color-accent) !important;
+  background-image: none !important;
+  outline: none !important;
+}
+#tabbrowser-tabs[movingtab-group] .tabbrowser-tab[dragover-groupTarget] .tab-content,
+#tabbrowser-tabs[movingtab-group] tab-split-view-wrapper[dragover-groupTarget] .tab-content {
+  color: var(--uc-color-base) !important;
+}
+
 
 /* ==========================================================================
    FINDBAR – floating search bar (based on LittleFox)
