@@ -2743,6 +2743,26 @@ sidebar-main {
   color: var(--uc-color-base) !important;
 }
 
+/* tab drag keeps the row height (#51) – while a tab is dragged, tabs.css
+   widens the drop zone with padding-bottom: 15px and cancels it in the layout
+   with margin-bottom: -15px. xul.css makes every XUL element border-box, so
+   the padding lands inside the 44px --tabstrip-min-height instead of on top
+   of it, the min-height stops binding, and the row shrinks to the 40px the
+   tabs themselves are tall. Adding the 15px to the min-height keeps the row
+   at 44px and keeps Firefox's drop zone. The 15px mirrors tabs.css.
+   The dragged tab itself goes position: absolute ([dragtarget]) and only gets
+   left/width inline, so it falls back to its own 32px --tab-min-height at the
+   top of the row while the resting tabs stretch to 44px: its label rode 6px
+   high. Pin it to the row height. Not height: 100% – the containing block is
+   #navigator-toolbox, which only happens to be one row tall. */
+#tabbrowser-tabs[orient="horizontal"][movingtab] {
+  min-height: calc(var(--tabstrip-min-height) + 15px) !important;
+
+  & .tabbrowser-tab[dragtarget] {
+    height: var(--tabstrip-min-height) !important;
+  }
+}
+
 
 /* ==========================================================================
    FINDBAR – floating search bar (based on LittleFox)
