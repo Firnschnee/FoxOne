@@ -1257,8 +1257,11 @@ sidebar-main,
   border: none !important;
 }
 
-#urlbar[focused="true"] > #urlbar-background,
-#urlbar[focused="true"] > .urlbar-background,
+/* [focused] is a boolean attribute: Firefox 157 sets it via
+   toggleAttribute("focused", true), i.e. with an empty value, so every
+   [focused="true"] selector in this file silently stopped matching (#52). */
+#urlbar[focused] > #urlbar-background,
+#urlbar[focused] > .urlbar-background,
 #urlbar:not([open]) > #urlbar-background,
 #urlbar:not([open]) > .urlbar-background {
   /* The field tone (issue #28): --uc-color-base normally, --lwt-accent-color
@@ -1975,7 +1978,7 @@ sidebar-main {
 }
 
 #urlbar:hover #identity-permission-box,
-#urlbar[focused="true"] #identity-permission-box {
+#urlbar[focused] #identity-permission-box {
   max-width: none !important;
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -2012,13 +2015,13 @@ sidebar-main {
 }
 
 #urlbar:hover #userContext-indicator,
-#urlbar[focused="true"] #userContext-indicator {
+#urlbar[focused] #userContext-indicator {
   max-width: 200px !important;
   opacity: 1 !important;
   margin-inline: 2px !important;
 }
 
-#urlbar[focused="true"] #userContext-label {
+#urlbar[focused] #userContext-label {
   max-width: 200px !important;
   opacity: 1 !important;
   margin-inline-start: 2px !important;
@@ -2083,10 +2086,10 @@ sidebar-main {
 #urlbar:hover #taskbar-tabs-button,
 #urlbar:hover #translations-button,
 #urlbar:hover .urlbar-addon-page-action,
-#urlbar[focused="true"] #reader-mode-button,
-#urlbar[focused="true"] #taskbar-tabs-button,
-#urlbar[focused="true"] #translations-button,
-#urlbar[focused="true"] .urlbar-addon-page-action {
+#urlbar[focused] #reader-mode-button,
+#urlbar[focused] #taskbar-tabs-button,
+#urlbar[focused] #translations-button,
+#urlbar[focused] .urlbar-addon-page-action {
   /* max-width only drives the slide-in transition; it must never act as the
      real width cap. An exact icon+padding fit (30px, then 32px) clipped the
      translations icon on FF153 stable because the rendered icon runs wider
