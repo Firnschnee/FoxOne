@@ -134,10 +134,12 @@
    ========================================================================== */
 
 /* The chrome:// prefix covers the in-content SUBDIALOGS (site permissions,
-   clear data, … under chrome://browser/content/preferences/dialogs/): they
+   containers, … under chrome://browser/content/preferences/dialogs/): they
    are separate documents in an iframe, so the about: prefix never matches
-   them, and they kept the full Nova violet. Same token system, same cure. */
-@-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/") {
+   them, and they kept the full Nova violet. Same token system, same cure.
+   The clear-data dialog lives outside that folder since its _v2 rewrite
+   (chrome://browser/content/sanitize_v2.xhtml) and needs its own prefix. */
+@-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/"), url-prefix("chrome://browser/content/sanitize") {
   /* Every rule below reads --uc-color-* from the PALETTE block and follows
      the light scheme with it. */
   :root {
@@ -266,11 +268,13 @@
   moz-segmented-control {
     --segmented-control-border-radius: calc(var(--uc-rounded) * (var(--uc-radius-surface) + var(--focus-outline-width) + var(--focus-outline-offset) + var(--border-width))) !important;
   }
-  /* Info boxes in preferences.css (sponsor note, sync info, QR box) get
-     their radius and a transparent border straight on the element. */
+  /* Info boxes in preferences.css (sponsor note, sync info, QR box) and the
+     clear-data warning box (sanitizeDialog_v2.css, --border-radius-small)
+     get their radius and border straight on the element. */
   .info-box-container,
   .sync-info-box,
-  .qr-code-box {
+  .qr-code-box,
+  #sanitizeEverythingWarningBox {
     border-radius: var(--uc-radius-surface) !important;
     border-color: var(--uc-color-surface) !important;
   }

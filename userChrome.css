@@ -1850,6 +1850,52 @@ sidebar-main {
 }
 
 
+/* Tab-modal dialogs in the browser window (Ctrl+Shift+Del clear data, and
+   every other window-modal subdialog): the frame is a .dialogBox in
+   browser.xhtml, painted from --background-color-box (Nova's violet-tinted
+   dark) with --border-radius-medium. Colour scoped :root:not([lwtheme])
+   like the other surfaces, the shape always applies (same split as the
+   popup blocks). The in-preferences variant of the same dialogs is themed
+   from userContent.css. */
+:root:not([lwtheme]) .dialogBox {
+  --background-color-box: var(--uc-color-base) !important;
+  --background-color-canvas: var(--uc-color-base) !important;
+  --card-border-color: var(--uc-color-surface) !important;
+}
+.dialogBox {
+  border-radius: var(--uc-radius-surface) !important;
+}
+
+/* The clear-data dialog document itself (sanitize_v2.xhtml), as opened in
+   that browser-window frame. userContent.css does not load in this
+   context, so the in-content treatment is repeated here: flat canvas,
+   FoxOne radius on buttons, dropdown and the warning box. The accent
+   already arrives through the NOVA VIOLET PURGE. */
+@-moz-document url-prefix(chrome://browser/content/sanitize) {
+  :root {
+    --background-color-canvas: var(--uc-color-base) !important;
+    --background-color-box: var(--uc-color-base) !important;
+    --button-border-radius: var(--uc-radius-surface) !important;
+    --button-background-color-hover: transparent !important;
+    --button-background-color-active: transparent !important;
+    --button-text-color-hover: var(--uc-color-accent) !important;
+    --button-text-color-active: var(--uc-color-accent) !important;
+  }
+  dialog,
+  :root {
+    background-color: var(--uc-color-base) !important;
+  }
+  menulist {
+    --select-border-radius: var(--uc-radius-surface) !important;
+    border-radius: var(--uc-radius-surface) !important;
+  }
+  #sanitizeEverythingWarningBox {
+    border-radius: var(--uc-radius-surface) !important;
+    border-color: var(--uc-color-surface) !important;
+  }
+}
+
+
 /* AI chatbot chrome – everything but the chat iframe lives inside
    chrome://browser/content/genai/chat.html, not browser.xhtml.
    #header = provider dropdown + settings/close buttons
