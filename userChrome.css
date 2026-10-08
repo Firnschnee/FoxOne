@@ -2418,6 +2418,10 @@ sidebar-main {
      buttons instead of one. The private-window zeroing of the cluster margin
      above outranks this by specificity, so it keeps working. */
   #TabsToolbar-customization-target > toolbaritem:last-of-type,
+    /* Back in the nav-bar's flow, so the FF153 1px-too-high correction from
+       the base rule applies again (the pinned rule above zeroes it). Without
+       it the puzzle sits a pixel above the star beside it. */
+    margin-top: 2px !important;
   #TabsToolbar .private-browsing-indicator-button {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
