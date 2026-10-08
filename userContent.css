@@ -367,6 +367,49 @@
   }
 }
 
+/* about:firefoxview – the page keeps its own new-tab colour set
+   (firefoxview.css): it pins --newtab-background-color to #2b2a33, which
+   wins over the canvas token from the central block, cards read
+   --newtab-background-color-secondary (#42414d), and action links and the
+   bookmark badge read --newtab-primary-action-background (Nova cyan).
+   Repoint the three sources, the --fxview-* names derive from them. Cards
+   follow the central block's model: flat on the canvas with a surface
+   border instead of the raised #42414d and its shadow, which only gets a
+   border under prefers-contrast. Hovers drop the grey block for accent
+   text, like the moz-box rows. (issue #53) */
+@-moz-document url-prefix("about:firefoxview") {
+  :root {
+    --newtab-background-color: var(--uc-color-base) !important;
+    --newtab-background-color-secondary: var(--uc-color-base) !important;
+    --newtab-primary-action-background: var(--uc-color-accent) !important;
+    --fxview-border: var(--uc-color-surface) !important;
+    --fxview-element-background-hover: transparent !important;
+    --fxview-element-background-active: transparent !important;
+    --fxview-text-color-hover: var(--uc-color-accent) !important;
+    --fxviewtabrow-text-color-hover: var(--uc-color-accent) !important;
+    /* the badge ring on a favicon cuts it out of the card; it switched to
+       the grey hover tone, which is gone now */
+    --fxview-indicator-stroke-color-hover: var(--uc-color-base) !important;
+  }
+  /* Pinned tabs show as a grid of bare favicons: no text for the accent
+     hover to colour, and a favicon can't be recoloured, so with the ghost
+     hover gone they gave no feedback at all. They keep a quiet surface
+     block. The token sits on the row's :host, set from the light DOM. */
+  opentabs-tab-row.pinned {
+    --fxviewtabrow-element-background-hover: var(--uc-color-surface) !important;
+    --fxviewtabrow-element-background-active: var(--uc-color-surface) !important;
+  }
+  .card-container:not(.inner) {
+    box-shadow: none !important;
+    border: 1px solid var(--uc-color-surface) !important;
+  }
+  .card-container,
+  details.empty-state,
+  .blackbox {
+    border-radius: var(--uc-radius-surface) !important;
+  }
+}
+
 /* about:mozilla – the Book of Mozilla easter egg ships its own maroon
    radial gradient and white serif text (toolkit aboutMozilla.css). Rebind
    the scripture to the palette: base background, amber verse. Typography
