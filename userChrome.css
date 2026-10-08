@@ -351,6 +351,11 @@
      bar and sidebar drifted to #2b2a33. Pin both to base. */
   --toolbar-background-color: var(--uc-color-base) !important;
   --toolbox-background-color: var(--uc-color-base) !important;
+  /* The window's body swaps to the -inactive token when Firefox loses focus,
+     Nova's rgb(31, 30, 37) violet. The toolbox paints over it, but the
+     vertical tab strip is transparent and showed it. No dimming, same as the
+     :root[lwtheme] #navigator-toolbox repaint further down. */
+  --toolbox-background-color-inactive: var(--uc-color-base) !important;
 
   /* URL bar. Nova renamed the field text tokens (--toolbar-field-color →
      --toolbar-field-text-color, and --toolbar-field-focus-color →
@@ -687,6 +692,7 @@ menupopup :is(menuitem, menu)[_moz-menuactive][disabled] {
   --toolbar-bgcolor: var(--lwt-accent-color) !important;
   --toolbar-background-color: var(--lwt-accent-color) !important;
   --toolbox-background-color: var(--lwt-accent-color) !important;
+  --toolbox-background-color-inactive: var(--lwt-accent-color) !important;
   --toolbar-field-background-color: var(--lwt-accent-color) !important;
   /* Popup surface fallback for the Mica opt-out's `inherit`: a theme that
      defines popup colours puts them here as inline style (which beats these
@@ -2412,16 +2418,16 @@ sidebar-main {
   :root:has(#tabbrowser-tabs[orient="vertical"]) #unified-extensions-button {
     position: static !important;
     height: auto !important;
+    /* Back in the nav-bar's flow, so the FF153 1px-too-high correction from
+       the base rule applies again (the pinned rule above zeroes it). Without
+       it the puzzle sits a pixel above the star beside it. */
+    margin-top: 2px !important;
   }
 
   /* The extension cluster and the private-window mask now clear two fixed
      buttons instead of one. The private-window zeroing of the cluster margin
      above outranks this by specificity, so it keeps working. */
   #TabsToolbar-customization-target > toolbaritem:last-of-type,
-    /* Back in the nav-bar's flow, so the FF153 1px-too-high correction from
-       the base rule applies again (the pinned rule above zeroes it). Without
-       it the puzzle sits a pixel above the star beside it. */
-    margin-top: 2px !important;
   #TabsToolbar .private-browsing-indicator-button {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
