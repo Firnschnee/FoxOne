@@ -2936,7 +2936,7 @@ label.found-matches {
   font-weight: bold;
 }
 .findbar-match-diacritics::before {
-  content: "aá";
+  content: "a\E1";  /* a + a-acute as an escape, so a mis-decoded file can't mangle it (#56) */
   font-weight: bold;
 }
 .findbar-entire-word::before {
