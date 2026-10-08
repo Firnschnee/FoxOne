@@ -222,6 +222,29 @@
   --uc-radius-row: calc(var(--uc-radius-surface) / 2);
 }
 
+/* ==========================================================================
+   ROW HEIGHT – the one line's height, named once (issue #57).
+
+   Not config: setting it does not resize the bar. Firefox sizes the row
+   through --tabstrip-min-height (tab-min-height + 2 * tab-margin-block);
+   this only tells the rules pinned to it (hamburger, puzzle button, URL
+   dropdown alignment) what that height is.
+
+   Read from Firefox rather than written out, because the row follows the
+   density: under Nova 44px normal (32 + 2 * 6), 36px compact (28 + 2 * 4),
+   53px touch (41 + 2 * 6), per tabs.css in FF157. A literal 44px threw the
+   hamburger and puzzle button off centre at compact and touch.
+   With sidebar.verticalTabs Firefox recomputes --tabstrip-min-height at
+   :root from the vertical tab metrics, so there it stops describing the
+   toolbar row. The hamburger and puzzle button sit in the nav-bar's flow in
+   that mode and drop the pinned height there. The URL dropdown pull still
+   reads it.
+   ========================================================================== */
+
+:root {
+  --uc-row-height: var(--tabstrip-min-height);
+}
+
 /* Wide-window tab widths (>= 1710px physical, ~2/3 of WQHD). Restores the
    pre-#7 ceilings: inactive caps near the active one, so flex distributes strip
    space evenly and tabs look uniform – the everyday-comfortable behaviour.
@@ -1062,6 +1085,9 @@ sidebar-main,
 
 :root:has(#tabbrowser-tabs[orient="vertical"]) #PanelUI-button {
   position: static !important;
+  /* In the nav-bar's flow, which centres it. --uc-row-height describes the
+     tab strip and is recomputed from the vertical tab metrics here. (#57) */
+  height: auto !important;
 }
 
 
@@ -1307,14 +1333,15 @@ sidebar-main,
    that goes unnoticed; give the box a corner radius and it reads as the URL
    bar hanging a pixel out of the toolbar.
 
-   The pull is derived, not measured: the row is 44px (the height the
-   hamburger is pinned to) and the field is centred in it, so the gap between
-   field and row edge is (--urlbar-height - 44px) / 2 on either side.
-   That resolves to -6px for the normal 32px field and -5px at touch
-   density's 34px – one expression that tracks the density by itself. */
+   The pull is derived, not measured: the row is --uc-row-height (the height
+   the hamburger is pinned to) and the field is centred in it, so the gap
+   between field and row edge is (--urlbar-height - --uc-row-height) / 2 on
+   either side. That resolves to -6px for the normal 32px field. It tracks
+   the field's density on its own, the row's only as far as --uc-row-height
+   does (see ROW HEIGHT). */
 #urlbar[breakout-extend] > .urlbar-background {
-  top: calc((var(--urlbar-height) - 44px) / 2) !important;
-  bottom: calc((var(--urlbar-height) - 44px) / 2) !important;
+  top: calc((var(--urlbar-height) - var(--uc-row-height)) / 2) !important;
+  bottom: calc((var(--urlbar-height) - var(--uc-row-height)) / 2) !important;
 }
 
 /* FF157 dropped the breakout: the results are their own popover anchored
@@ -1333,7 +1360,7 @@ sidebar-main,
    rounded-corners toggle, which land here since the upper half ends square at
    the seam. */
 #urlbar[popover-open] > .urlbar-background {
-  top: calc((var(--urlbar-height) - 44px) / 2) !important;
+  top: calc((var(--urlbar-height) - var(--uc-row-height)) / 2) !important;
 }
 
 #urlbar .urlbarView-background {
@@ -2214,7 +2241,7 @@ sidebar-main {
   position: fixed !important;
   right: var(--uc-window-buttons-width) !important;
   top: 0 !important;
-  height: 44px !important;
+  height: var(--uc-row-height) !important;
   z-index: 1000 !important;
   display: flex !important;
   align-items: center !important;
@@ -2370,7 +2397,7 @@ sidebar-main {
     position: fixed !important;
     right: calc(var(--uc-window-buttons-width) + var(--uc-extensions-button-width)) !important;
     top: 0 !important;
-    height: 44px !important;
+    height: var(--uc-row-height) !important;
     /* the nav-bar 1px nudge from the trust-icon family no longer applies */
     margin-top: 0 !important;
     z-index: 1000 !important;
@@ -2384,6 +2411,7 @@ sidebar-main {
   }
   :root:has(#tabbrowser-tabs[orient="vertical"]) #unified-extensions-button {
     position: static !important;
+    height: auto !important;
   }
 
   /* The extension cluster and the private-window mask now clear two fixed
