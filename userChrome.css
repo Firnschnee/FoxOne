@@ -1959,13 +1959,16 @@ sidebar-main {
    HIDDEN ELEMENTS
    ========================================================================== */
 
-/* Permanent hide – takes precedence over autohide */
+/* Permanent hide – takes precedence over autohide. Skipped in Customize mode,
+   so the buttons can still be moved or dragged out of the bar. */
 @container style(--uc-hide-nav-buttons: 1) {
-  #back-button,
-  #forward-button,
-  #reload-button,
-  #stop-reload-button,
-  #ipprotection-button {
+  :where(:root:not([customizing])) :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
     display: none !important;
   }
 }
