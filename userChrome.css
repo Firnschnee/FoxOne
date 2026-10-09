@@ -1971,13 +1971,18 @@ sidebar-main {
 }
 
 /* Navigation buttons – auto-hide with hover reveal */
-/* Mode 1 and 2 apply hidden state */
+/* Mode 1 and 2 apply hidden state – only inside #nav-bar and never in
+   Customize mode, so the palette and the customizable bar show every button
+   at full width. :where() keeps the qualifier at zero specificity, so the
+   hover and focus reveals below still win. */
 @container style(--uc-autohide-nav-buttons: 1), style(--uc-autohide-nav-buttons: 2) {
-  #back-button,
-  #forward-button,
-  #reload-button,
-  #stop-reload-button,
-  #ipprotection-button {
+  :where(:root:not([customizing])) #nav-bar :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
     opacity: 0 !important;
     max-width: 0 !important;
     min-width: 0 !important;
