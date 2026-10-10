@@ -149,7 +149,7 @@
   /* Navigation buttons – auto-hide with hover reveal (0 = always show, 1 = reveal with hover and focus, 2 = reveal with hover) */
   --uc-autohide-nav-buttons: 0;
 
-  /* Navigation buttons – delay before hover reveals them (with auto-hide 1 or 2), so a quick pass over the bar doesn't shift the URL bar. Leaving and focus stay immediate (0ms = instant) */
+  /* Navigation buttons – delay before hover reveals them (with auto-hide 1 or 2), so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate (0ms = instant) */
   --uc-autohide-nav-delay: 0ms;
 
   /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
