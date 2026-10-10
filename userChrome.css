@@ -2005,6 +2005,17 @@ sidebar-main {
     min-width: revert !important;
     max-width: 60px !important;
     padding-inline: revert !important;
+    /* Only the reveal properties wait for --uc-autohide-nav-delay. The later entries override
+       `all` for those properties, so the hover colour still changes at once. Leaving uses the
+       hidden state's transition above, so it has no delay. Keyboard focus reveals through the
+       focus rule below and skips the delay. */
+    transition:
+      all 0.2s ease,
+      opacity 0.2s ease var(--uc-autohide-nav-delay),
+      width 0.2s ease var(--uc-autohide-nav-delay),
+      min-width 0.2s ease var(--uc-autohide-nav-delay),
+      max-width 0.2s ease var(--uc-autohide-nav-delay),
+      padding 0.2s ease var(--uc-autohide-nav-delay) !important;
   }
   /* Back button has extra native leading padding (8px left vs 2px); revert misses it */
   #nav-bar:hover #back-button {
@@ -2036,32 +2047,6 @@ sidebar-main {
   }
   #nav-bar:focus-within :is(#back-button, #forward-button)[disabled] {
     opacity: 0.4 !important;
-  }
-}
-
-/* Hover-reveal delay (#55) – only the hover state carries the delay, so the
-   buttons slide in late and leave at once. Mode 1's focus reveal is excluded
-   and stays immediate. */
-@container style(--uc-autohide-nav-buttons: 1) {
-  #nav-bar:hover:not(:focus-within) :is(
-    #back-button,
-    #forward-button,
-    #reload-button,
-    #stop-reload-button,
-    #ipprotection-button
-  ) {
-    transition-delay: var(--uc-autohide-nav-delay) !important;
-  }
-}
-@container style(--uc-autohide-nav-buttons: 2) {
-  #nav-bar:hover :is(
-    #back-button,
-    #forward-button,
-    #reload-button,
-    #stop-reload-button,
-    #ipprotection-button
-  ) {
-    transition-delay: var(--uc-autohide-nav-delay) !important;
   }
 }
 
