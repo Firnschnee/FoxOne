@@ -102,6 +102,8 @@ What it deliberately does not touch:
 | `--uc-show-context-splitview` | `0` | Context menu "Open Link in Split View" (`0` = hidden, `1` = visible) |
 | `--uc-show-all-tabs-button` | `0` | All-tabs button (`0` = hidden, `1` = visible) |
 | `--uc-autohide-nav-buttons` | `0` | Navigation buttons auto-hide (`0` = always visible, `1` = reveal on hover and focus, `2` = reveal on hover only) |
+| `--uc-autohide-nav-delay` | `0ms` | Delay before hovering reveals the auto-hidden navigation buttons, so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate |
+| `--uc-hide-disabled-nav-buttons` | `0` | Back/Forward while there's nowhere to go (`0` = dimmed, `1` = hidden) |
 | `--uc-hide-nav-buttons` | `0` | Remove navigation buttons entirely (`1` = hide, `0` = show) |
 | `--uc-hide-urlbar-buttons` | `0` | Hide URL-bar clutter icons – shield (tracking protection), reader mode, translations, bookmark star, add-to-taskbar (`1` = hide all, `0` = default reveal) |
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |

@@ -149,6 +149,12 @@
   /* Navigation buttons – auto-hide with hover reveal (0 = always show, 1 = reveal with hover and focus, 2 = reveal with hover) */
   --uc-autohide-nav-buttons: 0;
 
+  /* Navigation buttons – delay before hover reveals them (with auto-hide 1 or 2), so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate (0ms = instant) */
+  --uc-autohide-nav-delay: 0ms;
+
+  /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
+  --uc-hide-disabled-nav-buttons: 0;
+
   /* Navigation buttons – remove back/forward/reload for mouse button and shortcut users (1 = hide, 0 = show) */
   --uc-hide-nav-buttons: 0;
 
@@ -2038,6 +2044,49 @@ sidebar-main {
   }
   #nav-bar:focus-within :is(#back-button, #forward-button)[disabled] {
     opacity: 0.4 !important;
+  }
+}
+
+/* Hover-reveal delay (#55) – only the hover state carries the delay, so the
+   buttons slide in late and leave at once. Mode 1's focus reveal is excluded
+   and stays immediate. */
+@container style(--uc-autohide-nav-buttons: 1) {
+  #nav-bar:hover:not(:focus-within) :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
+    transition-delay: var(--uc-autohide-nav-delay) !important;
+  }
+}
+@container style(--uc-autohide-nav-buttons: 2) {
+  #nav-bar:hover :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
+    transition-delay: var(--uc-autohide-nav-delay) !important;
+  }
+}
+
+/* Disabled Back/Forward collapse instead of dimming (#54) – in every
+   auto-hide mode, and with auto-hide off. Firefox itself only dims them.
+   The extra :root qualifier outranks the hover and focus reveal above.
+   Skipped in Customize mode, where every button must stay reachable. */
+@container style(--uc-hide-disabled-nav-buttons: 1) {
+  :root:not([customizing]) #nav-bar :is(#back-button, #forward-button)[disabled] {
+    opacity: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin-inline: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
   }
 }
 
