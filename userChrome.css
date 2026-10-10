@@ -163,6 +163,12 @@
    * misclicked when aiming for the URL bar (1 = hide all, 0 = default reveal) */
   --uc-hide-urlbar-buttons: 0;
 
+  /* URL-bar icons (reader, translations, add-to-taskbar, add-ons, permissions)
+   * – when to reveal them (0 = on URL-bar hover and focus, 1 = only when
+   * resting on the bookmark star or the shield next to them).
+   * Ignored while --uc-hide-urlbar-buttons is 1. */
+  --uc-urlbar-icons-reveal: 1;
+
   /* Pinned toolbar extension icons – hide and reveal on hamburger hover, to
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
@@ -2229,6 +2235,98 @@ sidebar-main {
   margin: 0 !important;
 }
 
+/* Reveal the page icons only from the bookmark star (issue #59, default on).
+   Hovering the URL bar or clicking into it no longer brings them in, so they
+   can't slide under the pointer while aiming for the text. The trigger is
+   #page-action-buttons, the container that holds the star and the hidden
+   icons: collapsed icons are 0 wide and pointer-events: none, so at first only
+   the visible icons at the right end (star, PiP, zoom) can be hovered. Once
+   revealed, the icons sit inside the same container and keep it hovered
+   while the pointer travels over them. The 300ms delay applies to hover only
+   and filters out passing over the star; hiding stays immediate.
+   :focus-within reveals at once, so keyboard users who reach the star with
+   the toolbar arrow keys can step on to the icons. Typing needs no rule:
+   Firefox itself drops the page actions (display: none) while the URL is
+   being edited. #id #id :is(#id) outranks the #urlbar:hover / [focused]
+   reveal above, which is what cancels it in this mode. */
+@container style(--uc-urlbar-icons-reveal: 1) {
+  #urlbar #page-action-buttons :is(
+    #reader-mode-button,
+    #taskbar-tabs-button,
+    #translations-button,
+    .urlbar-addon-page-action
+  ) {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #urlbar #page-action-buttons:is(:hover, :focus-within) :is(
+    #reader-mode-button,
+    #taskbar-tabs-button,
+    #translations-button,
+    .urlbar-addon-page-action
+  ) {
+    max-width: 40px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    padding-block: 0 !important;
+    padding-inline: 8px !important;
+    margin: 0 !important;
+  }
+
+  /* Delay only the reveal: transition-delay comes from the target state, so
+     setting it here leaves the hide untouched. One value covers all four
+     transitioned properties; no colour is transitioned, so hover colours on
+     the icons stay instant (the #58 trap). */
+  #urlbar #page-action-buttons:hover:not(:focus-within) :is(
+    #reader-mode-button,
+    #taskbar-tabs-button,
+    #translations-button,
+    .urlbar-addon-page-action
+  ) {
+    transition-delay: 0.3s !important;
+  }
+
+  /* Same idea on the left: the permissions icon reveals from the shield
+     instead of the URL bar. #trust-icon-container and #identity-box are
+     siblings, the permission box sits inside #identity-box right of the
+     shield, so it slides in away from the pointer. Hovering #identity-box
+     keeps it while the pointer travels onto it. The always-on states
+     (granted camera/mic/location, active sharing) are excluded from the
+     re-hide; :where() keeps that exclusion at zero specificity so the
+     reveals below still win. */
+  #urlbar #identity-box #identity-permission-box:where(:not(
+    [hasSharingIcon],
+    [hasPermissions]:not(:has(.blocked-permission-icon))
+  )) {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  #urlbar #trust-icon-container:is(:hover, :focus-visible) ~ #identity-box #identity-permission-box,
+  #urlbar #identity-box:is(:hover, :focus-within) #identity-permission-box {
+    /* A length, not none: 0 -> none can't interpolate, so the width would
+       jump at once and ignore the delay, opening an empty gap before the
+       delayed opacity fades the icon in. 200px clears several permission
+       icons side by side; the real width stays the content width. */
+    max-width: 200px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin-inline: revert !important;
+    padding-inline: revert !important;
+  }
+
+  #urlbar #trust-icon-container:hover:not(:focus-visible) ~ #identity-box #identity-permission-box {
+    transition-delay: 0.3s !important;
+  }
+}
+
 /* Translations icon, FF153: Mozilla's translations.svg is 17px wide in a
    16px .urlbar-icon box; upstream ships it with a "right letter is 1px too
    long" comment and a margin-right: -1px band-aid. At fractional display
@@ -3466,6 +3564,25 @@ html[id^="taskbartab"] #unified-extensions-button {
   #taskbar-tabs-button,
   #translations-button,
   .urlbar-addon-page-action { transition: none !important; }
+
+  /* Star-only reveal: the delay is a filter, not motion, so keep it. A 0s
+     transition with a delay still holds the old value until the delay ends,
+     then snaps. */
+  @container style(--uc-urlbar-icons-reveal: 1) {
+    #urlbar #page-action-buttons:hover:not(:focus-within) :is(
+      #reader-mode-button,
+      #taskbar-tabs-button,
+      #translations-button,
+      .urlbar-addon-page-action
+    ) {
+      transition: max-width 0s 0.3s, opacity 0s 0.3s,
+                  padding 0s 0.3s, margin 0s 0.3s !important;
+    }
+    #urlbar #trust-icon-container:hover:not(:focus-visible) ~ #identity-box #identity-permission-box {
+      transition: max-width 0s 0.3s, opacity 0s 0.3s,
+                  margin-inline 0s 0.3s, padding-inline 0s 0.3s !important;
+    }
+  }
 
   /* Tabstrip extension-icon reveal */
   #TabsToolbar-customization-target > toolbaritem { transition: none !important; }
