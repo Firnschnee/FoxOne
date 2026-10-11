@@ -3427,10 +3427,34 @@ html[id^="taskbartab"] #unified-extensions-button {
   #nav-bar  { transition: none !important; }
   #titlebar { transition: none !important; }
 
-  /* Auto-hide nav buttons reveal */
-  #reload-button,
-  #stop-reload-button,
-  #ipprotection-button { transition: none !important; }
+  /* Auto-hide nav buttons reveal. Source order alone is not enough here: the
+     hide and hover rules carry two ids (#nav-bar plus the button), which
+     outrank a bare button id. Repeat their selectors so the specificity ties
+     and the later position wins. The hover delay is a filter, not motion, so
+     it stays: a 0s transition with a delay holds the old value, then snaps. */
+  #nav-bar :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) { transition: none !important; }
+
+  #nav-bar:hover :is(
+    #back-button,
+    #forward-button,
+    #reload-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
+    transition:
+      all 0s,
+      opacity 0s var(--uc-autohide-nav-delay),
+      width 0s var(--uc-autohide-nav-delay),
+      min-width 0s var(--uc-autohide-nav-delay),
+      max-width 0s var(--uc-autohide-nav-delay),
+      padding 0s var(--uc-autohide-nav-delay) !important;
+  }
 
   /* Urlbar hover-reveal groups */
   #identity-permission-box { transition: none !important; }
