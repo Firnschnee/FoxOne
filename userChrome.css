@@ -1575,7 +1575,8 @@ sidebar-main,
 #urlbar .urlbar-page-action,
 #urlbar .identity-box-button,
 #urlbar #tracking-protection-icon-container,
-#urlbar #trust-icon-container {
+#urlbar #trust-icon-container,
+#urlbar #notification-popup-box {
   background-color: transparent !important;
 }
 #urlbar .urlbar-icon:not(#star-button):hover,
@@ -1590,16 +1591,20 @@ sidebar-main,
 /* Shield (tracking protection) and the site-info/settings icon use their own
    ids rather than a plain .urlbar-icon, and may paint via fill OR color, so
    set both, triggered by hovering the icon's container. If one still does not
-   recolour, its image node uses a different channel and needs a Toolbox read. */
+   recolour, its image node uses a different channel and needs a Toolbox read.
+   #notification-popup-box (DRM, persistent storage and other prompt anchors)
+   carries its own grey hover chip natively, cleared with the list above. */
 #tracking-protection-icon-container:hover #tracking-protection-icon,
 #trust-icon-container:hover #trust-icon,
-#urlbar .identity-box-button:hover {
+#urlbar .identity-box-button:hover,
+#urlbar #notification-popup-box:hover .notification-anchor-icon {
   fill: var(--uc-tab-hover-text) !important;
   color: var(--uc-tab-hover-text) !important;
 }
 #tracking-protection-icon-container:is(:active, [open]) #tracking-protection-icon,
 #trust-icon-container:is(:active, [open]) #trust-icon,
-#urlbar .identity-box-button:is(:active, [open]) {
+#urlbar .identity-box-button:is(:active, [open]),
+#urlbar #notification-popup-box:is(:active, [open]) .notification-anchor-icon {
   fill: var(--tab-selected-textcolor, #fabd2f) !important;
   color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
