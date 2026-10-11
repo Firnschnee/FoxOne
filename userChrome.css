@@ -2069,6 +2069,58 @@ sidebar-main {
   }
 }
 
+/* Star-only icon reveal (#59): resting on the bookmark star asks for the URL-bar
+   icons, not for Back/Forward on the far side of the bar, so the nav buttons
+   stay hidden while the pointer is on #page-action-buttons (star, zoom, the
+   revealed icons). Coming from the URL text they were already out: their
+   collapse waits the same 300ms as the icon reveal, so both land as one
+   movement instead of two. Only interpolable properties collapse here:
+   width and min-width keep the reveal's revert (auto) and follow max-width
+   down. Setting width: 0 as well would snap it at once (auto can't
+   interpolate) while padding still waits, leaving a sliver of the arrow
+   visible for 300ms. Mode 1 keeps its focus reveal, :where() holds that
+   exclusion at zero specificity so both modes tie with the reduced-motion
+   override at the end of the file. #id :has(#id) :is(#id) outranks the
+   #nav-bar:hover reveal above. */
+@container style(--uc-urlbar-icons-reveal: 1) {
+  @container style(--uc-autohide-nav-buttons: 2) {
+    :where(:root:not([customizing])) #nav-bar:has(#page-action-buttons:hover) :is(
+      #back-button,
+      #forward-button,
+      #reload-button,
+      #stop-reload-button,
+      #ipprotection-button
+    ) {
+      opacity: 0 !important;
+      max-width: 0 !important;
+      padding: 0 !important;
+      transition:
+        all 0.2s ease,
+        opacity 0.2s ease 0.3s,
+        max-width 0.2s ease 0.3s,
+        padding 0.2s ease 0.3s !important;
+    }
+  }
+  @container style(--uc-autohide-nav-buttons: 1) {
+    :where(:root:not([customizing])) #nav-bar:where(:not(:focus-within)):has(#page-action-buttons:hover) :is(
+      #back-button,
+      #forward-button,
+      #reload-button,
+      #stop-reload-button,
+      #ipprotection-button
+    ) {
+      opacity: 0 !important;
+      max-width: 0 !important;
+      padding: 0 !important;
+      transition:
+        all 0.2s ease,
+        opacity 0.2s ease 0.3s,
+        max-width 0.2s ease 0.3s,
+        padding 0.2s ease 0.3s !important;
+    }
+  }
+}
+
 /* Disabled Back/Forward collapse instead of dimming (#54) – in every
    auto-hide mode, and with auto-hide off. Firefox itself only dims them.
    The extra :root qualifier outranks the hover and focus reveal above.
@@ -3586,6 +3638,22 @@ html[id^="taskbartab"] #unified-extensions-button {
     #urlbar #trust-icon-container:hover:not(:focus-visible) ~ #identity-box #identity-permission-box {
       transition: max-width 0s 0.3s, opacity 0s 0.3s,
                   margin-inline 0s 0.3s, padding-inline 0s 0.3s !important;
+    }
+    /* Nav buttons held back on the star: same specificity as the rules
+       in the nav section, later position wins. The collapse snaps together with
+       the icons. */
+    :where(:root:not([customizing])) #nav-bar:has(#page-action-buttons:hover) :is(
+      #back-button,
+      #forward-button,
+      #reload-button,
+      #stop-reload-button,
+      #ipprotection-button
+    ) {
+      transition:
+        all 0s,
+        opacity 0s 0.3s,
+        max-width 0s 0.3s,
+        padding 0s 0.3s !important;
     }
   }
 
