@@ -1994,7 +1994,10 @@ sidebar-main {
 /* Mode 1 and 2 apply hidden state – only inside #nav-bar and never in
    Customize mode, so the palette and the customizable bar show every button
    at full width. :where() keeps the qualifier at zero specificity, so the
-   hover and focus reveals below still win. */
+   hover and focus reveals below still win.
+   width stays at the reveal's revert (auto) in both states, max-width does the
+   collapsing. width: 0 here snapped at once on leave (auto can't interpolate)
+   while padding still animated, leaving a sliver of the arrow for 0.2s. */
 @container style(--uc-autohide-nav-buttons: 1), style(--uc-autohide-nav-buttons: 2) {
   :where(:root:not([customizing])) #nav-bar :is(
     #back-button,
@@ -2006,7 +2009,7 @@ sidebar-main {
     opacity: 0 !important;
     max-width: 0 !important;
     min-width: 0 !important;
-    width: 0 !important;
+    width: revert !important;
     padding: 0 !important;
     overflow: hidden !important;
     transition: all 0.2s ease !important;
