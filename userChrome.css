@@ -99,6 +99,13 @@
      support. No need to measure it by hand on a modern build. */
   --uc-window-buttons-width: 138px;
 
+  /* Window controls (minimise/maximise/close) – hide them to free the space
+   * (1 = hide, 0 = show). Windows/Linux only, macOS keeps its traffic lights.
+   * Close with Ctrl+Shift+W or Alt+F4, maximise by double-clicking the drag
+   * space. In fullscreen (F11) the reveal loses its exit button too, F11
+   * leaves. (#60) */
+  --uc-hide-window-buttons: 0;
+
   /* Hamburger button width – reserved in tab bar to prevent overlap */
   --uc-hamburger-width: 44px;
 
@@ -2466,6 +2473,23 @@ sidebar-main {
   }
   #PanelUI-button {
     right: anchor(--uc-winbtns left, var(--uc-window-buttons-width)) !important;
+  }
+}
+
+/* Hidden window controls (toggle in CONFIG). Without a rendered box the
+   anchor() above has no target and falls back to --uc-window-buttons-width,
+   zeroed here so the hamburger and the pinned puzzle button slide to the
+   right edge. Set on the toolbox, not :root: a style query on :root has no
+   ancestor container to ask. The box sits in the tab strip's flow, so the
+   tabs take the freed width on their own. (#60) */
+@media not (-moz-platform: macos) {
+  @container style(--uc-hide-window-buttons: 1) {
+    .titlebar-buttonbox-container {
+      display: none !important;
+    }
+    #navigator-toolbox {
+      --uc-window-buttons-width: 0px;
+    }
   }
 }
 
