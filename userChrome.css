@@ -2576,10 +2576,15 @@ sidebar-main {
 
   /* Reveal: hovering the hamburger, an extension item itself (the bridge), or
      in private windows the mask button, which sits between the two and would
-     otherwise break the bridge on the way across. */
+     otherwise break the bridge on the way across. An open extension popup
+     holds the reveal too: the popup is a separate panel outside the toolbar,
+     so moving into it drops every :hover, and the collapsing cluster dragged
+     the button-anchored popup sideways. Firefox sets [open] on the button
+     while its popup is up. (#61) */
   :root:is(
     :has(#PanelUI-button:hover),
     :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
   ) #TabsToolbar-customization-target > toolbaritem {
     max-width: 60px !important;
@@ -2596,6 +2601,7 @@ sidebar-main {
   :root:is(
     :has(#PanelUI-button:hover),
     :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
   ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
     max-width: calc(60px + var(--uc-hamburger-width)) !important;
@@ -2607,6 +2613,7 @@ sidebar-main {
   :root[privatebrowsingmode]:is(
     :has(#PanelUI-button:hover),
     :has(#TabsToolbar-customization-target > toolbaritem:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
   ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
     max-width: 60px !important;
@@ -2669,6 +2676,7 @@ sidebar-main {
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
       :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
     ) #TabsToolbar-customization-target > toolbaritem {
       max-width: 60px !important;
@@ -2680,6 +2688,7 @@ sidebar-main {
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
       :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
     ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
       max-width: calc(60px + var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
@@ -2691,6 +2700,7 @@ sidebar-main {
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
       :has(#TabsToolbar-customization-target > toolbaritem:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
     ) #TabsToolbar-customization-target > toolbaritem:last-of-type {
       max-width: 60px !important;
