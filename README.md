@@ -2,7 +2,7 @@
 
 One-line layout, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gruvbox colors and ready for **Nova**
 
-> Tested with Firefox 157 on Windows, macOS, and Linux (GNOME & KDE) with `browser.nova.enabled` set to `true`
+> Tested with Firefox 157 on Windows with `browser.nova.enabled` set to `true`. macOS and Linux are supported but currently untested, reports are welcome
 
 ![urlbar](assets/preview_cropped.png)
 
