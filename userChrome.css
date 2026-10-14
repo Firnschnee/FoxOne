@@ -896,11 +896,12 @@ sidebar-main,
 
      overflow: Nova gives every .chrome-block container `overflow: clip`
      (browser-shared.css, inside @media -moz-pref("browser.nova.enabled")),
-     and #navigator-toolbox is one. The overlay's containing block IS the toolbox and it sits at
-     top:100%, i.e. entirely outside it, so the clip erases the bar in every
-     state – reveal included. Lifted on the toolbox only, from inside this
-     block, so setting --uc-dynamic-bookmarks: 0 hands the clip straight
-     back; the shared .chrome-block rule is never touched. */
+     and #navigator-toolbox is one. The overlay's containing block IS the
+     toolbox and it sits at top:100%, i.e. entirely outside it, so the clip
+     erases the bar in every state – reveal included. Lifted on the toolbox
+     only, from inside this block, so setting --uc-dynamic-bookmarks: 0
+     hands the clip straight back; the shared .chrome-block rule is never
+     touched. */
   #navigator-toolbox {
     position: relative !important;
     z-index: 9999 !important;
