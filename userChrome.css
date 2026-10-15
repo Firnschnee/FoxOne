@@ -3477,6 +3477,32 @@ html[id^="taskbartab"] #unified-extensions-button {
   }
 }
 
+/* The same form as a dialog of its own (bookmarkProperties.xhtml: "Neues
+   Lesezeichen" / "Lesezeichen hinzufügen" from the Library or a context
+   menu). Folder tree and tag list are covered above by id; the window
+   itself paints -moz-Dialog, fields and secondary buttons the
+   violet-tinted dark. Base everywhere, focused field surface, button
+   hover as accent text (same treatment as the sanitize dialog). */
+@-moz-document url("chrome://browser/content/places/bookmarkProperties.xhtml") {
+  :root {
+    --button-background-color: var(--uc-color-base) !important;
+    --button-background-color-hover: transparent !important;
+    --button-background-color-active: transparent !important;
+    --button-text-color-hover: var(--uc-color-accent) !important;
+    --button-text-color-active: var(--uc-color-accent) !important;
+  }
+  :root,
+  dialog {
+    background-color: var(--uc-color-base) !important;
+  }
+  input {
+    background-color: var(--uc-color-base) !important;
+  }
+  input:focus {
+    background-color: var(--uc-color-surface) !important;
+  }
+}
+
 
 /* ==========================================================================
    LIBRARY ("Bibliothek", places.xhtml) – selection follows the FoxOne
