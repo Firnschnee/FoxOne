@@ -1453,11 +1453,16 @@ sidebar-main,
    era when the context-fill channel was dead on this path) is retired: 154
    rebuilt the badges as fragment SVGs (badge-bookmark.svg#ltr-icon etc.) on
    a 24px .urlbarView-type-icon box overlaying the whole favicon, with a
-   working fill channel (fill: var(--toolbarbutton-icon-fill-attention)) and
-   a mask that notches the favicon corner. Under the old rule the star was
-   scaled to that full 24px box and swallowed the favicon. FoxOne already
-   pins --toolbarbutton-icon-fill-attention to the accent (identity block),
-   so the native badge arrives amber with no rule needed here. */
+   working fill channel and a mask that notches the favicon corner. Under
+   the old rule the star was scaled to that full 24px box and swallowed the
+   favicon. 154-157 filled the badge from --toolbarbutton-icon-fill-attention
+   (pinned to the accent in the identity block). 158 switched non-selected
+   rows to fill: var(--link-color), which follows the OS accent (cyan) on
+   profiles with browser.theme.native-theme. Pin the fill on the badge
+   itself, all rows, so the selected row's badge matches its amber title. */
+.urlbarView-row > .urlbarView-row-inner > .urlbarView-type-icon {
+  fill: var(--uc-color-accent) !important;
+}
 
 .urlbar-icon,
 #urlbar-go-button {
@@ -3358,6 +3363,122 @@ html[id^="taskbartab"] #unified-extensions-button {
 
 
 /* ==========================================================================
+   BOOKMARK EDIT PANEL (the star panel, #editBookmarkPanel in browser.xhtml)
+
+   Text fields: the chrome input rule (global-shared.css) fills them from
+   --input-text-background-color -> --background-color-box, Nova's
+   violet-tinted dark (#2b2a33). The folder tree paints Field, the
+   compiled-in standin of the same tone. Both go to base like the
+   Speicherort menulist next to them; the focused field takes surface,
+   the urlbar model the Library fields use too.
+
+   Folder tree: a XUL <tree>, so ::-moz-tree-* pseudos that CANNOT read
+   CSS variables. Hardcoded on purpose, same as the LIBRARY block below:
+   #fabd2f = --uc-color-accent, #ffda85 = --uc-tab-hover-text, light
+   scheme #b57614 / #855d22. Native selection is SelectedItem (the
+   Windows accent, cyan here), hover a grey block. FoxOne popup model
+   instead: no block, amber text for the selection, light amber for
+   hover. Selected rules come after the hover rules so a hovered
+   selection stays amber.
+   ========================================================================== */
+:root:not([lwtheme]) #editBookmarkPanel input {
+  background-color: var(--uc-color-base) !important;
+}
+:root:not([lwtheme]) #editBookmarkPanel input:focus {
+  background-color: var(--uc-color-surface) !important;
+}
+:root:not([lwtheme]) #editBMPanel_folderTree {
+  background-color: var(--uc-color-base) !important;
+}
+
+/* Tag selector (the checkbox list behind the Schlagwörter expander), in
+   the star panel AND the Library details pane: one id, two documents,
+   so it sits here instead of inside the Library's @-moz-document block.
+   The list is a richlistbox, painted Field like the folder tree.
+   Selection follows the tree model: amber text, no block. The native
+   checkboxes render in the Windows accent colour – redrawn flat:
+   base/surface at rest, filled amber with a dark check when set. The
+   lwtheme guard is inert in the Library (that window never gets one). */
+:root:not([lwtheme]) #editBMPanel_tagsSelector {
+  background-color: var(--uc-color-base) !important;
+}
+:root:not([lwtheme]) #editBMPanel_tagsSelector richlistitem[selected] {
+  background-color: transparent !important;
+  color: var(--uc-color-accent) !important;
+  outline: none !important;
+}
+:root:not([lwtheme]) #editBMPanel_tagsSelector richlistitem[selected] checkbox {
+  color: inherit !important;
+}
+:root:not([lwtheme]) #editBMPanel_tagsSelector .checkbox-check {
+  appearance: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 1px solid var(--uc-color-hover) !important;
+  border-radius: 3px !important;
+  background-color: var(--uc-color-base) !important;
+}
+:root:not([lwtheme]) #editBMPanel_tagsSelector checkbox[checked] .checkbox-check {
+  background-color: var(--uc-color-accent) !important;
+  border-color: var(--uc-color-accent) !important;
+  background-image: url("chrome://global/skin/icons/check.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+  -moz-context-properties: fill;
+  fill: var(--uc-color-base); /* base-coloured check on the accent fill */
+}
+
+#editBMPanel_folderTree > treechildren::-moz-tree-row(hover),
+#editBMPanel_folderTree > treechildren::-moz-tree-row(selected),
+#editBMPanel_folderTree > treechildren::-moz-tree-row(selected, focus) {
+  background-color: transparent !important;
+}
+/* Keyboard-cursor dashed ring – redundant next to the amber text. */
+#editBMPanel_folderTree > treechildren::-moz-tree-row(current),
+#editBMPanel_folderTree > treechildren::-moz-tree-row(current, focus) {
+  outline: none !important;
+}
+#editBMPanel_folderTree > treechildren::-moz-tree-cell-text(hover) {
+  color: #ffda85 !important;
+}
+#editBMPanel_folderTree > treechildren::-moz-tree-image(hover),
+#editBMPanel_folderTree > treechildren::-moz-tree-twisty(hover) {
+  fill: #ffda85 !important;
+}
+#editBMPanel_folderTree > treechildren::-moz-tree-cell-text(selected),
+#editBMPanel_folderTree > treechildren::-moz-tree-cell-text(selected, focus) {
+  color: #fabd2f !important;
+}
+#editBMPanel_folderTree > treechildren::-moz-tree-image(selected),
+#editBMPanel_folderTree > treechildren::-moz-tree-image(selected, focus),
+#editBMPanel_folderTree > treechildren::-moz-tree-twisty(selected),
+#editBMPanel_folderTree > treechildren::-moz-tree-twisty(selected, focus) {
+  fill: #fabd2f !important;
+}
+
+@media (prefers-color-scheme: light) {
+  #editBMPanel_folderTree > treechildren::-moz-tree-cell-text(hover) {
+    color: #855d22 !important;
+  }
+  #editBMPanel_folderTree > treechildren::-moz-tree-image(hover),
+  #editBMPanel_folderTree > treechildren::-moz-tree-twisty(hover) {
+    fill: #855d22 !important;
+  }
+  #editBMPanel_folderTree > treechildren::-moz-tree-cell-text(selected),
+  #editBMPanel_folderTree > treechildren::-moz-tree-cell-text(selected, focus) {
+    color: #b57614 !important;
+  }
+  #editBMPanel_folderTree > treechildren::-moz-tree-image(selected),
+  #editBMPanel_folderTree > treechildren::-moz-tree-image(selected, focus),
+  #editBMPanel_folderTree > treechildren::-moz-tree-twisty(selected),
+  #editBMPanel_folderTree > treechildren::-moz-tree-twisty(selected, focus) {
+    fill: #b57614 !important;
+  }
+}
+
+
+/* ==========================================================================
    LIBRARY ("Bibliothek", places.xhtml) – selection follows the FoxOne
    model: accent text instead of a background block (same as tabs, icons,
    urlbar results, add-ons list). Hover gets an accent frame, square
@@ -3561,39 +3682,13 @@ html[id^="taskbartab"] #unified-extensions-button {
 
   /* ------------------------------------------------------------------
      Tag selector (the checkbox list behind the Schlagwörter expander).
-     Selection follows the tree model: amber text, no block. The native
-     checkboxes render in the Windows accent colour – redrawn flat:
-     base/surface at rest, filled amber with a dark check when set.
+     Fill, selection and checkboxes live in BOOKMARK EDIT PANEL, shared
+     with the star panel. Only the frame is Library-specific: surface
+     hairline like the other fields here (the star panel keeps Nova's
+     field border next to its native-bordered inputs).
      ------------------------------------------------------------------ */
   #editBMPanel_tagsSelector {
-    background-color: var(--uc-color-base) !important;
     border: 1px solid var(--uc-color-surface) !important;
-  }
-  #editBMPanel_tagsSelector richlistitem[selected] {
-    background-color: transparent !important;
-    color: var(--uc-color-accent) !important;
-    outline: none !important;
-  }
-  #editBMPanel_tagsSelector richlistitem[selected] checkbox {
-    color: inherit !important;
-  }
-  #editBMPanel_tagsSelector .checkbox-check {
-    appearance: none !important;
-    width: 16px !important;
-    height: 16px !important;
-    border: 1px solid var(--uc-color-hover) !important;
-    border-radius: 3px !important;
-    background-color: var(--uc-color-base) !important;
-  }
-  #editBMPanel_tagsSelector checkbox[checked] .checkbox-check {
-    background-color: var(--uc-color-accent) !important;
-    border-color: var(--uc-color-accent) !important;
-    background-image: url("chrome://global/skin/icons/check.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 12px;
-    -moz-context-properties: fill;
-    fill: var(--uc-color-base); /* base-coloured check on the accent fill */
   }
 
   /* ------------------------------------------------------------------
