@@ -2701,8 +2701,8 @@ sidebar-main {
   }
 
   /* When new tab '+' icon is the last aligned right item, due to a flexible spacer on the left
-    it will otherwise be put on top of the extensions icon, incognito mode is ignored, because
-    the incognito icon makes the new tab icon break free and align nicely */
+     it will otherwise be put on top of the extensions icon, incognito mode is ignored, because
+     the incognito icon makes the new tab icon break free and align nicely */
   :root:not([privatebrowsingmode]) #TabsToolbar:has(toolbarspring + #new-tab-button) #new-tab-button {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width))!important;
   }
