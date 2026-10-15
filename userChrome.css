@@ -126,6 +126,12 @@
   /* Standalone new-tab button width (set to 0 if removed from toolbar) */
   --uc-newtab-width: 36px;
 
+  /* Hide/show the new tab '+' button (use CTRL + T to open new tabs), default: 0
+   * Show: 1
+   * Hide: 0
+   */
+  --uc-show-newtab-button: 0;
+
   /* Drag space – grab zone after the tabs for moving the window. Kept small;
      it is functional space, not just a gap, so don't drop it to 0. */
   --uc-drag-space: 20px;
@@ -1018,6 +1024,13 @@ sidebar-main,
   }
 }
 
+@container style(--uc-show-newtab-button: 0) {
+  #tabs-newtab-button,
+  #new-tab-button {
+    display: none !important;
+  }
+}
+
 #statuspanel #statuspanel-label {
   border: none !important;
   border-radius: var(--uc-radius-surface) !important;
@@ -1082,7 +1095,7 @@ sidebar-main,
 /* The last term reserves the pinned puzzle button (#48); it is a 0/1 toggle,
    so the product is 0 while the button stays in the nav-bar. */
 #tabbrowser-tabs:not([orient="vertical"]) {
-  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-toolbar-button-width) - var(--uc-drag-space) - var(--uc-newtab-width)
+  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-toolbar-button-width) - var(--uc-drag-space) - (var(--uc-newtab-width) * var(--uc-show-newtab-button, 1))
                   - var(--uc-extensions-button-width) * var(--uc-extensions-button-right)) !important;
 }
 
