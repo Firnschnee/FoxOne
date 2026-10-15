@@ -130,7 +130,7 @@
    * Show: 1
    * Hide: 0
    */
-  --uc-show-newtab-button: 0;
+  --uc-show-newtab-button: 1;
 
   /* Drag space – grab zone after the tabs for moving the window. Kept small;
      it is functional space, not just a gap, so don't drop it to 0. */
