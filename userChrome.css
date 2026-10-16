@@ -2550,19 +2550,21 @@ sidebar-main {
 #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))):where(:not(toolbaritem:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden]))) ~ *)) {
   margin-inline-start: auto !important;
 }
-/* Only the last item clears the fixed hamburger; intermediate items stay snug. */
-#TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+/* The last visible item gets the hamburger clearance. That's the extension
+   cluster, unless a flexible spacer has pushed a button there instead.
+   :where() lets the #13 rules take the clearance back while the icons are collapsed. */
+#TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
 
 /* Private windows: Firefox puts a mask toolbarbutton at the end of #TabsToolbar,
    right where the fixed hamburger sits, so the two overlapped. Give the mask
-   the hamburger clearance instead of the extension cluster, so the strip reads
-   [extensions][mask][hamburger][window controls]. */
+   the hamburger clearance instead of whatever item is last in the strip, so
+   the strip reads [last item][mask][hamburger][window controls]. */
 #TabsToolbar .private-browsing-indicator-button {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
-:root[privatebrowsingmode] #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+:root[privatebrowsingmode] #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
   margin-inline-end: 0 !important;
 }
 
@@ -2679,10 +2681,10 @@ sidebar-main {
     margin-top: 2px !important;
   }
 
-  /* The extension cluster and the private-window mask now clear two fixed
-     buttons instead of one. The private-window zeroing of the cluster margin
+  /* The last visible item and the private-window mask now clear two fixed
+     buttons instead of one. The private-window zeroing of that item's margin
      above outranks this by specificity, so it keeps working. */
-  #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))),
+  #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))),
   #TabsToolbar .private-browsing-indicator-button {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
