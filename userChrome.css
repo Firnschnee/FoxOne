@@ -2599,6 +2599,18 @@ sidebar-main {
   #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     margin-inline-end: 0 !important;
   }
+  /* A button right before the collapsed cluster, pushed to the edge by a
+     flexible space, would slide under the hamburger once the cluster folds
+     to zero. It takes over the clearance while collapsed and hands it back
+     on reveal, when the cluster's padding carries it again. Private windows
+     are left out: the mask holds the clearance there. The transition sits
+     in its own low-specificity rule so the reduced-motion block still wins. */
+  #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    transition: margin-inline-end 0.2s ease !important;
+  }
+  :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    margin-inline-end: var(--uc-hamburger-width) !important;
+  }
 
   /* Reveal: hovering the hamburger, an extension item itself (the bridge), or
      in private windows the mask button, which sits between the two and would
@@ -2644,6 +2656,16 @@ sidebar-main {
   ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     max-width: 60px !important;
     padding-inline-end: revert !important;
+  }
+  /* Revealed: the cluster's padding carries the clearance, so the button
+     before it drops its own, or the gap doubles. */
+  :root:is(
+    :has(#PanelUI-button:hover),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+    :has(#TabsToolbar-customization-target > toolbaritem [open]),
+    :has(#TabsToolbar .private-browsing-indicator-button:hover)
+  ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    margin-inline-end: 0 !important;
   }
 }
 
@@ -2696,6 +2718,20 @@ sidebar-main {
      to the icons and the bridge would otherwise break there. */
   @container style(--uc-hide-extension-icons: 1) {
     #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+      margin-inline-end: 0 !important;
+    }
+    /* The button before the collapsed cluster clears both fixed buttons,
+       and drops it on reveal, the puzzle's hover included. */
+    :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+      margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
+    }
+    :root:is(
+      :has(#PanelUI-button:hover),
+      :has(#unified-extensions-button:hover),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+      :has(#TabsToolbar-customization-target > toolbaritem [open]),
+      :has(#TabsToolbar .private-browsing-indicator-button:hover)
+    ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
       margin-inline-end: 0 !important;
     }
     :root:is(
@@ -3837,7 +3873,8 @@ html[id^="taskbartab"] #unified-extensions-button {
   }
 
   /* Tabstrip extension-icon reveal */
-  #TabsToolbar-customization-target > toolbaritem { transition: none !important; }
+  #TabsToolbar-customization-target > toolbaritem,
+  #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
 
   /* Dynamic bookmarks bar – reveal and collapse snap, delays included. The
      bar still appears and disappears on hover, it just does not animate. */
