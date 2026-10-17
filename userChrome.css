@@ -113,7 +113,8 @@
    * hamburger, instead of leaving it in the nav-bar after the URL bar
    * (1 = right, beside the hamburger, 0 = Firefox default in the nav-bar).
    * Firefox locks the button to the nav-bar in Customize Toolbar, so this is
-   * the only way to get it there. (issue #48) */
+   * the only way to get it there. Pinned is the tested layout, 0 leaves the
+   * button where Firefox puts it, best effort. (issues #48, #67) */
   --uc-extensions-button-right: 1;
   /* Width reserved for the pinned puzzle button. Also its distance from the
    * window controls beyond the hamburger, so it doubles as the gap knob:
