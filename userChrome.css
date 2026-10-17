@@ -1087,13 +1087,16 @@ sidebar-main,
                   - var(--uc-extensions-button-width) * var(--uc-extensions-button-right)) !important;
 }
 
-#navigator-toolbox:focus-within #nav-bar {
+/* Widen only for focus inside the nav-bar. The toolbox-wide :focus-within
+   from Cascade also fired when a tab's audio button took focus on mousedown,
+   so the tab strip shrank under the cursor and the click missed. (#68) */
+#navigator-toolbox:has(#nav-bar:focus-within) #nav-bar {
   width: var(--uc-urlbar-max-width);
   &.browser-titlebar {
     width: 100%;
   }
 }
-#navigator-toolbox:focus-within #titlebar {
+#navigator-toolbox:has(#nav-bar:focus-within) #titlebar {
   width: calc(100vw - var(--uc-urlbar-max-width) - 1px);
 }
 
