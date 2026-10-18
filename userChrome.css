@@ -1091,16 +1091,15 @@ sidebar-main,
    from Cascade also fired when a tab's audio button took focus on mousedown,
    so the tab strip shrank under the cursor and the click missed. Keying on
    the open view instead of focus also keeps a fresh new tab narrow until you
-   type, so opening a bookmark from it moves no tabs. 157+ opens the view as a
-   popover, up to 156 the urlbar carries [breakout-extend] instead.
+   type, so opening a bookmark from it moves no tabs.
    (#68, suggested by nickj2014) */
-#navigator-toolbox:has(:is(.urlbarView:popover-open, #urlbar[breakout-extend])) #nav-bar {
+#navigator-toolbox:has(.urlbarView:popover-open) #nav-bar {
   width: var(--uc-urlbar-max-width);
   &.browser-titlebar {
     width: 100%;
   }
 }
-#navigator-toolbox:has(:is(.urlbarView:popover-open, #urlbar[breakout-extend])) #titlebar {
+#navigator-toolbox:has(.urlbarView:popover-open) #titlebar {
   width: calc(100vw - var(--uc-urlbar-max-width) - 1px);
 }
 
