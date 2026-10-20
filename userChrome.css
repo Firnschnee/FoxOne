@@ -1582,6 +1582,27 @@ sidebar-main,
   --toolbarbutton-icon-fill: var(--uc-color-accent) !important;
 }
 
+/* Extension buttons in a toolbar: their icons are bitmaps, so the fill
+   model above can't recolour them and they gave either Nova's grey block
+   (in #TabsToolbar, which the #nav-bar rules miss) or no feedback at all
+   (in #nav-bar). A ring on the badge stack instead, native radius, same
+   two-step pair as everywhere: tab title hover colour on hover, accent
+   while pressed or while the popup is open. Inset shadow, so nothing
+   shifts. The panel rows are .subviewbutton and stay out. */
+.unified-extensions-item .unified-extensions-item-action-button.toolbarbutton-1 {
+  --toolbarbutton-background-color-hover: transparent !important;
+  --toolbarbutton-background-color-active: transparent !important;
+}
+.unified-extensions-item .unified-extensions-item-action-button.toolbarbutton-1:is(:hover, :active, [open]) > .toolbarbutton-badge-stack {
+  background-color: transparent !important;
+}
+.unified-extensions-item .unified-extensions-item-action-button.toolbarbutton-1:hover > .toolbarbutton-badge-stack {
+  box-shadow: inset 0 0 0 1px var(--uc-tab-hover-text) !important;
+}
+.unified-extensions-item .unified-extensions-item-action-button.toolbarbutton-1:is(:active, [open]) > .toolbarbutton-badge-stack {
+  box-shadow: inset 0 0 0 1px var(--tab-selected-textcolor, #fabd2f) !important;
+}
+
 /* urlbar action icons: shield, site-settings, page actions, reader,
    translations. They paint via fill directly; the bookmark star is excluded
    so its native state colour survives, and the icon background is dropped so
@@ -1813,18 +1834,32 @@ sidebar-main {
      per state on its own – so the hover/press tokens below recolour the
      icon to the accent, no background needed. */
   --toolbarbutton-icon-fill: currentColor !important;
-  --button-text-color-hover: var(--uc-color-accent) !important;
-  --button-text-color-ghost-hover: var(--uc-color-accent) !important;
+
+  /* Same two-step pair as the toolbar: tab title hover colour on hover,
+     accent while pressed and for the open panel's button. Icon (text
+     colour) and ring (border colour) move together. */
+  --button-text-color-hover: var(--uc-tab-hover-text) !important;
+  --button-text-color-ghost-hover: var(--uc-tab-hover-text) !important;
   --button-text-color-active: var(--uc-color-accent) !important;
   --button-text-color-ghost-active: var(--uc-color-accent) !important;
+  --button-border-color-hover: var(--uc-tab-hover-text) !important;
+  --button-border-color-ghost-hover: var(--uc-tab-hover-text) !important;
+  --button-border-color-active: var(--uc-color-accent) !important;
+  --button-border-color-ghost-active: var(--uc-color-accent) !important;
 
-  /* Rest + selected stay FoxOne text. Without these the selected (non-ghost,
-     aria-pressed) button keeps --button-text-color-selected, which is meant
-     as text ON a filled accent surface and resolves dark – on the now
-     transparent background the icon went dark too. */
-  --button-text-color: var(--uc-color-text) !important;
+  /* Idle buttons are type "icon ghost": FoxOne text, no ring. The open
+     panel's button (and the overflow button while its menu is up) drops
+     the ghost and becomes plain "icon", so the plain rest and selected
+     tokens only ever paint the open state: accent. The -selected text
+     token is meant as text ON a filled accent surface and resolves dark,
+     on the transparent background the icon went dark too, hence the
+     explicit value. Nova draws the ring from the plain border token in
+     white. */
+  --button-text-color: var(--uc-color-accent) !important;
+  --button-text-color-selected: var(--uc-color-accent) !important;
+  --button-border-color: var(--uc-color-accent) !important;
+  --button-border-color-selected: var(--uc-color-accent) !important;
   --button-text-color-ghost: var(--uc-color-text) !important;
-  --button-text-color-selected: var(--uc-color-text) !important;
   --button-text-color-ghost-selected: var(--uc-color-text) !important;
 }
 
@@ -1846,6 +1881,14 @@ sidebar-main {
     background-color: #1f1f1f !important;
   }
 
+  /* Field radius: same global tokens as the about: pages in userContent
+     (moz-input-text reads them without a :host re-declaration, so :root
+     reaches the shadow input). Nova rounds them to a pill. */
+  :root {
+    --input-search-border-radius: var(--uc-radius-surface, 0) !important;
+    --input-text-border-radius: var(--uc-radius-surface, 0) !important;
+  }
+
   /* Selected row (bookmarks, history, synced/open tabs) – native paints
      --button-background-color-primary, which resolves to the OS accent
      (cyan block). Selection follows the FoxOne model instead: no
@@ -1858,6 +1901,23 @@ sidebar-main {
     color: #fabd2f !important;
   }
 
+  /* Hover – accent frame, no fill, same as the Library rows. Native fills
+     the rows (tab-list/bookmark-list CSS) with
+     --button-background-color-ghost-hover and the device/date headers
+     (moz-card's shadow summary, also the bookmark-list folders) with
+     --card-header-background-color-hover, a solid block under Nova.
+     Styled on the elements directly, same shadow-piercing route as above.
+     Inset shadow instead of a border, so the row doesn't grow. :active
+     included, a click must not flash the block back in. */
+  sidebar-tab-row:not([selected]):is(:hover, :active),
+  sidebar-bookmark-row:not([selected]):is(:hover, :active),
+  details > summary:is(:hover, :active),
+  .bookmark-folder-label:is(:hover, :active) {
+    background-color: transparent !important;
+    box-shadow: inset 0 0 0 1px #fabd2f !important;
+    border-radius: var(--uc-radius-surface, 0) !important;
+  }
+
   /* Light scheme: the same two literals from the light palette. Field
      #f9f5d7 is Gruvbox Light's hard-contrast ground, a shade off base like
      #1f1f1f is in dark; #b57614 = --uc-light-color-accent. */
@@ -1868,6 +1928,12 @@ sidebar-main {
     sidebar-tab-row[selected],
     sidebar-bookmark-row[selected] {
       color: #b57614 !important;
+    }
+    sidebar-tab-row:not([selected]):is(:hover, :active),
+    sidebar-bookmark-row:not([selected]):is(:hover, :active),
+    details > summary:is(:hover, :active),
+    .bookmark-folder-label:is(:hover, :active) {
+      box-shadow: inset 0 0 0 1px #b57614 !important;
     }
   }
 }
@@ -1883,6 +1949,11 @@ sidebar-main {
 @-moz-document url("chrome://browser/content/places/bookmarksSidebar.xhtml") {
   input[type="search"] {
     background-color: #1f1f1f !important;
+  }
+  /* Field radius, same tokens as the sidebar/ block above. */
+  :root {
+    --input-search-border-radius: var(--uc-radius-surface, 0) !important;
+    --input-text-border-radius: var(--uc-radius-surface, 0) !important;
   }
 
   treechildren::-moz-tree-row(selected),
@@ -1901,9 +1972,24 @@ sidebar-main {
     fill: #fabd2f !important;
   }
 
+  /* Keyboard-cursor ring off and hover as an accent frame, both copied
+     from the Library block (native hover is a grey block). */
+  treechildren::-moz-tree-row(current),
+  treechildren::-moz-tree-row(current, focus) {
+    border: none !important;
+    outline: none !important;
+  }
+  treechildren::-moz-tree-row(hover) {
+    background-color: transparent !important;
+    border: 1px solid #fabd2f !important;
+  }
+
   @media (prefers-color-scheme: light) {
     input[type="search"] {
       background-color: #f9f5d7 !important;
+    }
+    treechildren::-moz-tree-row(hover) {
+      border-color: #b57614 !important;
     }
     treechildren::-moz-tree-cell-text(selected),
     treechildren::-moz-tree-cell-text(selected, focus) {
