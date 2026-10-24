@@ -192,7 +192,7 @@
    * once the pointer leaves. The hide delay is the grace period for travelling
    * from the URL bar down onto the bookmarks. */
   --uc-dynamic-bookmarks-hover-delay: 450ms;
-  --uc-dynamic-bookmarks-hide-delay: 50ms;
+  --uc-dynamic-bookmarks-hide-delay: 150ms;
 
   /* Bookmarks bar on fresh tabs – keep the dynamic bar revealed while the
    * active tab shows no page yet (new tab, home), no hover needed
@@ -965,9 +965,13 @@ sidebar-main,
      [breakout-extend]: under Nova that attribute follows the FOCUS alone
      (UrlbarInput.updateLayoutExtend: `if (this.focused || this.view.isOpen)`,
      where pre-Nova it followed view.isOpen), so guarding on it froze the bar
-     for as long as the caret sat in an empty URL bar – every fresh tab. */
+     for as long as the caret sat in an empty URL bar – every fresh tab.
+     The trigger is the input itself, not #urlbar: the shield, the star and
+     the icons they reveal sit in sibling containers, so aiming for them no
+     longer pulls the bar down. Nova moved the input from id to class, so
+     match both. */
   #navigator-toolbox:not(:has(#urlbar[open])) {
-    &:has(#urlbar:hover) #PersonalToolbar,
+    &:has(#urlbar-input:hover, .urlbar-input:hover) #PersonalToolbar,
     & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
       opacity: 1 !important;
       transform: scaleY(1) translateY(0) !important;
@@ -977,7 +981,7 @@ sidebar-main,
     }
     /* Hover on the URL bar waits out the delay; hover on the bar itself (the
        bridge that lets the pointer travel down) opens immediately. */
-    &:has(#urlbar:hover) #PersonalToolbar {
+    &:has(#urlbar-input:hover, .urlbar-input:hover) #PersonalToolbar {
       transition-delay: var(--uc-dynamic-bookmarks-hover-delay),
                         var(--uc-dynamic-bookmarks-hover-delay), 0s, 0s !important;
     }
