@@ -2,7 +2,7 @@
 
 One-line layout, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gruvbox colors and ready for **Nova**
 
-> Tested with Firefox 158 on Windows, macOS and Linux (GNOME) with `browser.nova.enabled` set to `true`.
+> Tested with Firefox 153 ESR & 158 on Windows, macOS and Linux (GNOME) with `browser.nova.enabled` = `true`.
 
 ![urlbar](assets/preview_cropped.png)
 
@@ -10,17 +10,13 @@ One-line layout, hover-reveal icons, dynamic bookmarks bar, floating Findbar, Gr
 
 Over 40 variables for colors, layout and toggles. Missing something or found a bug? Open an [Issue](https://github.com/Firnschnee/FoxOne/issues) or a PR.
 
-_I use Firefox ESR, which release should I use?_
-> - **ESR 153** (with `browser.nova.enabled`) – use the [**latest release**](https://github.com/Firnschnee/FoxOne/releases/latest), tested on ESR 153 again since 4.0
-> - **ESR 140** (with the classic **pre-Nova** UI) – use [**2.3**](https://github.com/Firnschnee/FoxOne/releases/tag/2.3)
-
 Using Thunderbird? Take a look at [BirdOne](https://github.com/Firnschnee/BirdOne).
 
 Special shoutout to:
-- [@NeroWolfe75](https://github.com/NeroWolfe75) – bug hunting, ideas and the urlbar and corner fixes
-- [@snkiz](https://github.com/snkiz) – nav button hover delay, hide-disabled option and the extension cluster rework
-- [@atrehhoff](https://github.com/atrehhoff) – new tab button, spacing and macOS testing
-- [@DeathMurderGod](https://github.com/DeathMurderGod) – minimum tab width and the original auto-hide nav buttons
+> - [@NeroWolfe75](https://github.com/NeroWolfe75) – bug hunting, ideas and the urlbar and corner fixes
+> - [@snkiz](https://github.com/snkiz) – nav button hover delay, hide-disabled option and the extension cluster rework
+> - [@atrehhoff](https://github.com/atrehhoff) – new tab button, spacing and macOS testing
+> - [@DeathMurderGod](https://github.com/DeathMurderGod) – minimum tab width and the original auto-hide nav buttons
 
 ---
 Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/) | License: [MIT](LICENSE)
