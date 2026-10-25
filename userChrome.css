@@ -200,6 +200,13 @@
    * --uc-dynamic-bookmarks is 0. */
   --uc-dynamic-bookmarks-newtab: 1;
 
+  /* Height of the revealed bookmarks bar (its items plus 6px padding top and
+   * bottom). While the bar is open, the find bar moves down by this much so
+   * the bar doesn't cover it. CSS can't measure the bar, so adjust it if your
+   * density or font size changes its height. Ignored while
+   * --uc-dynamic-bookmarks is 0. */
+  --uc-bookmarks-bar-height: 39px;
+
 }
 
 
@@ -3293,6 +3300,53 @@ findbar[hidden] {
   opacity: 0 !important;
   transform: scaleY(0.96) translateY(-4px) !important;
   transition-delay: 0s, 0s, 100ms !important;
+}
+
+/* The dynamic bookmarks bar hangs over the top of the page, the same edge the
+   find bar starts at, so the open bar covered it. While the bar is open, the
+   find bar moves down out of its way, and back once it hides. A permanent
+   offset would cost every page the gap for a bar that is open for a moment.
+   Both live in browser.xhtml, so :root:has() sees the bar's state. The
+   conditions mirror the reveal rules in DYNAMIC BOOKMARKS BAR, chained on
+   :root because :has() can't nest, and so do the delays: the URL-field hover
+   waits out the hover delay, the bar itself and fresh tabs move at once,
+   leaving waits out the hide delay, an opening results list doesn't wait.
+   `translate` is its own property, so it stacks with the open/close
+   transform above. The delay overrides skip [hidden], whose own delays time
+   the close. A bar Firefox collapsed ("Only on New Tab" elsewhere) is never
+   revealed, so it moves nothing. (#70, found by snkiz) */
+@container style(--uc-dynamic-bookmarks: 1) {
+  findbar {
+    transition: opacity 100ms ease-out, transform 100ms ease-out, visibility 0s step-end,
+                translate 100ms ease-out var(--uc-dynamic-bookmarks-hide-delay) !important;
+  }
+  :root:not(:has(#urlbar[open], #PersonalToolbar[collapsed="true"])) {
+    &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover,
+          #PersonalToolbar:hover,
+          #PersonalToolbar toolbarbutton[open]) findbar {
+      translate: 0 var(--uc-bookmarks-bar-height) !important;
+    }
+    &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover) findbar:not([hidden]) {
+      transition-delay: 0s, 0s, 0s, var(--uc-dynamic-bookmarks-hover-delay) !important;
+    }
+    &:has(#PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]) findbar:not([hidden]) {
+      transition-delay: 0s !important;
+    }
+  }
+  :root:has(#urlbar[open]) findbar:not([hidden]) {
+    transition-delay: 0s !important;
+  }
+  @container style(--uc-dynamic-bookmarks-newtab: 1) {
+    :root:not(:has(#urlbar[open], #PersonalToolbar[collapsed="true"])):has(
+      #urlbar-input-container[pageproxystate="invalid"],
+      .urlbar-input-container[pageproxystate="invalid"]
+    ):has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):placeholder-shown) findbar {
+      translate: 0 var(--uc-bookmarks-bar-height) !important;
+      &:not([hidden]) {
+        transition-delay: 0s !important;
+      }
+    }
+  }
 }
 
 .findbar-textbox {
