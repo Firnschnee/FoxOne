@@ -183,6 +183,10 @@
   /* Pinned toolbar extension icons – hide and reveal on hamburger hover, to
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
+  /* Unpinned puzzle only (--uc-extensions-button-right: 0): which side of the
+   * puzzle button the hidden extension icons are picked up from and open on
+   * (left or right). Only that side is read, so it never opens both ways. */
+  --uc-extensions-drawer-side: left;
 
   /* Bookmarks bar – float it out of the layout and reveal it on URL-bar hover
    * (1 = dynamic overlay, 0 = static row that keeps its own line).
@@ -2689,7 +2693,7 @@ sidebar-main {
    the icons open while the pointer travels from the hamburger onto them. It
    must target the toolbaritems specifically, not the customization-target,
    which spans the whole tab strip and would reveal on any tab hover. (#13) */
-@container style(--uc-hide-extension-icons: 1) {
+@container style(--uc-hide-extension-icons: 1) and style(--uc-extensions-button-right: 1) {
   #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     max-width: 0 !important;
     opacity: 0 !important;
@@ -2875,6 +2879,71 @@ sidebar-main {
   }
 }
 
+/* ==========================================================================
+   EXTENSIONS DRAWER, UNPINNED PUZZLE (--uc-extensions-button-right: 0)
+   With the puzzle button in the nav-bar (not pinned to the corner) the hidden
+   extension icons open from the puzzle button instead of the hamburger. The
+   drawer is the unbroken run of extension icons touching the puzzle on ONE
+   side: an icon is in it when everything between it and the puzzle is another
+   extension icon. What lies beyond the run does not matter, so a spacer or a
+   Firefox tool there no longer breaks it; a Firefox tool between the icons
+   and the puzzle ends the run. The run tucks away and slides out while the
+   pointer rests on the puzzle or one of its icons, or an extension popup is
+   open. Icons on the other side of the puzzle are not part of it.
+   --uc-extensions-drawer-side picks the side (left, the default, or right);
+   only that side is read and only that side opens, so it never opens both
+   ways. Left keeps the puzzle under the pointer when it opens.
+   Works in the nav-bar and in the title bar, wherever Firefox put the icon.
+   The title-bar rule above only takes the trailing run of items and the
+   puzzle, a toolbarbutton, breaks it, so icons beside a puzzle that sits next
+   to the hamburger were never picked up.
+   ========================================================================== */
+@container style(--uc-extensions-button-right: 0) {
+  @container style(--uc-hide-extension-icons: 1) {
+
+    @container not style(--uc-extensions-drawer-side: right) {
+      :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+        max-width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        padding-inline: 0 !important;
+        overflow: hidden !important;
+        transition: max-width 0.2s ease, opacity 0.2s ease, padding-inline 0.2s ease !important;
+      }
+      :root:root :is(#nav-bar, #TabsToolbar):is(
+        :has(#unified-extensions-button:is(:hover, [open])),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))):hover),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) [open])
+      ) :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+        max-width: 60px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding-inline: revert !important;
+      }
+    }
+
+    @container style(--uc-extensions-drawer-side: right) {
+      :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *) {
+        max-width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        padding-inline: 0 !important;
+        overflow: hidden !important;
+        transition: max-width 0.2s ease, opacity 0.2s ease, padding-inline 0.2s ease !important;
+      }
+      :root:root :is(#nav-bar, #TabsToolbar):is(
+        :has(#unified-extensions-button:is(:hover, [open])),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *):hover),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *) [open])
+      ) :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *) {
+        max-width: 60px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding-inline: revert !important;
+      }
+    }
+  }
+}
 
 /* ==========================================================================
    TABS
