@@ -933,9 +933,14 @@ sidebar-main,
      Firefox's fullscreen autohide hides as soon as the pointer leaves that
      box – via a plain inline margin-top. While the bar is hovered (or one
      of its folder menus is open), out-shout the inline style and pin the
-     toolbox down; leaving the bar hands control straight back. */
+     toolbox down; leaving the bar hands control straight back. A bookmark's
+     context menu holds it the same way (#74, see the reveal rules below). */
   :root[inFullscreen]:not([inDOMFullscreen])
-    #navigator-toolbox:has(#PersonalToolbar:is(:hover, :has(toolbarbutton[open]))) {
+    #navigator-toolbox:has(#PersonalToolbar:is(:hover, :has(toolbarbutton[open]))),
+  :root[inFullscreen]:not([inDOMFullscreen]):has(#placesContext:hover):not(:has(
+    #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+    #library-button[open], #bookmarksMenu[open]
+  )) #navigator-toolbox {
     margin-top: 0 !important;
   }
 
@@ -976,10 +981,22 @@ sidebar-main,
      The trigger is the input itself, not #urlbar: the shield, the star and
      the icons they reveal sit in sibling containers, so aiming for them no
      longer pulls the bar down. Nova moved the input from id to class, so
-     match both. */
+     match both.
+     A bookmark's context menu is a separate popup: the bookmark loses its
+     hover the moment it opens, and Firefox marks neither the menu nor the
+     bookmark as open, so the bar collapsed behind the menu. The menu does
+     match :hover while the pointer is on it, and the hide delay bridges the
+     move onto it. #placesContext lives in #mainPopupSet, outside the
+     toolbox, hence :root. Other bookmark menus in this window share it, so
+     the hold skips them, or a right-click there would pop the bar open.
+     (#74, reported by atrehhoff) */
   #navigator-toolbox:not(:has(#urlbar[open])) {
     &:has(#urlbar-input:hover, .urlbar-input:hover) #PersonalToolbar,
-    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
+    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])),
+    :root:has(#placesContext:hover):not(:has(
+      #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+      #library-button[open], #bookmarksMenu[open]
+    )) & #PersonalToolbar {
       opacity: 1 !important;
       transform: scaleY(1) translateY(0) !important;
       max-height: 4em !important;
@@ -992,7 +1009,11 @@ sidebar-main,
       transition-delay: var(--uc-dynamic-bookmarks-hover-delay),
                         var(--uc-dynamic-bookmarks-hover-delay), 0s, 0s !important;
     }
-    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])) {
+    & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])),
+    :root:has(#placesContext:hover):not(:has(
+      #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+      #library-button[open], #bookmarksMenu[open]
+    )) & #PersonalToolbar {
       transition-delay: 0s, 0s, 0s, 0s !important;
     }
   }
@@ -3319,7 +3340,8 @@ findbar[hidden] {
    `translate` is its own property, so it stacks with the open/close
    transform above. The delay overrides skip [hidden], whose own delays time
    the close. A bar Firefox collapsed ("Only on New Tab" elsewhere) is never
-   revealed, so it moves nothing. (#70, found by snkiz) */
+   revealed, so it moves nothing. (#70, found by snkiz) The bookmark context
+   menu hold mirrors the reveal rules too, exclusions included. (#74) */
 @container style(--uc-dynamic-bookmarks: 1) {
   findbar {
     transition: opacity 100ms ease-out, transform 100ms ease-out, visibility 0s step-end,
@@ -3328,13 +3350,21 @@ findbar[hidden] {
   :root:not(:has(#urlbar[open], #PersonalToolbar[collapsed="true"])) {
     &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover,
           #PersonalToolbar:hover,
-          #PersonalToolbar toolbarbutton[open]) findbar {
+          #PersonalToolbar toolbarbutton[open]) findbar,
+    &:has(#placesContext:hover):not(:has(
+      #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+      #library-button[open], #bookmarksMenu[open]
+    )) findbar {
       translate: 0 var(--uc-bookmarks-bar-height) !important;
     }
     &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover) findbar:not([hidden]) {
       transition-delay: 0s, 0s, 0s, var(--uc-dynamic-bookmarks-hover-delay) !important;
     }
-    &:has(#PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]) findbar:not([hidden]) {
+    &:has(#PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]) findbar:not([hidden]),
+    &:has(#placesContext:hover):not(:has(
+      #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+      #library-button[open], #bookmarksMenu[open]
+    )) findbar:not([hidden]) {
       transition-delay: 0s !important;
     }
   }
