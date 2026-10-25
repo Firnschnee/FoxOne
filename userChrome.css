@@ -135,6 +135,9 @@
   --findbar-top: 8px;
   --findbar-right: 8px;
   --findbar-width: 360px;
+  /* Height of the revealed bookmarks bar, so the find bar starts below it while
+   * --uc-dynamic-bookmarks is 1 (bar items plus its 6px padding top and bottom) */
+  --uc-bookmarks-bar-height: 39px;
 
   /* Show/Hide Find Bar Options
    * Show: 1
@@ -3287,8 +3290,18 @@ findbar {
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* The floating bookmarks bar drops over the top of the page and would cover
+   the find bar, which starts at the same edge. While it floats, start below
+   it. Stays when the bar is hidden: the find bar can't tell when it is open. */
+@container style(--uc-dynamic-bookmarks: 1) {
+  findbar {
+    top: calc(var(--uc-bookmarks-bar-height) + var(--findbar-top)) !important;
+  }
+}
+
 findbar {
   opacity: 1 !important;
+  transform-origin: top !important;
   transform-origin: top !important;
   transform: scaleY(1) translateY(0px) !important;
   transition: opacity 100ms ease-out, transform 100ms ease-out, visibility 0s step-end !important;
