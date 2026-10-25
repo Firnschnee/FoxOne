@@ -1103,14 +1103,19 @@ sidebar-main,
    so the tab strip shrank under the cursor and the click missed. Keying on
    the open view instead of focus also keeps a fresh new tab narrow until you
    type, so opening a bookmark from it moves no tabs.
-   (#68, suggested by nickj2014) */
-#navigator-toolbox:has(.urlbarView:popover-open) #nav-bar {
+   (#68, suggested by nickj2014)
+   Before 157 the view is no popover, so :popover-open never matched and ESR
+   153 stopped widening at all. #urlbar[open] is set while the list is open in
+   every version (the bookmarks-bar guard keys on it too), so it covers ESR.
+   Not [breakout-extend]: under Nova that follows the focus alone, which
+   would widen a fresh new tab again. (#69, found by snkiz) */
+#navigator-toolbox:has(.urlbarView:popover-open, #urlbar[open]) #nav-bar {
   width: var(--uc-urlbar-max-width);
   &.browser-titlebar {
     width: 100%;
   }
 }
-#navigator-toolbox:has(.urlbarView:popover-open) #titlebar {
+#navigator-toolbox:has(.urlbarView:popover-open, #urlbar[open]) #titlebar {
   width: calc(100vw - var(--uc-urlbar-max-width) - 1px);
 }
 
