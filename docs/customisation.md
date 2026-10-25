@@ -109,6 +109,7 @@ What it deliberately does not touch:
 | `--uc-hide-urlbar-buttons` | `0` | Hide URL-bar clutter icons – shield (tracking protection), reader mode, translations, bookmark star, add-to-taskbar (`1` = hide all, `0` = default reveal) |
 | `--uc-urlbar-icons-reveal` | `1` | When the URL-bar icons appear – reader mode, translations, add-to-taskbar, add-ons, permissions (`1` = only while resting on the bookmark star or the shield next to them, `0` = on URL-bar hover and focus). With `1`, auto-hidden navigation buttons stay hidden while you rest on the star. Ignored while `--uc-hide-urlbar-buttons` is `1` |
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
+| `--uc-extensions-drawer-side` | `left` | With the puzzle button unpinned (`--uc-extensions-button-right: 0`) and `--uc-hide-extension-icons` on: which side of the puzzle button the hidden extension icons are picked up from and open on (`left` or `right`). Only that side is read, so the drawer never opens both ways |
 | `--uc-show-loading-progress` | `0` | Loading progress bar on the active tab while a page loads (`1` = show, `0` = hide) |
 | `--uc-container-line-top` | `1` | Container tab indicator line position (`1` = top of the tab, the Firefox 153 layout, `0` = bottom edge, the classic pre-153 look) |
 | `--uc-dynamic-bookmarks` | `1` | Bookmarks bar as an overlay that reveals on hovering the URL field (not its icons) instead of a permanent row (`1` = dynamic, `0` = static row on its own line). Needs Firefox' bookmarks toolbar set to "Always show" |
@@ -143,6 +144,7 @@ The hand-off keys off the `lwtheme` attribute Firefox sets on the root element w
 | `--findbar-top` | `8px` | Distance from top edge |
 | `--findbar-right` | `8px` | Distance from right edge |
 | `--findbar-width` | `360px` | Preferred width |
+| `--uc-bookmarks-bar-height` | `39px` | Height of the revealed bookmarks bar (its items plus the 6px padding top and bottom). With `--uc-dynamic-bookmarks: 1` the find bar starts below it instead of being covered. Adjust it if your density or font size changes the bar's height |
 | `--show-highlight-all` | `1` | Show highlight-all button (`1` / `0`) |
 | `--show-match-case` | `1` | Show match-case button (`1` / `0`) |
 | `--show-match-diacritics` | `1` | Show match-diacritics button (`1` / `0`) |
