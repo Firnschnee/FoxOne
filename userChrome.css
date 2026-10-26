@@ -2556,9 +2556,16 @@ sidebar-main {
   #reader-mode-button,
   #taskbar-tabs-button,
   #translations-button,
-  #picture-in-picture-button,
-  #star-button-box {
+  #picture-in-picture-button {
     display: none !important;
+  }
+
+  /* display: none removes the element from the DOM and disables its handlers.
+     which breaks the bookmark button in the context menu. visibility: collapse 
+     hides the element visually while keeping it in the DOM so its handlers remain.
+  */
+  #star-button-box {
+    visibility: collapse !important;
   }
 }
 
