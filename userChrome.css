@@ -2560,10 +2560,15 @@ sidebar-main {
     display: none !important;
   }
 
-  /* display: none leaves the element without a size disabling its handlers.
-     which breaks the bookmark button in the context menu. position absolute
-     takes it out of the flow so it leaves no gap pointer-events: none makes it unclickable.
-  */
+  /* The star can't go with display: none. Ctrl+D and "Bookmark Page" anchor
+     the bookmark panel to #star-button-box, and Firefox only accepts an
+     anchor with a size (the fallbacks #pageActionButton and #identity-icon
+     are hidden or zero-sized here). Without one no panel opens and nothing
+     is saved. visibility: collapse still ends at 0px (flex item) and
+     visibility: hidden keeps the panel from opening, so keep it sized but
+     invisible: opacity 0, no pointer events, position absolute so it leaves
+     no gap. Toolbar arrow-key navigation ignores opacity, so the star stays
+     a key stop, Enter on it still bookmarks. (#76) */
   #star-button-box {
     opacity: 0 !important;
     pointer-events: none !important;
