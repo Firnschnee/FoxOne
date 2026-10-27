@@ -2556,9 +2556,18 @@ sidebar-main {
   #reader-mode-button,
   #taskbar-tabs-button,
   #translations-button,
-  #picture-in-picture-button,
-  #star-button-box {
+  #picture-in-picture-button {
     display: none !important;
+  }
+
+  /* display: none leaves the element without a size disabling its handlers.
+     which breaks the bookmark button in the context menu. position absolute
+     takes it out of the flow so it leaves no gap pointer-events: none makes it unclickable.
+  */
+  #star-button-box {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
   }
 }
 
