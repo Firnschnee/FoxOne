@@ -80,5 +80,3 @@ chrome/
    ├─ userContent.css
    └─ ...
 ```
-
-This lets you update FoxOne more easily without losing your custom configuration.
