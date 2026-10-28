@@ -361,6 +361,13 @@
    helper tokens following the theme instead of drifting to Nova defaults.
    FoxOne itself sets no lightweight theme, so without such an extension
    :root:not([lwtheme]) always matches and behaviour is unchanged.
+   Private windows are the exception. Under Nova they ship a built-in
+   theme through the same lwtheme path, and a purple panel with FoxOne's
+   amber accent and dark fields read as three schemes at once. There only
+   the toolbox follows the theme, as the private-window cue (FoxOne hides
+   the private-browsing label), while popups, dialogs and the sidebar keep
+   FoxOne's surfaces: :root:is(:not([lwtheme]), [privatebrowsingmode]).
+   Same specificity as the plain guard. (#77)
    (Firefox sets lwtheme="" on the root; the old :-moz-lwtheme pseudo-class
    was removed, so attribute selectors are the way now.)
    ---------------------------------------------------------------------- */
@@ -406,23 +413,26 @@
   --arrowpanel-border-color: var(--uc-color-surface) !important;
   --panel-item-hover-bgcolor: var(--uc-color-hover) !important;
 
-  /* Sidebar. Current builds paint the revamped sidebar panel (#sidebar,
-     sidebar.css under sidebar.revamp) with --sidebar-background-color,
-     whose dark default is rgb(28 27 34) - a blue-grey that ignores the
-     FoxOne palette. The --lwt-* names below are only consumed when a theme
-     extension sets them, so pin the real tokens too. */
+  /* Content container behind the page. Painting it base kills the white
+     flash Firefox shows while a page loads or during navigation. Chrome
+     surface only – does not touch website content (about:newtab keeps its
+     own opaque canvas). */
+  --tabpanel-background-color: var(--uc-color-base) !important;
+}
+
+/* Sidebar. Current builds paint the revamped sidebar panel (#sidebar,
+   sidebar.css under sidebar.revamp) with --sidebar-background-color,
+   whose dark default is rgb(28 27 34) - a blue-grey that ignores the
+   FoxOne palette. The --lwt-* names below are only consumed when a theme
+   extension sets them, so pin the real tokens too. Private windows keep
+   it, like popups and dialogs (see the header above). */
+:root:is(:not([lwtheme]), [privatebrowsingmode]) {
   --sidebar-background-color: var(--uc-color-base) !important;
   --sidebar-text-color: var(--uc-color-text) !important;
   --lwt-sidebar-background-color: var(--uc-color-base) !important;
   --lwt-sidebar-text-color: var(--uc-color-text) !important;
   --lwt-sidebar-border-color: var(--uc-color-surface) !important;
   --sidebar-highlight-background-color: var(--uc-color-hover) !important;
-
-  /* Content container behind the page. Painting it base kills the white
-     flash Firefox shows while a page loads or during navigation. Chrome
-     surface only – does not touch website content (about:newtab keeps its
-     own opaque canvas). */
-  --tabpanel-background-color: var(--uc-color-base) !important;
 }
 
 /* ----------------------------------------------------------------------
@@ -438,25 +448,37 @@
    them to the FoxOne accent recolours all of it at once: protections
    panel toggle, "Datenschutzeinstellungen" link, permission chips.
 
+   The lever is unconditional, like the other accent cues: a dynamic theme
+   doesn't bring an accent of its own, so scoping it away under [lwtheme]
+   only handed theme users and Nova's private windows (a built-in theme,
+   same lwtheme path) back to violet or the system accent, e.g. on the
+   bookmark panel's primary button and checkbox (#77).
+
    A handful of Nova tokens reference the violet palette DIRECTLY, past
    the accent tokens; those are repointed individually below. Scoped
-   :root:not([lwtheme]) like the other surface colours: a dynamic theme
-   keeps its own accents. Inert without Nova (pre-Nova builds simply get
-   amber instead of the old cyan accent, which is on-brand anyway). */
-:root:not([lwtheme]) {
+   :root:not([lwtheme]) like the other surface colours, so a dynamic theme
+   keeps driving surfaces and text. Inert without Nova (pre-Nova builds
+   simply get amber instead of the old cyan accent, which is on-brand
+   anyway). */
+:root {
   /* The central lever: the semantic accent family. */
   --color-accent-primary: var(--uc-color-accent) !important;
   --color-accent-primary-hover: var(--uc-color-accent) !important;
   --color-accent-primary-active: var(--uc-color-accent) !important;
   --color-accent-primary-selected: var(--uc-color-accent) !important;
+}
 
-  /* Direct violet references (satellites). */
-  /* Info-message surface, e.g. the "Firefox ist wachsam" card in the
-     protections panel (dark: --color-violet-70). The fox illustration
-     inside it is a baked SVG image and stays violet; only its card
-     recolours. */
+/* Direct violet references (satellites). */
+/* Info-message surface, e.g. the "Firefox ist wachsam" card in the
+   protections panel (dark: --color-violet-70). The fox illustration
+   inside it is a baked SVG image and stays violet; only its card
+   recolours. A popup surface, so private windows keep it too. */
+:root:is(:not([lwtheme]), [privatebrowsingmode]) {
   --background-color-information: var(--uc-color-surface) !important;
   --icon-color-information: var(--uc-color-accent) !important;
+}
+
+:root:not([lwtheme]) {
   --icon-color-accent-primary-desaturated: var(--uc-color-accent) !important;
   /* Generic chrome-button hover/active blocks (dark:
      --color-violet-desaturated-50/-40). Inside popups FoxOne's panel
@@ -492,7 +514,7 @@
    --panel-background-color value and 100% radius makes it round, so any
    !important override here flattens it to a plain square.
    ---------------------------------------------------------------------- */
-:root:not([lwtheme]) :is(panel, menupopup):not(#DateTimePickerPanel, .autoscroller) {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) :is(panel, menupopup):not(#DateTimePickerPanel, .autoscroller) {
   --panel-background-color: var(--uc-color-base) !important;
   --panel-text-color: var(--uc-color-text) !important;
   --panel-border-color: var(--uc-color-surface) !important;
@@ -2049,7 +2071,7 @@ sidebar-main {
    like the other surfaces, the shape always applies (same split as the
    popup blocks). The in-preferences variant of the same dialogs is themed
    from userContent.css. */
-:root:not([lwtheme]) .dialogBox {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) .dialogBox {
   --background-color-box: var(--uc-color-base) !important;
   --background-color-canvas: var(--uc-color-base) !important;
   --card-border-color: var(--uc-color-surface) !important;
@@ -3619,13 +3641,13 @@ html[id^="taskbartab"] #unified-extensions-button {
    hover. Selected rules come after the hover rules so a hovered
    selection stays amber.
    ========================================================================== */
-:root:not([lwtheme]) #editBookmarkPanel input {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBookmarkPanel input {
   background-color: var(--uc-color-base) !important;
 }
-:root:not([lwtheme]) #editBookmarkPanel input:focus {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBookmarkPanel input:focus {
   background-color: var(--uc-color-surface) !important;
 }
-:root:not([lwtheme]) #editBMPanel_folderTree {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_folderTree {
   background-color: var(--uc-color-base) !important;
 }
 
@@ -3637,18 +3659,18 @@ html[id^="taskbartab"] #unified-extensions-button {
    checkboxes render in the Windows accent colour – redrawn flat:
    base/surface at rest, filled amber with a dark check when set. The
    lwtheme guard is inert in the Library (that window never gets one). */
-:root:not([lwtheme]) #editBMPanel_tagsSelector {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_tagsSelector {
   background-color: var(--uc-color-base) !important;
 }
-:root:not([lwtheme]) #editBMPanel_tagsSelector richlistitem[selected] {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_tagsSelector richlistitem[selected] {
   background-color: transparent !important;
   color: var(--uc-color-accent) !important;
   outline: none !important;
 }
-:root:not([lwtheme]) #editBMPanel_tagsSelector richlistitem[selected] checkbox {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_tagsSelector richlistitem[selected] checkbox {
   color: inherit !important;
 }
-:root:not([lwtheme]) #editBMPanel_tagsSelector .checkbox-check {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_tagsSelector .checkbox-check {
   appearance: none !important;
   width: 16px !important;
   height: 16px !important;
@@ -3656,7 +3678,7 @@ html[id^="taskbartab"] #unified-extensions-button {
   border-radius: 3px !important;
   background-color: var(--uc-color-base) !important;
 }
-:root:not([lwtheme]) #editBMPanel_tagsSelector checkbox[checked] .checkbox-check {
+:root:is(:not([lwtheme]), [privatebrowsingmode]) #editBMPanel_tagsSelector checkbox[checked] .checkbox-check {
   background-color: var(--uc-color-accent) !important;
   border-color: var(--uc-color-accent) !important;
   background-image: url("chrome://global/skin/icons/check.svg");
