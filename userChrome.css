@@ -508,6 +508,12 @@
   /* Nova paints the toolbox with a violet-leading gradient; FoxOne pins
      the toolbox colour already, kill the gradient stop too. */
   --toolbox-background-color-gradient-leading: var(--uc-color-base) !important;
+  /* The sidebar launcher flyout (expand on hover) paints the whole gradient,
+     so the trailing stop (orange) was left. Firefox 160 renamed the stops
+     (dropped "color"), so both spellings are set. (#81) */
+  --toolbox-background-color-gradient-trailing: var(--uc-color-base) !important;
+  --toolbox-background-gradient-leading: var(--uc-color-base) !important;
+  --toolbox-background-gradient-trailing: var(--uc-color-base) !important;
 }
 
 /* ----------------------------------------------------------------------
