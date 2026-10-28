@@ -459,6 +459,13 @@
    same lwtheme path) back to violet or the system accent, e.g. on the
    bookmark panel's primary button and checkbox (#77).
 
+   The text on the accent has to travel with it. Nova sets
+   --button-text-color-primary to light-dark(white, gray-70), and a popup
+   resolves light-dark() against its own colour scheme, which a light
+   theme turns light while FoxOne's palette stays dark: white on amber.
+   Base is the dark ink on the dark palette's amber and the light ink on
+   the light palette's dark amber, so it reads in both.
+
    A handful of Nova tokens reference the violet palette DIRECTLY, past
    the accent tokens; those are repointed individually below. Scoped
    :root:not([lwtheme]) like the other surface colours, so a dynamic theme
@@ -471,6 +478,9 @@
   --color-accent-primary-hover: var(--uc-color-accent) !important;
   --color-accent-primary-active: var(--uc-color-accent) !important;
   --color-accent-primary-selected: var(--uc-color-accent) !important;
+  --button-text-color-primary: var(--uc-color-base) !important;
+  --button-text-color-primary-hover: var(--uc-color-base) !important;
+  --button-text-color-primary-active: var(--uc-color-base) !important;
 }
 
 /* Direct violet references (satellites). */
