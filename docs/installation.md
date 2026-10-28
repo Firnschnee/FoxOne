@@ -50,3 +50,33 @@ Right-click an empty spot on the toolbar and pick **Bookmarks Toolbar → Always
 Sounds backwards for a one-line theme, but that is what hands the bar to FoxOne: since 3.5 it no longer sits on a row of its own. It hangs below the toolbar, out of sight, and fades in when you reach for the URL bar – move the pointer down onto it and it stays open until you leave. The page keeps the line. Since 3.5.2 a fresh tab shows the bar outright, no hover needed, until you navigate somewhere.
 
 Leave the setting alone and nothing changes; Firefox keeps the bar collapsed and there is nothing to reveal. If you would rather have the classic permanent row, set `--uc-dynamic-bookmarks: 0` in `userChrome.css` – see [Customisation](customisation.html).
+
+## Keeping your settings across updates
+
+If you want to keep your custom tweaks without overwriting them whenever FoxOne is updated, you can keep the downloaded theme files in a separate folder and let your `userChrome.css` and `userContent.css` import them. Put the import at the top of the file, then add your own settings after it so your changes win.
+
+```css
+@import "FoxOne/userChrome.css"; /* and likewise for userContent.css */
+
+:root {
+  --uc-color-accent: #C689FF;
+  --uc-light-color-accent: #C689FF;
+  --uc-tab-hover-text: #C689FF;
+  --uc-light-tab-hover-text: #C689FF;
+  --uc-toolbar-button-width: 0px;
+  --uc-newtab-width: 0px;
+  --uc-drag-space: 0px;
+}
+```
+
+A simple profile layout could look like this:
+
+```text
+chrome/
+├─ userChrome.css    # your personal settings
+├─ userContent.css   # your personal settings
+└─ FoxOne/
+   ├─ userChrome.css
+   ├─ userContent.css
+   └─ ...
+```
