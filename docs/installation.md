@@ -53,30 +53,42 @@ Leave the setting alone and nothing changes; Firefox keeps the bar collapsed and
 
 ## Keeping your settings across updates
 
-If you want to keep your custom tweaks without overwriting them whenever FoxOne is updated, you can keep the downloaded theme files in a separate folder and let your `userChrome.css` and `userContent.css` import them. Put the import at the top of the file, then add your own settings after it so your changes win.
-
-```css
-@import "FoxOne/userChrome.css"; /* and likewise for userContent.css */
-
-:root {
-  --uc-color-accent: #C689FF;
-  --uc-light-color-accent: #C689FF;
-  --uc-tab-hover-text: #C689FF;
-  --uc-light-tab-hover-text: #C689FF;
-  --uc-toolbar-button-width: 0px;
-  --uc-newtab-width: 0px;
-  --uc-drag-space: 0px;
-}
-```
-
-A simple profile layout could look like this:
+If you change more than a setting or two, you can keep FoxOne's files in a folder of their own and import them. An update then only replaces the files in that folder, and your settings stay where they are.
 
 ```text
 chrome/
-├─ userChrome.css    # your personal settings
-├─ userContent.css   # your personal settings
+├─ userChrome.css    # your settings
+├─ userContent.css   # your settings
 └─ FoxOne/
    ├─ userChrome.css
    ├─ userContent.css
    └─ ...
 ```
+
+Your own `userChrome.css` starts with the import, followed by only the settings you change:
+
+```css
+@import "FoxOne/userChrome.css";
+
+:root {
+  --uc-rounded: 1;
+  --uc-hide-urlbar-buttons: 1;
+  --uc-light-color-accent: #8f3f71;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --uc-color-accent: #d3869b;
+  }
+}
+```
+
+The import has to come before any other rule, otherwise Firefox ignores it. Do the same in your own `userContent.css` with `@import "FoxOne/userContent.css";`. Its settings are listed in its own CONFIG block.
+
+A few things behave differently from editing FoxOne's CONFIG block directly, because your settings now come last:
+
+- Put overrides of the dark palette (`--uc-color-*`, `--uc-tab-hover-text`) in a `prefers-color-scheme: dark` block as above. Otherwise they also apply in light mode. `userContent.css` has no `--uc-light-*` settings, so set the light colours there in a `prefers-color-scheme: light` block.
+- Tab widths you set here apply at every window width. FoxOne normally widens tabs on wide windows.
+- On macOS, leave `--uc-window-buttons-width` alone. FoxOne sets it to `0px` there.
+
+When an update removes or renames a setting, that setting simply stops doing anything. The release notes list every such change.
