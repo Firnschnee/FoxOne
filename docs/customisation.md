@@ -89,9 +89,9 @@ What it deliberately does not touch:
 |---|---|---|
 | `--uc-window-buttons-width` | `138px` | Window control button width. Fallback only: on non-macOS the hamburger auto-tracks the real control box via CSS anchor positioning; used on macOS and on Firefox builds without anchor support (auto `0px` on macOS) |
 | `--uc-hide-window-buttons` | `0` | Hide the window controls (minimise, maximise, close) to free their space (`1` = hide, `0` = show). Windows and Linux only, macOS keeps its traffic lights. Close with `Ctrl+Shift+W` or `Alt+F4`, maximise by double-clicking the drag space. In fullscreen the exit button goes too, `F11` leaves |
-| `--uc-hamburger-width` | `44px` | Hamburger menu reserved width |
+| `--uc-hamburger-width` | `36px` | Hamburger menu reserved width |
 | `--uc-extensions-button-right` | `1` | Pin the extensions (puzzle) button to the right edge next to the hamburger instead of the nav-bar after the URL bar (`1` = right, `0` = Firefox default). Firefox locks the button to the nav-bar in Customize Toolbar, so this is the only way to get it there |
-| `--uc-extensions-button-width` | `36px` | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
+| `--uc-extensions-button-width` | `38px` | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
 | `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
 | `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |
 | `--uc-drag-space` | `20px` | Grab zone after the tabs for moving the window (functional space, don't set to `0`) |

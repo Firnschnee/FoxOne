@@ -106,8 +106,10 @@
    * leaves. (#60) */
   --uc-hide-window-buttons: 0;
 
-  /* Hamburger button width – reserved in tab bar to prevent overlap */
-  --uc-hamburger-width: 44px;
+  /* Hamburger button width – reserved in tab bar to prevent overlap.
+   * With the pinned puzzle it works out as the puzzle's own width, so the
+   * puzzle sits at regular button spacing from the tab-bar item before it. */
+  --uc-hamburger-width: 36px;
 
   /* Extensions (puzzle) button – pin it to the right edge, next to the
    * hamburger, instead of leaving it in the nav-bar after the URL bar
@@ -118,8 +120,11 @@
   --uc-extensions-button-right: 1;
   /* Width reserved for the pinned puzzle button. Also its distance from the
    * window controls beyond the hamburger, so it doubles as the gap knob:
-   * lower it to pull the two buttons closer, raise it to space them out. */
-  --uc-extensions-button-width: 36px;
+   * lower it to pull the two buttons closer, raise it to space them out.
+   * The hamburger is 4px wider than the puzzle (40 vs 36 at normal density),
+   * so 38 puts the two at regular button spacing. Measured on Windows, FF159;
+   * compact and normal both read even with 36 / 38. (#73) */
+  --uc-extensions-button-width: 38px;
 
   /* Extra toolbar button width (extensions, uBlock etc.) */
   --uc-toolbar-button-width: 36px;
@@ -2797,7 +2802,7 @@ sidebar-main {
     padding-inline: revert !important;
   }
   /* Hamburger clearance on the revealed cluster's last item as PADDING, not
-     margin, so the 44px lives inside the item's own hover box. That closes the
+     margin, so the clearance lives inside the item's own hover box. That closes the
      dead zone between the last icon and the fixed hamburger: the toolbaritem
      :hover bridge now spans the whole gap, so the icons stay open while the
      pointer travels from the hamburger onto them. max-width grows by the same
