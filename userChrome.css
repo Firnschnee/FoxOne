@@ -3240,8 +3240,15 @@ sidebar-main {
   color: var(--uc-color-base) !important;
 }
 
-/* selected tab: accent text only, no background tint or underline */
-.tabbrowser-tab[selected] .tab-background {
+/* selected tab: accent text only, no background tint or underline.
+   Keyed on .tab-background's own [selected], which tab.mjs maps from the
+   tab's [visuallyselected] – the same attribute Nova's rules use. The tab's
+   [selected] moves the moment a tab is picked, [visuallyselected] only once
+   the async tab switcher has the new tab painted. A .tabbrowser-tab[selected]
+   selector left that gap open: the outgoing tab had already lost [selected]
+   but still showed Nova's gradient (or, in private windows, the lwt-tab-line
+   outline), which fast Ctrl+Tab cycling made visible (#80). */
+.tab-background[selected] {
   background-color: transparent !important;
   /* Nova paints a gradient "border" on the active tab via a layered
      background-image (--tab-border-color-accent). FoxOne marks the active
