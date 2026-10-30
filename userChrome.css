@@ -481,6 +481,11 @@
   --button-text-color-primary: var(--uc-color-base) !important;
   --button-text-color-primary-hover: var(--uc-color-base) !important;
   --button-text-color-primary-active: var(--uc-color-base) !important;
+  /* Nova paints the toolbox with a violet-to-orange gradient, and the sidebar launcher flyout
+     (expand on hover) paints the whole thing. The stop names changed in Firefox 160, so override
+     the gradient itself, which keeps its name on every version. The opaque toolbox colour layer
+     still paints. Unconditional, because the flyout has no lwtheme guard. (#81) */
+  --toolbox-background-gradient: none !important;
 }
 
 /* Direct violet references (satellites). */
@@ -505,15 +510,6 @@
   /* Base chrome text drifts to violet-desaturated-0 (#f2f0f8) under Nova;
      pin to the palette text colour. */
   --text-color: var(--uc-color-text) !important;
-  /* Nova paints the toolbox with a violet-leading gradient; FoxOne pins
-     the toolbox colour already, kill the gradient stop too. */
-  --toolbox-background-color-gradient-leading: var(--uc-color-base) !important;
-  /* The sidebar launcher flyout (expand on hover) paints the whole gradient,
-     so the trailing stop (orange) was left. Firefox 160 renamed the stops
-     (dropped "color"), so both spellings are set. (#81) */
-  --toolbox-background-color-gradient-trailing: var(--uc-color-base) !important;
-  --toolbox-background-gradient-leading: var(--uc-color-base) !important;
-  --toolbox-background-gradient-trailing: var(--uc-color-base) !important;
 }
 
 /* ----------------------------------------------------------------------
