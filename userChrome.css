@@ -1289,6 +1289,33 @@ sidebar-main,
   margin-top: 0 !important;
 }
 
+/* The flatten above also strips the margin Firefox holds on the sidebar panel
+   so that, with "expand on hover", it sits beside the collapsed launcher
+   (sidebar.css). The panel then slid under the launcher's hover trigger (seen in #82).
+   The rules key on the cause: #sidebar-box carries .chrome-block, which is what
+   makes the flatten above reach it. Where the panel does not carry the class
+   (newer Firefox) nothing here matches, so there is no second margin. Put
+   Firefox's own margin back for the panel only: Nova holds it while a panel is
+   open, the older rules only while the launcher is hovered and expanded or animating. */
+@media -moz-pref("browser.nova.enabled") {
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block[sidebar-panel-open]:not([sidebar-positionend]) {
+    margin-inline-start: calc(var(--sidebar-launcher-collapsed-width, 0px) + var(--chrome-window-gap, 0px)) !important;
+  }
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block[sidebar-panel-open][sidebar-positionend] {
+    margin-inline-end: calc(var(--sidebar-launcher-collapsed-width, 0px) + var(--chrome-window-gap, 0px)) !important;
+  }
+}
+/* Nova off is not the supported mode, but it is how ESR ships out of the box, so it is fixed anyway. */
+@media not -moz-pref("browser.nova.enabled") {
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block:not([sidebar-positionend])[sidebar-panel-open][sidebar-launcher-hovered][sidebar-launcher-expanded],
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block:not([sidebar-positionend])[sidebar-ongoing-animations][sidebar-panel-open] {
+    margin-inline-start: var(--sidebar-launcher-collapsed-width, 0px) !important;
+  }
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block[sidebar-positionend][sidebar-panel-open][sidebar-launcher-hovered][sidebar-launcher-expanded],
+  :root[sidebar-expand-on-hover] #sidebar-box.chrome-block[sidebar-positionend][sidebar-ongoing-animations][sidebar-panel-open] {
+    margin-inline-end: var(--sidebar-launcher-collapsed-width, 0px) !important;
+  }
+}
 /* Nova insets the web content on #browser (the flex hbox wrapping sidebar +
    content): padding pushed the page off the window edge, and a 4px flex gap
    (column + row) left strips between content and sidebar and a height/strip
