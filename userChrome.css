@@ -76,7 +76,8 @@
   --uc-active-tab-width: clamp(100px, 30vw, 190px);
   --uc-inactive-tab-width: clamp(100px, 20vw, 120px);
   /* Tab min width (opt-in): 76px = Firefox default (browser.tabs.tabMinWidth).
-     Lower it (e.g. 36px) to allow narrower tabs / fit more before overflow scroll */
+     Lower it (e.g. 36px) to allow narrower tabs / fit more before overflow scroll.
+     All three widths apply to horizontal tabs only, vertical ones fill the sidebar. */
   --uc-tab-min-width: 76px;
 
   /* Inactive tab hover title color (issue #16). Sits between text and accent:
@@ -3013,9 +3014,11 @@ sidebar-main {
    matters once --uc-tab-min-width drops below ~50px (favicon-only tabs): the
    audio button then no longer fits and gives way to the favicon badge below.
    inline-size containment is safe here because tab widths come from the
-   strip's flexbox and the min/max-width clamps, not from content. */
-.tabbrowser-tab:not([pinned]) {
-  container-type: inline-size;
+   strip's flexbox and the min/max-width clamps, not from content.
+   Horizontal strip only, and named: an unnamed query would fall through to
+   Nova's #vertical-tabs container, which is under 50px when collapsed. (#85) */
+:where(#tabbrowser-tabs[orient="horizontal"]) .tabbrowser-tab:not([pinned]) {
+  container: uc-tab / inline-size;
 }
 
 /* Tab close button: an overlay in the tab's top layer, not a flex child.
@@ -3091,14 +3094,16 @@ sidebar-main {
   color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
-/* adaptive tab width */
-.tabbrowser-tab[selected][fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
+/* adaptive tab width. Horizontal strip only, like Nova's own tab widths: in
+   the vertical strip the tabs fill the sidebar, and the min-width pushed them
+   past the collapsed strip's edge. (#85) */
+:where(#tabbrowser-tabs[orient="horizontal"]) .tabbrowser-tab[selected][fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   max-width: var(--uc-active-tab-width) !important;
 }
-.tabbrowser-tab[fadein]:not([selected]):not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
+:where(#tabbrowser-tabs[orient="horizontal"]) .tabbrowser-tab[fadein]:not([selected]):not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   max-width: var(--uc-inactive-tab-width) !important;
 }
-.tabbrowser-tab[fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
+:where(#tabbrowser-tabs[orient="horizontal"]) .tabbrowser-tab[fadein]:not([pinned]):not(tab-group[collapsed] .tabbrowser-tab) {
   min-width: var(--uc-tab-min-width) !important;
 }
 
@@ -3184,7 +3189,7 @@ sidebar-main {
    overlay rules above; only the -8px end-overhang is pulled to -2px so the
    badge stays inside the tab. Pinned tabs have no container (see the
    close-button block), so the query never matches them. */
-@container (width < 50px) {
+@container uc-tab (width < 50px) {
   .tab-audio-button {
     display: none !important;
   }

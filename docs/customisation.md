@@ -77,9 +77,9 @@ What it deliberately does not touch:
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD; the threshold is tiered by `resolution`/dppx so it fires at the same physical pixel count under DPI scaling) |
-| `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
-| `--uc-tab-min-width` | `76px` | Tab minimum width (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow). The hover close button is an overlay that slides in from the right and works at any tab width; below `50px` tabs go favicon-only and the audio button gives way to a small badge on the favicon |
+| `--uc-active-tab-width` | `clamp(100px, 30vw, 190px)` | Active tab width in the horizontal strip (narrow-window default; widened to `…250px` once the window reaches ~1710 *physical* px, i.e. ~2/3 of WQHD; the threshold is tiered by `resolution`/dppx so it fires at the same physical pixel count under DPI scaling) |
+| `--uc-inactive-tab-width` | `clamp(100px, 20vw, 120px)` | Inactive tab width in the horizontal strip (ceiling kept below the active one so the active tab stays visibly larger; widened to `…200px` at the same ~1710 physical-px threshold) |
+| `--uc-tab-min-width` | `76px` | Tab minimum width in the horizontal strip (Firefox default: `76px`, lower e.g. `36px` to fit more before overflow). The hover close button is an overlay that slides in from the right and works at any tab width; below `50px` tabs go favicon-only and the audio button gives way to a small badge on the favicon |
 | `--uc-tab-hover-text` | `#ffda85` | Inactive tab title color on hover |
 | `--uc-light-tab-hover-text` | `#855d22` | Inactive tab title color on hover, light scheme |
 
