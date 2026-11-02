@@ -1088,6 +1088,100 @@ sidebar-main,
       transition-delay: 0s, 0s, 0s, 0s !important;
     }
   }
+
+  /* ------------------------------------------------------------------------
+     Sidebar launcher: the bar steps aside or hides (issue #82)
+
+     The floating bar is as wide as the window, so it would cover the sidebar
+     launcher. The launcher is in one of three states, and each gets one of
+     two answers (with the launcher hidden, none of this applies):
+       collapsed (a narrow strip of icons)  -> step: the bar starts after it
+       expanded, or a sidebar panel open    -> hide: no room, the bar fades out
+     That holds in every tab mode. The exceptions are noted on the rules:
+     horizontal tabs have no expanded state, and "expand on hover" steps a
+     little further, past the window gap.
+     With the sidebar on the right, the step counts from the right edge.
+
+     The step is the strip's width, worked out from Firefox's tokens, so there
+     is nothing to set: horizontal tabs, the button size plus the padding on
+     each side; vertical tabs, the collapsed tab width. The plain numbers
+     behind each token are a last resort, so a rename leaves the bar a few
+     pixels off, not broken.
+     ------------------------------------------------------------------------ */
+
+  /* Step, horizontal tabs. The button is --sidebar-launcher-button-size, a
+     Nightly fix (161, compact density, where the button is smaller) that will
+     likely reach every Firefox, so it comes first; --size-item-large (32px) is
+     the one token every build has. The padding is
+     --sidebar-launcher-button-padding-inline (159 and up); ESR 153 has none
+     and pads with --space-medium, so delete that fallback when ESR 153 retires. */
+  :root:has(#sidebar-container:not([hidden])):not(
+    :has(#tabbrowser-tabs[orient="vertical"])
+  ) #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    --uc-launcher-strip: calc(
+      var(--sidebar-launcher-button-size, var(--size-item-large, 32px))
+      + 2 * var(--sidebar-launcher-button-padding-inline, var(--space-medium, 0.75rem))
+    );
+    width: auto !important;
+    left: var(--uc-launcher-strip) !important;
+    right: 0 !important;
+  }
+  /* Same, sidebar on the right. A moving target: Firefox is moving
+     sidebar-positionend to the root (Nightly 161; Mozilla bug 2078353), while
+     ESR 153 sets it only on the sidebar's own elements. So either counts; when
+     ESR 153 retires, the #sidebar-container half can go. */
+  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#sidebar-container:not([hidden])):not(
+    :has(#tabbrowser-tabs[orient="vertical"])
+  ) #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    left: 0 !important;
+    right: var(--uc-launcher-strip) !important;
+  }
+
+  /* Step, vertical tabs: the collapsed tab width (plus a scrollbar allowance
+     on Nightly 161), the same for "always show" and "expand on hover". */
+  :root:has(#tabbrowser-tabs[orient="vertical"])
+    #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    --uc-launcher-strip: calc(
+      var(--tab-collapsed-width, 48px)
+      + var(--tab-collapsed-scrollbar-extra, 0px)
+    );
+    width: auto !important;
+    left: var(--uc-launcher-strip) !important;
+    right: 0 !important;
+  }
+  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#tabbrowser-tabs[orient="vertical"])
+    #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    left: 0 !important;
+    right: var(--uc-launcher-strip) !important;
+  }
+
+  /* "Expand on hover" only: the page sits one window gap past the strip (Nova,
+     4px on ESR 153), so the step adds it; 0px where a build doesn't declare it. */
+  @media -moz-pref("sidebar.visibility", "expand-on-hover") {
+    :root:has(#tabbrowser-tabs[orient="vertical"])
+      #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+      --uc-launcher-strip: calc(
+        var(--tab-collapsed-width, 48px)
+        + var(--tab-collapsed-scrollbar-extra, 0px)
+        + var(--chrome-window-gap, 0px)
+      );
+    }
+  }
+
+  /* Hide: the launcher expanded (vertical tabs only; Firefox flags it on the tab
+     strip, [expanded], or on the launcher, [sidebar-launcher-expanded]) or any
+     sidebar panel open. filter: opacity(0), not opacity: the reveal rules set
+     opacity, and the fresh-tab one wins on specificity. */
+  :root:has(#tabbrowser-tabs[orient="vertical"][expanded])
+    #PersonalToolbar:not(:has(toolbarpaletteitem)),
+  :root:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded])
+    #PersonalToolbar:not(:has(toolbarpaletteitem)),
+  :root:has(#tabbrowser-tabbox[sidebar-panel-open])
+    #PersonalToolbar:not(:has(toolbarpaletteitem)) {
+    filter: opacity(0) !important;
+    pointer-events: none !important;
+    transition: filter 120ms ease-out !important;
+  }
 }
 
 #statuspanel #statuspanel-label {
