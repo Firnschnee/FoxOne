@@ -4149,13 +4149,16 @@ html[id^="taskbartab"] #unified-extensions-button {
   #TabsToolbar-customization-target > toolbaritem,
   #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
 
-  /* Dynamic bookmarks bar – reveal and collapse snap, delays included. The
-     bar still appears and disappears on hover, it just does not animate. */
-  #PersonalToolbar { transition: none !important; }
+  /* Dynamic bookmarks bar – reveal and collapse snap. The resting rule carries
+     :not(:has(toolbarpaletteitem)), which outranked a bare #PersonalToolbar,
+     so the bar kept animating. Repeat it so the specificity ties. Only the
+     durations go: the hover delay is a filter, and the hide delay keeps the
+     hit box for the trip down from the URL bar, so both stay. */
+  #PersonalToolbar:not(:has(toolbarpaletteitem)) { transition-duration: 0s !important; }
 
-  /* Findbar slide / scale */
-  findbar,
-  findbar[hidden] { transition: none !important; }
+  /* Findbar slide / scale. Durations only, as above, so the move out of the
+     bookmarks bar's way still waits out the same delays as the bar. */
+  findbar { transition-duration: 0s !important; }
 
   /* Loading progress bar - resting full stroke instead of growth.
      Visibility stays bound to --uc-show-loading-progress, so the feature
