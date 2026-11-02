@@ -4262,3 +4262,7 @@ html[id^="taskbartab"] #unified-extensions-button {
     transform: scaleX(1) !important;
   }
 }
+
+/* REVIEW ONLY (issue #82): pink floating bookmarks bar, so a reviewer can see exactly where it starts and ends.
+   Not part of the change. Drop this commit before merging. */
+:root:root:root #PersonalToolbar { background-color: hotpink !important; background-image: none !important; }
