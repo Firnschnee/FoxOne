@@ -1881,6 +1881,9 @@ sidebar-main,
    vanished for the whole load; with it on, top:0 + bottom:0 + fixed height is
    over-constrained and the bar jumped to the top edge). A 36px pinned tab has
    no legible progress track anyway.
+   Tabs in the collapsed vertical strip are excluded for the same reason:
+   the selected one carries the pinned indicator there (#85). The exclusion
+   sits in :where() inside the existing :not(), so specificity is unchanged.
    Note: transform must NOT be !important – animations can't override it.
    ========================================================================== */
 
@@ -1903,20 +1906,20 @@ sidebar-main,
 }
 
 /* Bottom bar – animated on busy tabs (pinned excluded, see header) */
-.tabbrowser-tab[busy]:not([pinned]) .tab-background::before {
+.tabbrowser-tab[busy]:not([pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::before {
   opacity: var(--uc-show-loading-progress) !important;
   transition: none !important;
   animation: uc-progress 2.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards !important;
 }
 
 /* Inactive busy tabs – white to match tab text color */
-.tabbrowser-tab[busy]:not([selected], [pinned]) .tab-background::before {
+.tabbrowser-tab[busy]:not([selected], [pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::before {
   background: var(--toolbar-color, #FFFFFF) !important;
   box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
 
 /* Top glow – busy tabs (pinned excluded: their ::after is the indicator) */
-.tabbrowser-tab[busy]:not([pinned]) .tab-background::after {
+.tabbrowser-tab[busy]:not([pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::after {
   content: "" !important;
   display: block !important;
   position: absolute !important;
@@ -1933,7 +1936,7 @@ sidebar-main,
 }
 
 /* Top glow – inactive tabs use white */
-.tabbrowser-tab[busy]:not([selected], [pinned]) .tab-background::after {
+.tabbrowser-tab[busy]:not([selected], [pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::after {
   background: var(--toolbar-color, #FFFFFF) !important;
   box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
 }
@@ -3115,12 +3118,17 @@ sidebar-main {
    the old sub-50px hiding and its container query (the container-type above
    stays for the audio badge). FoxOne twist on the original: the X slides in
    from the right, vertically centred on the label line, so nothing moves
-   vertically in the one-line layout. */
+   vertically in the one-line layout.
+   The collapsed vertical strip is left to Nova: it has its own X there (a
+   small badge at the tab's top-start corner, hidden entirely with
+   expand-on-hover), and the overlay landed next to the icon instead (#85).
+   The scope sits in :where() so the hover rules below keep their
+   specificity against the base rule. */
 .tabbrowser-tab:not([pinned]) .tab-content {
   /* anchor for the absolutely positioned X */
   position: relative !important;
 }
-.tabbrowser-tab:not([pinned]) .tab-close-button {
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([pinned]) .tab-close-button {
   /* revert (not -moz-inline-block: a removed alias that parses as invalid
      and gets dropped): restores the native close-button display. */
   display: revert !important;
@@ -3162,18 +3170,18 @@ sidebar-main {
   flex: none !important;
   overflow: hidden !important;
 }
-.tabbrowser-tab:not([pinned]):hover .tab-close-button {
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([pinned]):hover .tab-close-button {
   opacity: 0.9 !important;
   transform: translateX(0) scale(0.75) !important;
 }
 /* Same three-step colour model as the toolbar icons (issue #16): rest white
    (above), hover the X itself hover-yellow, press it amber. fill is
    currentColor since 154, so color alone recolours the glyph. */
-.tabbrowser-tab:not([pinned]) .tab-close-button:hover {
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([pinned]) .tab-close-button:hover {
   opacity: 1 !important;
   color: var(--uc-tab-hover-text) !important;
 }
-.tabbrowser-tab:not([pinned]) .tab-close-button:hover:active {
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([pinned]) .tab-close-button:hover:active {
   color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
@@ -3188,8 +3196,12 @@ sidebar-main {
   min-width: var(--uc-tab-min-width) !important;
 }
 
-/* active pinned tab – bottom glow indicator (mirrors container-line style) */
-.tabbrowser-tab[pinned][selected] .tab-background::after {
+/* active pinned tab – bottom glow indicator (mirrors container-line style).
+   The collapsed vertical strip has no titles, so the accent title colour
+   that marks the active tab elsewhere shows nothing there; every tab is an
+   icon tile like a pinned one and gets the same line (#85). */
+.tabbrowser-tab[pinned][selected] .tab-background::after,
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tabbrowser-tab[selected] .tab-background::after {
   content: "" !important;
   display: block !important;
   position: absolute !important;
@@ -3391,6 +3403,22 @@ sidebar-main {
 
 #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[fadein]:not([pinned]) {
   max-width: none !important;
+}
+
+/* Collapsed vertical strip: the tab box is the fixed-width background plus
+   Nova's inner margin on both sides, and that margin is what centres the
+   background on the icon. The reset above pushed the background to the
+   start edge, off-centre from the icon and the selected-tab line (#85).
+   159 renamed the token (tab.tokens.css); the fallback covers 153. */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-background {
+  margin-inline: var(--tab-margin-inline-inner, var(--tab-inner-inline-margin)) !important;
+}
+
+/* Nova tints idle pinned tabs in the vertical strip (7% currentColor), but
+   only while not hovered, so with FoxOne's transparent hover the square
+   vanished under the pointer. FoxOne tabs carry no background. (#85) */
+#pinned-tabs-container[orient="vertical"] .tab-background:not([selected], [multiselected]) {
+  background-color: transparent !important;
 }
 
 
@@ -4243,13 +4271,16 @@ html[id^="taskbartab"] #unified-extensions-button {
   #TabsToolbar-customization-target > toolbaritem,
   #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
 
-  /* Dynamic bookmarks bar – reveal and collapse snap, delays included. The
-     bar still appears and disappears on hover, it just does not animate. */
-  #PersonalToolbar { transition: none !important; }
+  /* Dynamic bookmarks bar – reveal and collapse snap. The resting rule carries
+     :not(:has(toolbarpaletteitem)), which outranked a bare #PersonalToolbar,
+     so the bar kept animating. Repeat it so the specificity ties. Only the
+     durations go: the hover delay is a filter, and the hide delay keeps the
+     hit box for the trip down from the URL bar, so both stay. */
+  #PersonalToolbar:not(:has(toolbarpaletteitem)) { transition-duration: 0s !important; }
 
-  /* Findbar slide / scale */
-  findbar,
-  findbar[hidden] { transition: none !important; }
+  /* Findbar slide / scale. Durations only, as above, so the move out of the
+     bookmarks bar's way still waits out the same delays as the bar. */
+  findbar { transition-duration: 0s !important; }
 
   /* Loading progress bar - resting full stroke instead of growth.
      Visibility stays bound to --uc-show-loading-progress, so the feature
