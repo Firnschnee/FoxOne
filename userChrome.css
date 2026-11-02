@@ -3555,13 +3555,20 @@ findbar[hidden] {
    transform above. The delay overrides skip [hidden], whose own delays time
    the close. A bar Firefox collapsed ("Only on New Tab" elsewhere) is never
    revealed, so it moves nothing. (#70, found by snkiz) The bookmark context
-   menu hold mirrors the reveal rules too, exclusions included. (#74) */
+   menu hold mirrors the reveal rules too, exclusions included. (#74)
+   The hide rules of the sidebar launcher block (#82) are exclusions too: a
+   bar hidden by an expanded launcher or an open panel moves nothing. */
 @container style(--uc-dynamic-bookmarks: 1) {
   findbar {
     transition: opacity 100ms ease-out, transform 100ms ease-out, visibility 0s step-end,
                 translate 100ms ease-out var(--uc-dynamic-bookmarks-hide-delay) !important;
   }
-  :root:not(:has(#urlbar[open], #PersonalToolbar[collapsed="true"])) {
+  :root:not(:has(
+    #urlbar[open],
+    #PersonalToolbar[collapsed="true"],
+    #tabbrowser-tabs[orient="vertical"][expanded],
+    #tabbrowser-tabbox[sidebar-panel-open]
+  )):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded])) {
     &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover,
           #PersonalToolbar:hover,
           #PersonalToolbar toolbarbutton[open]) findbar,
@@ -3586,7 +3593,12 @@ findbar[hidden] {
     transition-delay: 0s !important;
   }
   @container style(--uc-dynamic-bookmarks-newtab: 1) {
-    :root:not(:has(#urlbar[open], #PersonalToolbar[collapsed="true"])):has(
+    :root:not(:has(
+      #urlbar[open],
+      #PersonalToolbar[collapsed="true"],
+      #tabbrowser-tabs[orient="vertical"][expanded],
+      #tabbrowser-tabbox[sidebar-panel-open]
+    )):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded])):has(
       #urlbar-input-container[pageproxystate="invalid"],
       .urlbar-input-container[pageproxystate="invalid"]
     ):has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):placeholder-shown) findbar {
