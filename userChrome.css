@@ -1179,7 +1179,15 @@ sidebar-main,
     #PersonalToolbar:not(:has(toolbarpaletteitem)) {
     filter: opacity(0) !important;
     pointer-events: none !important;
-    transition: filter 120ms ease-out !important;
+    /* The resting transition list with filter added, written as longhands so
+       the delays and the max-height / padding-block steps keep running. The
+       delay list has four values, so filter reuses the first (the hide delay). */
+    transition-property: opacity, transform, max-height, padding-block, filter !important;
+    transition-duration: 100ms, 100ms, 0s, 0s, 120ms !important;
+    /* This rule outranks the reduced-motion block below, so it snaps here. */
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s !important;
+    }
   }
 }
 
