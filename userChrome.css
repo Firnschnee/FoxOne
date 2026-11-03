@@ -1139,8 +1139,10 @@ sidebar-main,
   }
 
   /* Step, vertical tabs: the collapsed tab width (plus a scrollbar allowance
-     on Nightly 161), the same for "always show" and "expand on hover". */
-  :root:has(#tabbrowser-tabs[orient="vertical"])
+     on Nightly 161), the same for "always show" and "expand on hover". Like
+     the horizontal rule, only while the launcher shows: "Hide tabs and
+     sidebar" hides it, and the bar goes back to the window edge. */
+  :root:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
     #PersonalToolbar:not(:has(toolbarpaletteitem)) {
     --uc-launcher-strip: calc(
       var(--tab-collapsed-width, 48px)
@@ -1150,7 +1152,7 @@ sidebar-main,
     left: var(--uc-launcher-strip) !important;
     right: 0 !important;
   }
-  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#tabbrowser-tabs[orient="vertical"])
+  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
     #PersonalToolbar:not(:has(toolbarpaletteitem)) {
     left: 0 !important;
     right: var(--uc-launcher-strip) !important;
