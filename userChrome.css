@@ -947,17 +947,6 @@ sidebar-main,
   );
 }
 
-/* "Expand on hover" only: the page sits one window gap past the strip (Nova,
-   4px on ESR 153), so the strip adds it; 0px where a build doesn't declare it. */
-:root[sidebar-expand-on-hover]:has(#tabbrowser-tabs[orient="vertical"]) {
-  --uc-launcher-strip: calc(
-    var(--tab-collapsed-width, 48px)
-    + var(--tab-collapsed-scrollbar-extra, 0px)
-    - 0.5px
-    + var(--chrome-window-gap, 0px)
-  );
-}
-
 /* ==========================================================================
    DYNAMIC BOOKMARKS BAR (on by default, --uc-dynamic-bookmarks: 0 opts out)
 
