@@ -913,6 +913,59 @@ sidebar-main,
 }
 
 /* ==========================================================================
+   SIDEBAR LAUNCHER STRIP – how far the collapsed launcher reaches in from the
+   window edge. Worked out from Firefox's tokens, so it follows the density and
+   the text size; nothing to set. Declared once on :root, outside the @container
+   below (a style query can't match :root itself), so every rule that has to
+   keep clear of the launcher reads the same number: the floating bookmarks bar
+   (#82) and, in F11, the toolbar (#89). The plain numbers behind each token
+   are a last resort, so a rename leaves it a few pixels off, not broken.
+   ========================================================================== */
+
+/* Horizontal tabs: the button plus the padding on each side. The button is
+   --sidebar-launcher-button-size, a Nightly fix (161, compact density, where
+   the button is smaller) that will likely reach every Firefox, so it comes
+   first; --size-item-large (32px) is the one token every build has. The
+   padding is --sidebar-launcher-button-padding-inline (159 and up); ESR 153
+   has none and pads with --space-medium, so delete that fallback when ESR 153
+   retires. */
+:root:has(#sidebar-container:not([hidden])):not(
+  :has(#tabbrowser-tabs[orient="vertical"])
+) {
+  --uc-launcher-strip: calc(
+    var(--sidebar-launcher-button-size, var(--size-item-large, 31px))
+    + 2 * var(--sidebar-launcher-button-padding-inline, var(--space-medium, 0.75rem))
+  );
+}
+
+/* Vertical tabs: the collapsed tab width, plus a scrollbar allowance on
+   Nightly 161, less half a pixel for the launcher's own border. The border is
+   1px on each side but renders in whole device pixels, and the launcher's
+   visible edge sits inside it: measured on ESR 153 the launcher box was
+   50.467px, the strip alone 49.12px, and the dark edge about 48.7px. Starting
+   the toolbar and bar half a pixel inside the strip meets that edge with no
+   sliver of page between them (checked at Windows 115%; +1.5px, the first
+   guess, left one). Only while the launcher shows. */
+:root:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden])) {
+  --uc-launcher-strip: calc(
+    var(--tab-collapsed-width, 47px)
+    + var(--tab-collapsed-scrollbar-extra, 0px)
+    - 0.5px
+  );
+}
+
+/* "Expand on hover" only: the page sits one window gap past the strip (Nova,
+   4px on ESR 153), so the strip adds it; 0px where a build doesn't declare it. */
+:root[sidebar-expand-on-hover]:has(#tabbrowser-tabs[orient="vertical"]) {
+  --uc-launcher-strip: calc(
+    var(--tab-collapsed-width, 47px)
+    + var(--tab-collapsed-scrollbar-extra, 0px)
+    - 0.5px
+    + var(--chrome-window-gap, 0px)
+  );
+}
+
+/* ==========================================================================
    DYNAMIC BOOKMARKS BAR (on by default, --uc-dynamic-bookmarks: 0 opts out)
 
    Mechanism adapted from LittleFox (github.com/biglavis/LittleFox, MIT):
@@ -1110,19 +1163,11 @@ sidebar-main,
      pixels off, not broken.
      ------------------------------------------------------------------------ */
 
-  /* Step, horizontal tabs. The button is --sidebar-launcher-button-size, a
-     Nightly fix (161, compact density, where the button is smaller) that will
-     likely reach every Firefox, so it comes first; --size-item-large (32px) is
-     the one token every build has. The padding is
-     --sidebar-launcher-button-padding-inline (159 and up); ESR 153 has none
-     and pads with --space-medium, so delete that fallback when ESR 153 retires. */
-  :root:has(#sidebar-container:not([hidden])):not(
+  /* Step, horizontal tabs: the bar starts after --uc-launcher-strip, the width
+     declared above the DYNAMIC BOOKMARKS BAR block. */
+  :root:not([inFullscreen]):has(#sidebar-container:not([hidden])):not(
     :has(#tabbrowser-tabs[orient="vertical"])
   ) #PersonalToolbar:not(:has(toolbarpaletteitem)) {
-    --uc-launcher-strip: calc(
-      var(--sidebar-launcher-button-size, var(--size-item-large, 32px))
-      + 2 * var(--sidebar-launcher-button-padding-inline, var(--space-medium, 0.75rem))
-    );
     width: auto !important;
     left: var(--uc-launcher-strip) !important;
     right: 0 !important;
@@ -1131,42 +1176,26 @@ sidebar-main,
      sidebar-positionend to the root (Nightly 161; Mozilla bug 2078353), while
      ESR 153 sets it only on the sidebar's own elements. So either counts; when
      ESR 153 retires, the #sidebar-container half can go. */
-  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#sidebar-container:not([hidden])):not(
+  :root:not([inFullscreen]):is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#sidebar-container:not([hidden])):not(
     :has(#tabbrowser-tabs[orient="vertical"])
   ) #PersonalToolbar:not(:has(toolbarpaletteitem)) {
     left: 0 !important;
     right: var(--uc-launcher-strip) !important;
   }
 
-  /* Step, vertical tabs: the collapsed tab width (plus a scrollbar allowance
-     on Nightly 161), the same for "always show" and "expand on hover". Like
-     the horizontal rule, only while the launcher shows: "Hide tabs and
+  /* Step, vertical tabs: the same, for "always show" and "expand on hover".
+     Like the horizontal rule, only while the launcher shows: "Hide tabs and
      sidebar" hides it, and the bar goes back to the window edge. */
-  :root:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
+  :root:not([inFullscreen]):has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
     #PersonalToolbar:not(:has(toolbarpaletteitem)) {
-    --uc-launcher-strip: calc(
-      var(--tab-collapsed-width, 48px)
-      + var(--tab-collapsed-scrollbar-extra, 0px)
-    );
     width: auto !important;
     left: var(--uc-launcher-strip) !important;
     right: 0 !important;
   }
-  :root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
+  :root:not([inFullscreen]):is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden]))
     #PersonalToolbar:not(:has(toolbarpaletteitem)) {
     left: 0 !important;
     right: var(--uc-launcher-strip) !important;
-  }
-
-  /* "Expand on hover" only: the page sits one window gap past the strip (Nova,
-     4px on ESR 153), so the step adds it; 0px where a build doesn't declare it. */
-  :root[sidebar-expand-on-hover]:has(#tabbrowser-tabs[orient="vertical"])
-    #PersonalToolbar:not(:has(toolbarpaletteitem)) {
-    --uc-launcher-strip: calc(
-      var(--tab-collapsed-width, 48px)
-      + var(--tab-collapsed-scrollbar-extra, 0px)
-      + var(--chrome-window-gap, 0px)
-    );
   }
 
   /* Hide: the launcher expanded (vertical tabs only; Firefox flags it on the tab
@@ -1389,6 +1418,17 @@ sidebar-main,
    everywhere except on the toolbox while in fullscreen. */
 :root:not([inFullscreen]) .chrome-block,
 .chrome-block:not(#navigator-toolbox) {
+  margin-top: 0 !important;
+}
+
+/* The same flatten for the toolbox in F11, but only while it is shown. Firefox
+   hides it with an inline margin-top (the toolbox's own height, negative) and
+   clears that inline style when it shows it again (browser-fullScreenAndPointer
+   Lock.js, same on ESR 153 and Nightly 161), so the Nova margin-top the toolbox
+   keeps in F11 was a gap above the shown toolbar, closed only while the bar
+   was hovered (the pin in DYNAMIC BOOKMARKS BAR). :not([style*="margin-top"])
+   leaves the hidden state, where the inline style must win, alone. */
+:root[inFullscreen]:not([inDOMFullscreen]) #navigator-toolbox:not([style*="margin-top"]) {
   margin-top: 0 !important;
 }
 
@@ -2841,6 +2881,46 @@ sidebar-main {
   overflow: visible !important;
 }
 
+/* F11 and the sidebar launcher (#89). The rule above pins the toolbox to the
+   whole window, so it covers the launcher, which stays on screen in F11. Start
+   it after the launcher strip instead, the same width the bookmarks bar steps
+   by (--uc-launcher-strip, declared above the DYNAMIC BOOKMARKS BAR block), and
+   the other way round with the sidebar on the right. The bar hangs from the
+   toolbox, so it rides along; its own step is switched off in F11 (the four
+   step rules there), or it would step twice. Only while the launcher is
+   collapsed: with it expanded, a step of one strip would leave the toolbar over
+   the top of a wider launcher anyway (the pinned tabs sit under it), so it
+   stays full width there. A panel open keeps the step: the launcher stays put
+   beside it (the bar's hide rules differ, they hide for panels too). */
+:root[inFullscreen]:not([inDOMFullscreen]):has(#sidebar-container:not([hidden])):not(:has(#tabbrowser-tabs[orient="vertical"][expanded])):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded]))
+  #navigator-toolbox {
+  width: auto !important;
+  inset-inline-start: var(--uc-launcher-strip, 0px) !important;
+  inset-inline-end: 0 !important;
+}
+:root[inFullscreen]:not([inDOMFullscreen]):is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend])):has(#sidebar-container:not([hidden])):not(:has(#tabbrowser-tabs[orient="vertical"][expanded])):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded]))
+  #navigator-toolbox {
+  inset-inline-start: 0 !important;
+  inset-inline-end: var(--uc-launcher-strip, 0px) !important;
+}
+
+/* F11 with "expand on hover" (#89, #90). Firefox expands the launcher over the
+   page the moment the pointer reaches it, and the toolbar, being full width
+   while the launcher is expanded (above), would lie across its top. The mode
+   is already rough in F11 on Firefox's side (see #90); this only keeps the
+   toolbar out of the expanded launcher's way, so it is hidden while the launcher
+   is expanded by hover. Hidden visually only (visibility, not the reveal state
+   Firefox keeps), so its own show and hide logic is not disturbed, and the
+   toolbar is back when the launcher collapses. A launcher expanded with its
+   toggle (no hover) keeps the full-width toolbar. */
+:root[inFullscreen]:not([inDOMFullscreen])[sidebar-expand-on-hover]:has(
+  #tabbrowser-tabs[orient="vertical"][expanded],
+  #sidebar-container[sidebar-launcher-expanded]
+) #navigator-toolbox {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* ==========================================================================
    TOOLBAR EXTENSION BUTTONS – push to right, next to hamburger.
    Only targets <toolbarbutton> and <toolbaritem> children of #TabsToolbar
@@ -3548,6 +3628,19 @@ findbar[hidden] {
   opacity: 0 !important;
   transform: scaleY(0.96) translateY(-4px) !important;
   transition-delay: 0s, 0s, 100ms !important;
+}
+
+/* F11: the toolbar floats over the page (out of flow, #46), so while it is
+   showing it covers the find bar, which starts at the same top edge. Firefox
+   marks the toolbar as showing by un-hiding #fullscr-toggler (ESR 153 and
+   154+ alike), so that is the cue: the find bar starts below the toolbar
+   while it shows and returns to the top edge when it hides. The toolbar is
+   one row (--uc-row-height) tall, tabs and nav-bar share it, so the push is
+   the same with vertical and horizontal tabs. (An anchor() to the toolbox was
+   tried first; Firefox does not resolve it across to the find bar.) The
+   bookmarks bar push below still stacks on top of this. (#70) */
+:root[inFullscreen]:not([inDOMFullscreen]):has(#fullscr-toggler[hidden]) findbar {
+  top: calc(var(--uc-row-height) + var(--findbar-top)) !important;
 }
 
 /* The dynamic bookmarks bar hangs over the top of the page, the same edge the
