@@ -206,13 +206,6 @@
    * --uc-dynamic-bookmarks is 0. */
   --uc-dynamic-bookmarks-newtab: 1;
 
-  /* Height of the revealed bookmarks bar (its items plus 6px padding top and
-   * bottom). While the bar is open, the find bar moves down by this much so
-   * the bar doesn't cover it. CSS can't measure the bar, so adjust it if your
-   * density or font size changes its height. Ignored while
-   * --uc-dynamic-bookmarks is 0. */
-  --uc-bookmarks-bar-height: 39px;
-
 }
 
 
@@ -926,9 +919,6 @@ sidebar-main,
    --sidebar-launcher-button-size, a Nightly fix (161, compact density, where
    the button is smaller) that will likely reach every Firefox, so it comes
    first; --size-item-large (32px) is the one token every build has. The
-   plain-number fallbacks (31px here, 47px for vertical tabs) are 1px under
-   the real values on purpose: a renamed token then leaves a pixel short,
-   never overlaps. The
    padding is --sidebar-launcher-button-padding-inline (159 and up); ESR 153
    has none and pads with --space-medium, so delete that fallback when ESR 153
    retires. */
@@ -936,7 +926,7 @@ sidebar-main,
   :has(#tabbrowser-tabs[orient="vertical"])
 ) {
   --uc-launcher-strip: calc(
-    var(--sidebar-launcher-button-size, var(--size-item-large, 31px))
+    var(--sidebar-launcher-button-size, var(--size-item-large, 32px))
     + 2 * var(--sidebar-launcher-button-padding-inline, var(--space-medium, 0.75rem))
   );
 }
@@ -951,7 +941,7 @@ sidebar-main,
    guess, left one). Only while the launcher shows. */
 :root:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container:not([hidden])) {
   --uc-launcher-strip: calc(
-    var(--tab-collapsed-width, 47px)
+    var(--tab-collapsed-width, 48px)
     + var(--tab-collapsed-scrollbar-extra, 0px)
     - 0.5px
   );
@@ -961,7 +951,7 @@ sidebar-main,
    4px on ESR 153), so the strip adds it; 0px where a build doesn't declare it. */
 :root[sidebar-expand-on-hover]:has(#tabbrowser-tabs[orient="vertical"]) {
   --uc-launcher-strip: calc(
-    var(--tab-collapsed-width, 47px)
+    var(--tab-collapsed-width, 48px)
     + var(--tab-collapsed-scrollbar-extra, 0px)
     - 0.5px
     + var(--chrome-window-gap, 0px)
@@ -3596,6 +3586,17 @@ sidebar-main {
   --findbar-max-width: calc(100vw - 2 * var(--findbar-right));
   --findbar-width-use: clamp(var(--findbar-min-width-expanded), var(--findbar-width), var(--findbar-max-width));
 
+  /* Height of the revealed bookmarks bar; while it is open the find bar moves
+     down by this much (below). CSS can't measure the bar, so it is worked out:
+     its own 6px padding top and bottom, plus one item, which is a 16px icon
+     with Firefox's --bookmark-block-padding on each side (1px compact, 4px
+     normal, 7px touch) and about 3px Firefox adds around the label. Measured on
+     ESR 153: 32.9, 38.9 and 44.9px at compact, normal and touch (and the same at
+     100% text); 31px is the fixed part, 0.1px long, never short. It follows
+     density and any theme that sets the padding token.
+     Not config: to change it, set --bookmark-block-padding, not this. */
+  --uc-bookmarks-bar-height: calc(31px + 2 * var(--bookmark-block-padding, 4px));
+
   --textbox-min-width: calc(var(--findbar-min-width) - 116px);
   --textbox-width: calc(var(--findbar-width-use) - 116px - var(--options-width));
 }
@@ -3638,11 +3639,16 @@ findbar[hidden] {
    showing it covers the find bar, which starts at the same top edge. Firefox
    marks the toolbar as showing by hiding #fullscr-toggler, [hidden] (ESR 153
    and 154+ alike), so that is the cue: the find bar starts below the toolbar
-   while it shows and returns to the top edge when it hides. The toolbar is
-   one row (--uc-row-height) tall, tabs and nav-bar share it, so the push is
-   the same with vertical and horizontal tabs. (An anchor() to the toolbox was
-   tried first; Firefox does not resolve it across to the find bar.) The
-   bookmarks bar push below still stacks on top of this. (#70) */
+   while it shows and returns to the top edge when it hides. The push is one
+   --uc-row-height, and the clearance it leaves is not constant. With vertical
+   tabs Firefox keeps --tabstrip-min-height (so --uc-row-height) at 36px while
+   the toolbar is 36, 40 and 44px at compact, normal and touch, so the find
+   bar's 8px gap becomes 8, 4 and 0px: it always clears the toolbar, but is
+   flush with it at touch. With horizontal tabs the row follows the density
+   and the gap is within a few px of it. Making it exact kept breaking one
+   density or another, so this is the simple version. (An anchor() to the
+   toolbox was tried first; Firefox does not resolve it across to the find
+   bar.) The bookmarks bar push below still stacks on top of this. (#70) */
 :root[inFullscreen]:not([inDOMFullscreen]):has(#fullscr-toggler[hidden]) findbar {
   top: calc(var(--uc-row-height) + var(--findbar-top)) !important;
 }
