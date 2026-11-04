@@ -121,6 +121,8 @@ The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavi
 
 Since 3.5 it is on by default. Set Firefox' bookmarks toolbar to **Always show** (right-click the toolbar area → *Bookmarks Toolbar* → *Always Show*) and it hides itself until you reach for the URL bar, giving the line back to the page. Since 3.5.2 a fresh tab keeps the bar visible until you navigate, so a new tab lands you straight on your bookmarks. Set `--uc-dynamic-bookmarks: 0` for the previous behaviour, a permanent row below the toolbar, or `--uc-dynamic-bookmarks-newtab: 0` to keep fresh tabs hover-only.
 
+On macOS the bar collapses when you right-click a bookmark, because the native context menu is drawn outside of what CSS can see. Set `widget.macos.native-context-menus` to `false` in `about:config` to use Firefox' own menus, and the bar stays open.
+
 ### Adaptive Tab Bar Colour
 
 FoxOne is compatible with the [Adaptive Tab Bar Colour](https://addons.mozilla.org/firefox/addon/adaptive-tab-bar-colour/) extension out of the box, with no configuration needed. When the extension is active it retints the frame, toolbar, URL field, popups and sidebar to match each page, and FoxOne yields those surfaces to it, collapsing the extension's separate tones onto one flat colour so the one-line bar stays seamless. FoxOne's structural layout and its accent cues (selected-tab line and title, focus ring, container glow) stay in place, so the one-line look survives the recolour.
