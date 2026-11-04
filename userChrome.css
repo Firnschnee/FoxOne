@@ -206,6 +206,13 @@
    * --uc-dynamic-bookmarks is 0. */
   --uc-dynamic-bookmarks-newtab: 1;
 
+  /* Height of the revealed bookmarks bar (its items plus 6px padding top and
+   * bottom). While the bar is open, the find bar moves down by this much so
+   * the bar doesn't cover it. CSS can't measure the bar, so adjust it if your
+   * density or font size changes its height. Ignored while
+   * --uc-dynamic-bookmarks is 0. */
+  --uc-bookmarks-bar-height: 39px;
+
 }
 
 
@@ -3574,17 +3581,6 @@ sidebar-main {
   --findbar-min-width-expanded: calc(var(--findbar-min-width) + var(--options-width));
   --findbar-max-width: calc(100vw - 2 * var(--findbar-right));
   --findbar-width-use: clamp(var(--findbar-min-width-expanded), var(--findbar-width), var(--findbar-max-width));
-
-  /* Height of the revealed bookmarks bar; while it is open the find bar moves
-     down by this much (below). CSS can't measure the bar, so it is worked out:
-     its own 6px padding top and bottom, plus one item, which is a 16px icon
-     with Firefox's --bookmark-block-padding on each side (1px compact, 4px
-     normal, 7px touch) and about 3px Firefox adds around the label. Measured on
-     ESR 153: 32.9, 38.9 and 44.9px at compact, normal and touch (and the same at
-     100% text); 31px is the fixed part, 0.1px long, never short. It follows
-     density and any theme that sets the padding token.
-     Not config: to change it, set --bookmark-block-padding, not this. */
-  --uc-bookmarks-bar-height: calc(31px + 2 * var(--bookmark-block-padding, 4px));
 
   --textbox-min-width: calc(var(--findbar-min-width) - 116px);
   --textbox-width: calc(var(--findbar-width-use) - 116px - var(--options-width));
