@@ -926,6 +926,9 @@ sidebar-main,
    --sidebar-launcher-button-size, a Nightly fix (161, compact density, where
    the button is smaller) that will likely reach every Firefox, so it comes
    first; --size-item-large (32px) is the one token every build has. The
+   plain-number fallbacks (31px here, 47px for vertical tabs) are 1px under
+   the real values on purpose: a renamed token then leaves a pixel short,
+   never overlaps. The
    padding is --sidebar-launcher-button-padding-inline (159 and up); ESR 153
    has none and pads with --space-medium, so delete that fallback when ESR 153
    retires. */
@@ -2911,8 +2914,9 @@ sidebar-main {
    toolbar out of the expanded launcher's way, so it is hidden while the launcher
    is expanded by hover. Hidden visually only (visibility, not the reveal state
    Firefox keeps), so its own show and hide logic is not disturbed, and the
-   toolbar is back when the launcher collapses. A launcher expanded with its
-   toggle (no hover) keeps the full-width toolbar. */
+   toolbar is back when the launcher collapses. In this mode any expanded
+   launcher hides it, however it got expanded: the launcher's toggle fights
+   Firefox's F11 hover, so the rule does not depend on it. */
 :root[inFullscreen]:not([inDOMFullscreen])[sidebar-expand-on-hover]:has(
   #tabbrowser-tabs[orient="vertical"][expanded],
   #sidebar-container[sidebar-launcher-expanded]
@@ -3632,8 +3636,8 @@ findbar[hidden] {
 
 /* F11: the toolbar floats over the page (out of flow, #46), so while it is
    showing it covers the find bar, which starts at the same top edge. Firefox
-   marks the toolbar as showing by un-hiding #fullscr-toggler (ESR 153 and
-   154+ alike), so that is the cue: the find bar starts below the toolbar
+   marks the toolbar as showing by hiding #fullscr-toggler, [hidden] (ESR 153
+   and 154+ alike), so that is the cue: the find bar starts below the toolbar
    while it shows and returns to the top edge when it hides. The toolbar is
    one row (--uc-row-height) tall, tabs and nav-bar share it, so the push is
    the same with vertical and horizontal tabs. (An anchor() to the toolbox was
