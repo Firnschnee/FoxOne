@@ -103,15 +103,19 @@ for (const p of CSS_FILES) {
   }
 }
 
+// A default in backticks is compared with the CSS. A default in plain text
+// ("derived (about 33 / 39 / 45px)") marks a value worked out from Firefox's
+// tokens: the row still counts as documented, but there is no literal to
+// compare (#93).
 const docVars = new Map();
-for (const m of doc.matchAll(/^\|\s*`(--[\w-]+)`\s*\|\s*`([^`]*)`/gm)) {
-  docVars.set(m[1], normalise(m[2]));
+for (const m of doc.matchAll(/^\|\s*`(--[\w-]+)`\s*\|\s*(?:`([^`]*)`)?/gm)) {
+  docVars.set(m[1], m[2] === undefined ? null : normalise(m[2]));
 }
 
 for (const [name, docValue] of [...docVars].sort()) {
   if (!cssFirst.has(name)) {
     fail(`${name} is documented in customisation.md but not defined in CSS`);
-  } else if (cssFirst.get(name) !== docValue) {
+  } else if (docValue !== null && cssFirst.get(name) !== docValue) {
     fail(
       `${name}: customisation.md says \`${docValue}\`, ` +
         `CSS says \`${cssFirst.get(name)}\``,
