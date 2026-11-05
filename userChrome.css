@@ -1140,16 +1140,13 @@ sidebar-main,
      two answers (with the launcher hidden, none of this applies):
        collapsed (a narrow strip of icons)  -> step: the bar starts after it
        expanded, or a sidebar panel open    -> hide: no room, the bar fades out
-     That holds in every tab mode. The exceptions are noted on the rules:
-     horizontal tabs have no expanded state, and "expand on hover" steps a
-     little further, past the window gap.
+     That holds in every tab mode, "expand on hover" included. The one
+     exception is noted on the rules: horizontal tabs have no expanded state.
      With the sidebar on the right, the step counts from the right edge.
 
-     The step is the strip's width, worked out from Firefox's tokens, so there
-     is nothing to set: horizontal tabs, the button size plus the padding on
-     each side; vertical tabs, the collapsed tab width. The plain numbers
-     behind each token are a last resort, so a rename leaves the bar a few
-     pixels off, not broken.
+     The step is --uc-launcher-strip, declared above this block, where it is
+     worked out from Firefox's tokens. In F11 the toolbox steps instead and
+     the bar rides along, so these step rules stand down there.
      ------------------------------------------------------------------------ */
 
   /* Step, horizontal tabs: the bar starts after --uc-launcher-strip, the width
