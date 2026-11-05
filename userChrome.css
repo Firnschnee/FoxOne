@@ -206,12 +206,15 @@
    * --uc-dynamic-bookmarks is 0. */
   --uc-dynamic-bookmarks-newtab: 1;
 
-  /* Height of the revealed bookmarks bar (its items plus 6px padding top and
-   * bottom). While the bar is open, the find bar moves down by this much so
-   * the bar doesn't cover it. CSS can't measure the bar, so adjust it if your
-   * density or font size changes its height. Ignored while
-   * --uc-dynamic-bookmarks is 0. */
-  --uc-bookmarks-bar-height: 39px;
+  /* How far the find bar moves down while the dynamic bookmarks bar is open, so
+   * the bar doesn't cover it. The default follows Firefox's density (about
+   * 33 / 39 / 45px at compact / normal / touch). Set a fixed value if your bar
+   * comes out taller and covers the find bar. Ignored while
+   * --uc-dynamic-bookmarks is 0.
+   * The default is calc(31px + 2 * var(--bookmark-block-padding, 4px)): the
+   * bar's own 6px padding top and bottom plus one item (a 16px icon, about 3px
+   * around the label, and Firefox's --bookmark-block-padding on each side). */
+  --uc-bookmarks-bar-height: calc(31px + 2 * var(--bookmark-block-padding, 4px));
 
 }
 
