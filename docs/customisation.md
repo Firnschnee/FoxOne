@@ -115,7 +115,7 @@ What it deliberately does not touch:
 | `--uc-dynamic-bookmarks-hover-delay` | `450ms` | Delay before the URL-bar hover reveals the bar |
 | `--uc-dynamic-bookmarks-hide-delay` | `150ms` | Grace period before the bar collapses again, for travelling from the URL bar onto it |
 | `--uc-dynamic-bookmarks-newtab` | `1` | Keep the bar revealed on fresh tabs (new tab, home) without hovering (`1` = show on fresh tabs, `0` = hover only). No effect while `--uc-dynamic-bookmarks` is `0` |
-| `--uc-bookmarks-bar-height` | `calc(31px + 2 * var(--bookmark-block-padding, 4px))` | Height of the revealed bar (its items plus 6px padding top and bottom). While the bar is open the find bar moves down by this much, so the bar doesn't cover it. CSS can't measure the bar, so adjust it if your density or font size changes its height. No effect while `--uc-dynamic-bookmarks` is `0` |
+| `--uc-bookmarks-bar-height` | derived (about 33 / 39 / 45px) | How far the find bar moves down while the dynamic bookmarks bar is open, so the bar doesn't cover it. The default follows Firefox's density (about 33 / 39 / 45px at compact / normal / touch). Set a fixed value if your bar comes out taller and covers the find bar. No effect while `--uc-dynamic-bookmarks` is `0` |
 
 The dynamic bookmarks bar is adapted from [LittleFox](https://github.com/biglavis/LittleFox) (MIT).
 
