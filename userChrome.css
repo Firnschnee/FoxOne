@@ -999,8 +999,8 @@ sidebar-main,
      open; otherwise the bar collapses out from under its own menu.
 
    FoxOne differences from the original: gated by @container instead of
-   calc()-encoded 0/1, so at the default 0 not one declaration reaches the
-   toolbar; the reveal trigger is #urlbar rather than #urlbar-container
+   calc()-encoded 0/1, so with the switch at 0 not one declaration reaches
+   the toolbar; the reveal trigger is #urlbar rather than #urlbar-container
    (Nova reshuffled the container); the toolbox clip is lifted (see below);
    and the collapsed bar sheds its padding, not just its content height.
    ========================================================================== */
