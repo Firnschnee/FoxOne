@@ -3879,6 +3879,48 @@ html[id^="taskbartab"] #unified-extensions-button {
 
 
 /* ==========================================================================
+   MINI WINDOW – FF 159+ (browser.mini-window.enabled, default on from 160).
+   A single-tab, always-on-top browser window marked :root[mini-window].
+   Nova takes the toolbox out of flow (position: absolute, top edge), slides
+   it in on hover near the top, and pushes #browser down by the measured
+   --mini-window-toolbar-height while it is shown. It also hides everything
+   in the nav-bar except back/forward/reload, the URL bar and its own
+   audio/restore/close buttons. FoxOne broke both halves (#88).
+   ========================================================================== */
+
+/* The dynamic bookmarks block (and the macOS traffic-light block) set the
+   toolbox to position: relative, which put it back in flow. The page then
+   sat below the bar AND got Nova's push on top, leaving a bar-high gap. */
+:root[mini-window] #navigator-toolbox {
+  position: absolute !important;
+}
+
+/* Nova hides the hamburger and the puzzle here, but FoxOne's pinned
+   versions force display: flex !important and brought both back. */
+:root[mini-window] :is(#PanelUI-button, #unified-extensions-button) {
+  display: none !important;
+}
+
+/* Nova centres the URL bar at max-width 60 % (80 % under 400px), which left
+   wide empty gaps on both sides of it. FoxOne lets it fill the row instead,
+   but keeps a gap before the restore/close buttons: the nav-bar is the mini
+   window's only drag area (no titlebar), and a full-width URL bar left
+   nothing to grab. Margin is not hit-tested on the container, so the gap
+   drags the window. Nova's own drop under 150px stays. */
+:root[mini-window] #urlbar-container {
+  max-width: none !important;
+  margin-inline: 0 clamp(24px, 12%, 96px) !important;
+}
+
+/* The mini window has no titlebar buttons; its own close button in the
+   nav-bar stands in for them, so it hovers in the same close-red as
+   .titlebar-close (WINDOW CONTROLS). Restore keeps the nav-bar hover. */
+:root[mini-window] #mini-window-close-button:is(:hover, :active) {
+  --toolbarbutton-icon-fill: #e81123 !important; /* Windows close-red */
+}
+
+
+/* ==========================================================================
    WINDOW CONTROLS – FoxOne-ified. Firefox paints min/max/close itself
    (the native titlebar is hidden), so they never quite matched the
    DWM-drawn buttons of other windows. Instead of imitating Windows:
