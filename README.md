@@ -14,7 +14,7 @@ Using Thunderbird? Take a look at [BirdOne](https://github.com/Firnschnee/BirdOn
 
 Special shoutout to:
 > - [@NeroWolfe75](https://github.com/NeroWolfe75) – bug hunting, ideas and the urlbar and corner fixes
-> - [@snkiz](https://github.com/snkiz) – nav button hover delay, hide-disabled option and the extension cluster rework
+> - [@snkiz](https://github.com/snkiz) – sidebar launcher and F11 fixes, nav button options and the extension cluster
 > - [@atrehhoff](https://github.com/atrehhoff) – new tab button, spacing and macOS testing
 > - [@DeathMurderGod](https://github.com/DeathMurderGod) – minimum tab width and the original auto-hide nav buttons
 
