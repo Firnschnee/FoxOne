@@ -957,6 +957,28 @@ sidebar-main,
   );
 }
 
+/* F11 on 154 and up: when the toolbar autohides, Firefox collapses the
+   launcher with it (:root[fullscreenNavToolboxHidden], content-visibility
+   hidden and flex-basis 0 in fullscreen-and-pointerlock.css). With no launcher
+   there is no strip, so the F11 toolbar step falls back to the window edge.
+   It shows wherever toolbox content stays on screen while Firefox counts the
+   toolbar as hidden, such as the bookmarks bar revealed on a new tab. ESR 153
+   never sets the attribute, and its launcher stays on screen (#90).
+   The bookmarks bar hold is the exception (see DYNAMIC BOOKMARKS BAR): Firefox
+   hides the toolbar, launcher included, once the pointer is 50px down, which
+   is halfway onto the bar. Dropping the step there would slide the bookmarks
+   sideways under the pointer, so the toolbar keeps its place until the hold
+   lets go, with a strip of page beside it. The selector outweighs the two
+   rules above, so no !important. (#94) */
+:root[fullscreenNavToolboxHidden]:not(:has(
+  #PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]
+)):not(:has(#placesContext:hover):not(:has(
+  #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+  #library-button[open], #bookmarksMenu[open]
+))) {
+  --uc-launcher-strip: 0px;
+}
+
 /* ==========================================================================
    DYNAMIC BOOKMARKS BAR (on by default, --uc-dynamic-bookmarks: 0 opts out)
 
@@ -2871,9 +2893,10 @@ sidebar-main {
 }
 
 /* F11 and the sidebar launcher (#89). The rule above pins the toolbox to the
-   whole window, so it covers the launcher, which stays on screen in F11. Start
+   whole window, so it covers the launcher while that shows in F11. Start
    it after the launcher strip instead, the same width the bookmarks bar steps
-   by (--uc-launcher-strip, declared above the DYNAMIC BOOKMARKS BAR block), and
+   by (--uc-launcher-strip, declared above the DYNAMIC BOOKMARKS BAR block, where
+   it drops to 0 while 154+ autohides the launcher with the toolbar, #94), and
    the other way round with the sidebar on the right. The bar hangs from the
    toolbox, so it rides along; its own step is switched off in F11 (the four
    step rules there), or it would step twice. Only while the launcher is
@@ -3633,8 +3656,18 @@ findbar[hidden] {
    and the gap is within a few px of it. Making it exact kept breaking one
    density or another, so this is the simple version. (An anchor() to the
    toolbox was tried first; Firefox does not resolve it across to the find
-   bar.) The bookmarks bar push below still stacks on top of this. (#70) */
-:root[inFullscreen]:not([inDOMFullscreen]):has(#fullscr-toggler[hidden]) findbar {
+   bar.) The bookmarks bar push below still stacks on top of this. (#70)
+   The bookmarks bar hold (DYNAMIC BOOKMARKS BAR) keeps the toolbar down after
+   Firefox has hidden it and shown the toggler again, in every build, so the
+   hold counts as showing too. (#94) */
+:root[inFullscreen]:not([inDOMFullscreen]):is(
+  :has(#fullscr-toggler[hidden]),
+  :has(#PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]),
+  :has(#placesContext:hover):not(:has(
+    #PanelUI-menu-button[open], #bookmarks-menu-button[open],
+    #library-button[open], #bookmarksMenu[open]
+  ))
+) findbar {
   top: calc(var(--uc-row-height) + var(--findbar-top)) !important;
 }
 
