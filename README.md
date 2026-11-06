@@ -19,4 +19,6 @@ Special shoutout to:
 > - [@DeathMurderGod](https://github.com/DeathMurderGod) – minimum tab width and the original auto-hide nav buttons
 
 ---
-Inspired by [Cascade](https://github.com/andreasgrafen/cascade) & [LittleFox](https://github.com/biglavis/LittleFox) | It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/) | License: [MIT](LICENSE)
+Built on [Cascade](https://github.com/cascadefox/cascade). Floating Findbar and dynamic bookmarks bar adapted from [LittleFox](https://github.com/biglavis/LittleFox).
+
+It works with [Adaptive Tab Bar Colour](https://addons.mozilla.org/de/firefox/addon/adaptive-tab-bar-colour/) | License: [MIT](LICENSE)
