@@ -3748,7 +3748,7 @@ findbar[hidden] {
   }
   :root:not(:has(
     #urlbar[open],
-    #PersonalToolbar[collapsed="true"],
+    #PersonalToolbar[collapsed],
     #tabbrowser-tabs[orient="vertical"][expanded]
   )):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded])) {
     &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover,
@@ -3777,7 +3777,7 @@ findbar[hidden] {
   @container style(--uc-dynamic-bookmarks-newtab: 1) {
     :root:not(:has(
       #urlbar[open],
-      #PersonalToolbar[collapsed="true"],
+      #PersonalToolbar[collapsed],
       #tabbrowser-tabs[orient="vertical"][expanded]
     )):not(:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-launcher-expanded])):has(
       #urlbar-input-container[pageproxystate="invalid"],
