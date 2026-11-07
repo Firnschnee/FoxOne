@@ -803,12 +803,64 @@ menupopup :is(menuitem, menu)[_moz-menuactive][disabled] {
    LAYOUT
    ========================================================================== */
 
+/* Menu bar. Under Nova it is a direct child of the toolbox, i.e. one more
+   flex item in FoxOne's single row. Hidden, it collapses to width 0. Alt or
+   F10 drops [inactive], and it used to squeeze in front of the nav-bar,
+   dragging its own window controls into the middle of the row and shoving
+   nav-bar and tabs aside (issue #78, reported by atrehhoff).
+   Revealed that way it now lies over the nav-bar section instead: out of
+   flow, one row tall, painted with the toolbox background, so nothing else
+   in the row moves. The anchor() lines take top and height from the nav-bar
+   itself, correct at every density and with vertical tabs. Builds without
+   anchor positioning drop them and keep the row-height fallback above them.
+   Its own window controls go, and the real ones stay visible: Firefox hides
+   those while the menu bar is up, because vanilla gives the menu bar its own
+   row with its own controls.
+   A permanent menu bar (no [autohide]) and Customize mode get that row of
+   their own, above the line, as in vanilla. */
+#nav-bar {
+  anchor-name: --uc-navbar;
+}
+
 #toolbar-menubar {
   &[autohide] {
+    /* min-width: toolkit's toolbar.css gives every toolbar min-width: 1px,
+       which beat width: 0 and kept a 1px sliver in the row. Revealing the
+       menu took it out of flow, so the tab strip jumped by that pixel.
+       !important because that sheet is author level and a plain user rule
+       loses to it whatever the specificity. */
     &[inactive]:not([customizing]) {
       width: 0px;
+      min-width: 0px !important;
+    }
+    &:not([inactive], [customizing]) {
+      position: absolute !important;
+      inset-inline-start: 0 !important;
+      top: 0 !important;
+      height: var(--uc-row-height) !important;
+      top: anchor(--uc-navbar top) !important;
+      height: anchor-size(--uc-navbar height) !important;
+      min-height: 0 !important;
+      width: var(--uc-urlbar-min-width) !important;
+      min-width: max-content !important;
+      z-index: 10 !important;
+      background: inherit !important;
+
+      & > .titlebar-buttonbox-container {
+        display: none !important;
+      }
     }
   }
+  &:not([autohide]),
+  &[customizing] {
+    width: 100%;
+  }
+}
+
+#toolbar-menubar[autohide]:not([inactive], [customizing])
+  ~ :is(#TabsToolbar, #nav-bar)
+  > .titlebar-buttonbox-container {
+  visibility: visible !important;
 }
 
 #main-window,
