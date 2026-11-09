@@ -2369,11 +2369,16 @@ sidebar-main {
    chrome://browser/content/genai/chat.html, not browser.xhtml.
    #header = provider dropdown + settings/close buttons
    #message-container = permission/error notifications (hidden = silent)
-   #summarize-btn-container = "Seite zusammenfassen" strip */
+   #summarize-btn-container = "Seite zusammenfassen" strip
+   #footer = wrapper around the summarize strip and the chatbot promo (158+).
+     It carries a 1px border-top (var(--border-color)), so with only its
+     content hidden it left a light line along the bottom of the panel.
+     ESR 153 has no #footer and puts that border on the summarize strip. */
 @-moz-document url-prefix(chrome://browser/content/genai/) {
   #header,
   #message-container,
-  #summarize-btn-container {
+  #summarize-btn-container,
+  #footer {
     display: none !important;
   }
 
