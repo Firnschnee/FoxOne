@@ -3005,8 +3005,9 @@ sidebar-main {
 }
 /* The cluster is the unbroken run of extension items at the end of the
    toolbar, against the hamburger: an item with only extension items after it.
-   Invisible items don't break the run: #alltabs-button (hidden by FoxOne) and
-   anything Firefox hides with [hidden], such as the Smart Window widgets that
+   Invisible items don't break the run: #alltabs-button (hidden by FoxOne),
+   #nav-bar-overflow-button (the toolbar's ">>" overflow button, which vertical
+   tabs put after the extensions) and anything Firefox hides with [hidden], such as the Smart Window widgets that
    FF158 parks at the end of the tab strip and keeps hidden wherever Smart
    Window is unavailable or off (not created in private windows). Items placed
    before the tabs, or before a tool or spacer, aren't in it: they stay where
@@ -3015,13 +3016,13 @@ sidebar-main {
    auto start-margin, so the whole group shifts right as one cluster instead
    of each item claiming its own slice of free space (which split a second
    icon off toward the middle). */
-#TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))):where(:not(toolbaritem:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden]))) ~ *)) {
+#TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))):where(:not(toolbaritem:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden]))) ~ *)) {
   margin-inline-start: auto !important;
 }
 /* The last visible item gets the hamburger clearance. That's the extension
    cluster, unless a flexible spacer has pushed a button there instead.
    :where() lets the #13 rules take the clearance back while the icons are collapsed. */
-#TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
+#TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, #nav-bar-overflow-button, [hidden])))) {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
 
@@ -3032,7 +3033,7 @@ sidebar-main {
 #TabsToolbar .private-browsing-indicator-button {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
-:root[privatebrowsingmode] #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
+:root[privatebrowsingmode] #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, #nav-bar-overflow-button, [hidden])))) {
   margin-inline-end: 0 !important;
 }
 
@@ -3054,7 +3055,7 @@ sidebar-main {
    must target the toolbaritems specifically, not the customization-target,
    which spans the whole tab strip and would reveal on any tab hover. (#13) */
 @container style(--uc-hide-extension-icons: 1) {
-  #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     max-width: 0 !important;
     opacity: 0 !important;
     pointer-events: none !important;
@@ -3064,7 +3065,7 @@ sidebar-main {
                 padding-inline 0.2s ease, margin-inline 0.2s ease !important;
   }
   /* collapsed last item drops the hamburger clearance so no gap is reserved */
-  #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     margin-inline-end: 0 !important;
   }
   /* A button right before the collapsed cluster, pushed to the edge by a
@@ -3073,10 +3074,10 @@ sidebar-main {
      on reveal, when the cluster's padding carries it again. Private windows
      are left out: the mask holds the clearance there. The transition sits
      in its own low-specificity rule so the reduced-motion block still wins. */
-  #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     transition: margin-inline-end 0.2s ease !important;
   }
-  :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     margin-inline-end: var(--uc-hamburger-width) !important;
   }
 
@@ -3089,10 +3090,10 @@ sidebar-main {
      while its popup is up. (#61) */
   :root:is(
     :has(#PanelUI-button:hover),
-    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
     :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
-  ) #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  ) #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     max-width: 60px !important;
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -3106,10 +3107,10 @@ sidebar-main {
      amount so the icon is not squeezed by the padding (border-box). (#13) */
   :root:is(
     :has(#PanelUI-button:hover),
-    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
     :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
-  ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     max-width: calc(60px + var(--uc-hamburger-width)) !important;
     padding-inline-end: var(--uc-hamburger-width) !important;
   }
@@ -3118,10 +3119,10 @@ sidebar-main {
      gap doubles. The mask's :hover in the lists above is the bridge here. */
   :root[privatebrowsingmode]:is(
     :has(#PanelUI-button:hover),
-    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
     :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
-  ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     max-width: 60px !important;
     padding-inline-end: revert !important;
   }
@@ -3129,10 +3130,10 @@ sidebar-main {
      before it drops its own, or the gap doubles. */
   :root:is(
     :has(#PanelUI-button:hover),
-    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+    :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
     :has(#TabsToolbar-customization-target > toolbaritem [open]),
     :has(#TabsToolbar .private-browsing-indicator-button:hover)
-  ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
     margin-inline-end: 0 !important;
   }
 }
@@ -3174,7 +3175,7 @@ sidebar-main {
   /* The last visible item and the private-window mask now clear two fixed
      buttons instead of one. The private-window zeroing of that item's margin
      above outranks this by specificity, so it keeps working. */
-  #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))),
+  #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, #nav-bar-overflow-button, [hidden])))),
   #TabsToolbar .private-browsing-indicator-button {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
@@ -3185,30 +3186,30 @@ sidebar-main {
      reveal, because the pointer now crosses it on the way from the hamburger
      to the icons and the bridge would otherwise break there. */
   @container style(--uc-hide-extension-icons: 1) {
-    #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       margin-inline-end: 0 !important;
     }
     /* The button before the collapsed cluster clears both fixed buttons,
        and drops it on reveal, the puzzle's hover included. */
-    :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
     }
     :root:is(
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
-      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
       :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
-    ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    ) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, #nav-bar-overflow-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       margin-inline-end: 0 !important;
     }
     :root:is(
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
-      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
       :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
-    ) #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    ) #TabsToolbar-customization-target > toolbaritem:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       max-width: 60px !important;
       opacity: 1 !important;
       pointer-events: auto !important;
@@ -3217,10 +3218,10 @@ sidebar-main {
     :root:is(
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
-      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
       :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
-    ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       max-width: calc(60px + var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
       padding-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
     }
@@ -3229,10 +3230,10 @@ sidebar-main {
     :root[privatebrowsingmode]:is(
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
-      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
+      :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))),
       :has(#TabsToolbar-customization-target > toolbaritem [open]),
       :has(#TabsToolbar .private-browsing-indicator-button:hover)
-    ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       max-width: 60px !important;
       padding-inline-end: revert !important;
     }
