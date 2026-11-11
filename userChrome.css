@@ -187,10 +187,10 @@
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
 
-  /* Which side the extension drawer opens from when the puzzle is not pinned
-   * to the corner (--uc-extensions-button-right: 0, or vertical tabs): left =
-   * the icons touching the puzzle on its left, right = on its right. Point it
-   * toward the inside of the bar. */
+  /* Which side the extension drawer opens from with vertical tabs (best effort
+   * for an unpinned puzzle with horizontal tabs): left = the icons touching
+   * the puzzle on its left, right = on its right. Point it toward the inside
+   * of the bar. */
   --uc-extensions-drawer-side: left;
 
   /* Bookmarks bar – float it out of the layout and reveal it on URL-bar hover
@@ -3269,6 +3269,9 @@ sidebar-main {
    It works in the nav-bar and in the tab bar's toolbar
    (#TabsToolbar-customization-target), where Firefox puts an icon in whichever
    bar it was dragged to.
+   Vertical tabs are the supported case. An unpinned puzzle with horizontal tabs
+   (--uc-extensions-button-right: 0) is best effort: the drawer follows the
+   puzzle's new margin, but is not tuned for that layout.
    The reveal conditions are flat on purpose: a :has() inside a :has() is not
    allowed by the spec, and inside :is() the branch is silently dropped. So
    "an icon of the run is hovered" is written with sibling combinators from the
