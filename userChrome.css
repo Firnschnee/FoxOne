@@ -187,6 +187,12 @@
    * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
   --uc-hide-extension-icons: 1;
 
+  /* Which side the extension drawer opens from when the puzzle is not pinned
+   * to the corner (--uc-extensions-button-right: 0, or vertical tabs): left =
+   * the icons touching the puzzle on its left, right = on its right. Point it
+   * toward the inside of the bar. */
+  --uc-extensions-drawer-side: left;
+
   /* Bookmarks bar – float it out of the layout and reveal it on URL-bar hover
    * (1 = dynamic overlay, 0 = static row that keeps its own line).
    * Only bites with Firefox' bookmarks toolbar set to "Always show": under
@@ -3236,6 +3242,89 @@ sidebar-main {
     ) #TabsToolbar-customization-target > toolbaritem:last-of-type:where(:not(:has(~ :not(toolbaritem, #alltabs-button, #nav-bar-overflow-button, [hidden])))) {
       max-width: 60px !important;
       padding-inline-end: revert !important;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   EXTENSION DRAWER (puzzle not pinned to the corner, or vertical tabs) (#96)
+   Applies when --uc-extensions-button-right is 0 and whenever the tab strip is
+   vertical, and only while the icons hide (--uc-hide-extension-icons: 1).
+   Vertical tabs leave the puzzle in the nav-bar, never at the corner, so they
+   are the unpinned case whatever --uc-extensions-button-right says. Setting it
+   to 0 for them only changes the rules gated on it: the corner clearances.
+   The drawer is the unbroken run of extension icons touching the puzzle button
+   on ONE side: an icon is in it when everything between that icon and the
+   puzzle is another extension icon. What lies beyond the run does not matter,
+   so a spacer or a Firefox tool there no longer breaks it, and a Firefox tool
+   between the icons and the puzzle ends the run. The run tucks away and slides
+   out when the pointer rests on the puzzle, on one of its icons, or while an
+   extension popup is open. Icons on the other side of the puzzle are not part
+   of it.
+   The side is --uc-extensions-drawer-side: left (the default) or right. It
+   picks up from that side only, and slides out on that side only, so the
+   drawer never opens on both. Point it toward the inside of the bar. CSS can't
+   tell which side that is, so it is a manual switch.
+   It works in the nav-bar and in the tab bar's toolbar
+   (#TabsToolbar-customization-target), where Firefox puts an icon in whichever
+   bar it was dragged to.
+   The reveal conditions are flat on purpose: a :has() inside a :has() is not
+   allowed by the spec, and inside :is() the branch is silently dropped. So
+   "an icon of the run is hovered" is written with sibling combinators from the
+   bar (hovered icon, then the puzzle later, with only icons between), not by
+   reusing the run selector. "An extension popup is open" is looser for the
+   same reason: an open popup from any extension button in the bar opens the
+   drawer and holds it open, wherever that extension sits, not only one in the
+   run. Harmless in practice.
+   ========================================================================== */
+:root:has(#tabbrowser-tabs[orient="vertical"]) {
+  --uc-extensions-button-right: 0;
+}
+
+@container style(--uc-extensions-button-right: 0) {
+  @container style(--uc-hide-extension-icons: 1) {
+
+    @container not style(--uc-extensions-drawer-side: right) {
+      :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+        max-width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        padding-inline: 0 !important;
+        overflow: hidden !important;
+        transition: max-width 0.2s ease, opacity 0.2s ease, padding-inline 0.2s ease !important;
+      }
+      :root:root :is(#nav-bar, #TabsToolbar):is(
+        :has(#unified-extensions-button:is(:hover, [open])),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:hover ~ #unified-extensions-button):not(:has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:hover ~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button)),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"] [open])
+      ) :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+        max-width: 60px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding-inline: revert !important;
+      }
+    }
+
+    @container style(--uc-extensions-drawer-side: right) {
+      :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *) {
+        max-width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        padding-inline: 0 !important;
+        overflow: hidden !important;
+        transition: max-width 0.2s ease, opacity 0.2s ease, padding-inline 0.2s ease !important;
+      }
+      :root:root :is(#nav-bar, #TabsToolbar):is(
+        :has(#unified-extensions-button:is(:hover, [open])),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > #unified-extensions-button ~ toolbaritem[id$="-browser-action"]:hover):not(:has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > #unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ toolbaritem[id$="-browser-action"]:hover)),
+        :has(:is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"] [open])
+      ) :is(#nav-bar-customization-target, #TabsToolbar-customization-target) > toolbaritem[id$="-browser-action"]:where(#unified-extensions-button ~ *):not(#unified-extensions-button ~ :not(toolbaritem[id$="-browser-action"], [hidden]) ~ *) {
+        max-width: 60px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding-inline: revert !important;
+      }
     }
   }
 }
