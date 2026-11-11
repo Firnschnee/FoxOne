@@ -3280,8 +3280,13 @@ sidebar-main {
    drawer and holds it open, wherever that extension sits, not only one in the
    run. Harmless in practice.
    ========================================================================== */
-:root:has(#tabbrowser-tabs[orient="vertical"]) {
-  --uc-extensions-button-right: 0;
+/* Set on the toolbox, inside the hide switch's own query: :root has no ancestor
+   to query, and the drawer rules below all sit inside the toolbox. With the
+   icons not hiding, nothing is changed for vertical tabs. */
+@container style(--uc-hide-extension-icons: 1) {
+  :root:has(#tabbrowser-tabs[orient="vertical"]) #navigator-toolbox {
+    --uc-extensions-button-right: 0;
+  }
 }
 
 @container style(--uc-extensions-button-right: 0) {
