@@ -3028,18 +3028,14 @@ sidebar-main {
 /* Private windows: Firefox puts a mask toolbarbutton at the end of #TabsToolbar,
    right where the fixed hamburger sits, so the two overlapped. Give the mask
    the hamburger clearance instead of whatever item is last in the strip, so
-   the strip reads [last item][mask][hamburger][window controls]. */
+   the strip reads [last item][mask][hamburger][window controls]. The rules that
+   hand the clearance to the mask only apply while the mask exists: ESR 153 has
+   no mask button, and there the last item keeps its own clearance. (#97) */
 #TabsToolbar .private-browsing-indicator-button {
   margin-inline-end: var(--uc-hamburger-width) !important;
 }
-:root[privatebrowsingmode] #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
+:root[privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button) #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
   margin-inline-end: 0 !important;
-}
-
-/* ...but only where there is a mask. Firefox ESR 153 has no mask button, so with the zeroing above the last item
-   kept no clearance and sat on the hamburger. With no mask in the window it gets the hamburger clearance back. */
-:root[privatebrowsingmode]:not(:has(#TabsToolbar .private-browsing-indicator-button)) #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
-  margin-inline-end: var(--uc-hamburger-width) !important;
 }
 
 /* Customize mode wraps every item in a toolbarpaletteitem, so none of the
@@ -3047,7 +3043,7 @@ sidebar-main {
    hamburger (and puzzle). Give the toolbar's last wrapper the clearance.
    Private windows: the mask carries it instead. Vertical tabs left as they
    are. (#62, snkiz/FoxMica#32) */
-:root[customizing]:not([privatebrowsingmode]):not(:has(#tabbrowser-tabs[orient="vertical"]))
+:root[customizing]:where(:not([privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button))):not(:has(#tabbrowser-tabs[orient="vertical"]))
   #TabsToolbar-customization-target > toolbarpaletteitem:last-child {
   margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width) * var(--uc-extensions-button-right)) !important;
 }
@@ -3082,7 +3078,7 @@ sidebar-main {
   #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     transition: margin-inline-end 0.2s ease !important;
   }
-  :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+  :root:where(:not([privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button))) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     margin-inline-end: var(--uc-hamburger-width) !important;
   }
 
@@ -3122,7 +3118,7 @@ sidebar-main {
   /* Private windows: the mask already carries the hamburger clearance as its
      own margin (above), so the revealed cluster must not add it again or the
      gap doubles. The mask's :hover in the lists above is the bridge here. */
-  :root[privatebrowsingmode]:is(
+  :root[privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button):is(
     :has(#PanelUI-button:hover),
     :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
     :has(#TabsToolbar-customization-target > toolbaritem [open]),
@@ -3185,12 +3181,6 @@ sidebar-main {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
 
-  /* The same for a private window with no mask (ESR 153): the last item clears both fixed buttons. */
-  :root[privatebrowsingmode]:not(:has(#TabsToolbar .private-browsing-indicator-button))
-    #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
-    margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
-  }
-
   /* Hover-reveal (#13) with the puzzle in between: the collapsed cluster
      drops the clearance again (restated, since the rule above is later in
      source than the #13 collapse), and the puzzle's own hover joins the
@@ -3202,7 +3192,7 @@ sidebar-main {
     }
     /* The button before the collapsed cluster clears both fixed buttons,
        and drops it on reveal, the puzzle's hover included. */
-    :root:not([privatebrowsingmode]) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
+    :root:where(:not([privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button))) #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
       margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
     }
     :root:is(
@@ -3238,7 +3228,7 @@ sidebar-main {
     }
     /* Private windows: the mask carries the two-button clearance (margin
        above), the cluster adds none. Same reasoning as the #13 base block. */
-    :root[privatebrowsingmode]:is(
+    :root[privatebrowsingmode]:has(#TabsToolbar .private-browsing-indicator-button):is(
       :has(#PanelUI-button:hover),
       :has(#unified-extensions-button:hover),
       :has(#TabsToolbar-customization-target > toolbaritem:hover):where(:not(:has(#TabsToolbar-customization-target > toolbaritem:hover ~ :not(toolbaritem, #alltabs-button, [hidden])))),
