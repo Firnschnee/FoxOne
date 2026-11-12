@@ -138,8 +138,11 @@
    are separate documents in an iframe, so the about: prefix never matches
    them, and they kept the full Nova violet. Same token system, same cure.
    The clear-data dialog lives outside that folder since its _v2 rewrite
-   (chrome://browser/content/sanitize_v2.xhtml) and needs its own prefix. */
-@-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/"), url-prefix("chrome://browser/content/sanitize") {
+   (chrome://browser/content/sanitize_v2.xhtml) and needs its own prefix,
+   as do the two other subdialogs preferences opens from elsewhere: the
+   helper-app picker behind Applications > "Use other…" (toolkit's
+   appPicker.xhtml, issue #95) and the add-search-engine dialog. */
+@-moz-document url-prefix("about:"), url-prefix("chrome://browser/content/preferences/"), url-prefix("chrome://browser/content/sanitize"), url-prefix("chrome://global/content/appPicker"), url-prefix("chrome://browser/content/search/addEngine") {
   /* Every rule below reads --uc-color-* from the PALETTE block and follows
      the light scheme with it. */
   :root {
