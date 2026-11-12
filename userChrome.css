@@ -1401,6 +1401,13 @@ sidebar-main,
   height: auto !important;
 }
 
+/* The toolbar is the window's whole width here and the tab strip no longer shares it, so the URL bar fills it and
+   nothing is left to drag the window by. Same gap as the Mini Window's URL bar (below), on the end side only: the
+   field stays left-aligned and the margin, which is not hit-tested, is the grab area. */
+:root:has(#tabbrowser-tabs[orient="vertical"]) #nav-bar #urlbar-container {
+  margin-inline: 0 clamp(24px, 12%, 96px) !important;
+}
+
 
 /* ==========================================================================
    macOS – left-side window controls (traffic lights).
