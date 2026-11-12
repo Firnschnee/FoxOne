@@ -3036,6 +3036,12 @@ sidebar-main {
   margin-inline-end: 0 !important;
 }
 
+/* ...but only where there is a mask. Firefox ESR 153 has no mask button, so with the zeroing above the last item
+   kept no clearance and sat on the hamburger. With no mask in the window it gets the hamburger clearance back. */
+:root[privatebrowsingmode]:not(:has(#TabsToolbar .private-browsing-indicator-button)) #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
+  margin-inline-end: var(--uc-hamburger-width) !important;
+}
+
 /* Customize mode wraps every item in a toolbarpaletteitem, so none of the
    toolbaritem rules apply there and the last items slid under the fixed
    hamburger (and puzzle). Give the toolbar's last wrapper the clearance.
@@ -3176,6 +3182,12 @@ sidebar-main {
      above outranks this by specificity, so it keeps working. */
   #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))),
   #TabsToolbar .private-browsing-indicator-button {
+    margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
+  }
+
+  /* The same for a private window with no mask (ESR 153): the last item clears both fixed buttons. */
+  :root[privatebrowsingmode]:not(:has(#TabsToolbar .private-browsing-indicator-button))
+    #TabsToolbar-customization-target > :is(toolbarbutton, toolbaritem):where(:not(#alltabs-button, [hidden])):where(:not(:has(~ :not(#alltabs-button, [hidden])))) {
     margin-inline-end: calc(var(--uc-hamburger-width) + var(--uc-extensions-button-width)) !important;
   }
 
