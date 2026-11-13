@@ -1403,6 +1403,16 @@ sidebar-main,
   height: auto !important;
 }
 
+/* The URL bar fills the whole vertical-tab toolbar, which leaves nothing to
+   grab the window by. Same gap as the mini window's: margin is not hit-tested
+   on the container, so it drags. Left out when the toolbar holds a spring,
+   since the user has then placed their own spacing. */
+:root:has(#tabbrowser-tabs[orient="vertical"])
+  #nav-bar-customization-target:not(:has(> toolbarspring))
+  > #urlbar-container {
+  margin-inline: 0 clamp(24px, 12%, 96px) !important;
+}
+
 
 /* ==========================================================================
    macOS – left-side window controls (traffic lights).
