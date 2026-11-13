@@ -3263,7 +3263,7 @@ sidebar-main {
    and holds it open, wherever that extension sits, not only one in the run. Harmless in practice.
    ========================================================================== */
 @container style(--uc-hide-extension-icons: 1) {
-  :root:has(#tabbrowser-tabs[orient="vertical"]) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+  :where(:root:has(#tabbrowser-tabs[orient="vertical"])) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
     max-width: 0 !important;
     opacity: 0 !important;
     pointer-events: none !important;
@@ -4561,7 +4561,8 @@ html[id^="taskbartab"] #unified-extensions-button {
   #TabsToolbar-customization-target > toolbaritem,
   #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
 
-  /* Nav-bar extension-icon reveal (vertical tabs) */
+  /* Nav-bar extension-icon reveal (vertical tabs). The hide rule keeps its vertical-tabs gate inside :where(), so the
+     two selectors tie and the later position wins. (#96) */
   #nav-bar-customization-target > toolbaritem[id$="-browser-action"] { transition: none !important; }
 
   /* Dynamic bookmarks bar – reveal and collapse snap. The resting rule carries
