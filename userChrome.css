@@ -121,7 +121,10 @@
    * (1 = right, beside the hamburger, 0 = Firefox default in the nav-bar).
    * Firefox locks the button to the nav-bar in Customize Toolbar, so this is
    * the only way to get it there. Pinned is the tested layout, 0 leaves the
-   * button where Firefox puts it, best effort. (issues #48, #67) */
+   * button where Firefox puts it, best effort. (issues #48, #67)
+   * Two-row layouts need 0: in FoxMica's StockMica+ and in PWAsForFirefox
+   * windows the pin can't take, so the switch stays even though only 1 is
+   * tested. Don't cut it in a cleanup round. (#73) */
   --uc-extensions-button-right: 1;
   /* Width reserved for the pinned puzzle button. Also its distance from the
    * window controls beyond the hamburger, so it doubles as the gap knob:
@@ -3078,7 +3081,8 @@ sidebar-main {
      flexible space, would slide under the hamburger once the cluster folds
      to zero. It takes over the clearance while collapsed and hands it back
      on reveal, when the cluster's padding carries it again. Private windows
-     are left out: the mask holds the clearance there. The transition sits
+     with the mask are left out: the mask holds the clearance there (ESR 153
+     has none and is treated like a normal window, #97). The transition sits
      in its own low-specificity rule so the reduced-motion block still wins. */
   #TabsToolbar-customization-target > toolbarbutton:where(:not(#alltabs-button, [hidden])):where(:has(~ toolbaritem:not([hidden]))):where(:not(:has(~ :not(toolbaritem, #alltabs-button, [hidden])))) {
     transition: margin-inline-end 0.2s ease !important;
@@ -3151,6 +3155,9 @@ sidebar-main {
    position:fixed, anchored to the window controls, --uc-extensions-button-
    width further left. Leaving the nav-bar flow hands its slot to the URL bar.
    Fullscreen and vertical tabs follow the hamburger's handling. (#48)
+   The off switch (0) is kept on purpose for two-row layouts such as FoxMica's
+   StockMica+ and PWAsForFirefox windows, where the pin doesn't take. Only 1
+   is tested, 0 is best effort but must keep working. (#73)
    ========================================================================== */
 @container style(--uc-extensions-button-right: 1) {
   #unified-extensions-button {
