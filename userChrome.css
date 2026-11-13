@@ -1405,10 +1405,13 @@ sidebar-main,
 
 /* The URL bar fills the whole vertical-tab toolbar, which leaves nothing to
    grab the window by. Same gap as the mini window's: margin is not hit-tested
-   on the container, so it drags. Left out when the toolbar holds a spring,
-   since the user has then placed their own spacing. */
+   on the container, so it drags. Keep the value in step with the MINI WINDOW
+   block. Left out when the toolbar holds a spring, since the user has then
+   placed their own spacing. Firefox's own #vertical-spacer doesn't count: it
+   is a fixed spring in every nav-bar, and the .titlebar-spacer rule hides it,
+   which is why the grab area was missing in the first place. (#98) */
 :root:has(#tabbrowser-tabs[orient="vertical"])
-  #nav-bar-customization-target:not(:has(> toolbarspring))
+  #nav-bar-customization-target:not(:has(> toolbarspring:not(#vertical-spacer)))
   > #urlbar-container {
   margin-inline: 0 clamp(24px, 12%, 96px) !important;
 }
@@ -4020,7 +4023,9 @@ html[id^="taskbartab"] #unified-extensions-button {
    but keeps a gap before the restore/close buttons: the nav-bar is the mini
    window's only drag area (no titlebar), and a full-width URL bar left
    nothing to grab. Margin is not hit-tested on the container, so the gap
-   drags the window. Nova's own drop under 150px stays. */
+   drags the window. Nova's own drop under 150px stays. The vertical-tabs
+   grab area (under "Vertical tabs – toolbar layout override", #98) uses the
+   same margin, keep the two in step. */
 :root[mini-window] #urlbar-container {
   max-width: none !important;
   margin-inline: 0 clamp(24px, 12%, 96px) !important;
