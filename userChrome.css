@@ -3266,10 +3266,15 @@ sidebar-main {
   :where(:root:has(#tabbrowser-tabs[orient="vertical"])) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
     max-width: 0 !important;
     opacity: 0 !important;
-    pointer-events: none !important;
+    visibility: hidden !important;
     padding-inline: 0 !important;
     overflow: hidden !important;
-    transition: max-width 0.2s ease, opacity 0.2s ease, padding-inline 0.2s ease !important;
+    /* Closing waits 150ms, and the icons stay hoverable until it has run
+       (visibility flips last), so the pointer can cross from the puzzle onto
+       an icon, or from one icon to the next, without the drawer shutting
+       under it. The reveal below drops the delay, so opening is immediate. */
+    transition: max-width 0.2s ease 150ms, opacity 0.2s ease 150ms,
+                padding-inline 0.2s ease 150ms, visibility 0s linear 350ms !important;
   }
   :root:root:has(#tabbrowser-tabs[orient="vertical"]) #nav-bar:is(
     :has(#unified-extensions-button:is(:hover, [open])),
@@ -3279,8 +3284,9 @@ sidebar-main {
   ) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
     max-width: 60px !important;
     opacity: 1 !important;
-    pointer-events: auto !important;
+    visibility: visible !important;
     padding-inline: revert !important;
+    transition-delay: 0s !important;
   }
 }
 
@@ -4562,8 +4568,9 @@ html[id^="taskbartab"] #unified-extensions-button {
   #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
 
   /* Nav-bar extension-icon reveal (vertical tabs). The hide rule keeps its vertical-tabs gate inside :where(), so the
-     two selectors tie and the later position wins. (#96) */
-  #nav-bar-customization-target > toolbaritem[id$="-browser-action"] { transition: none !important; }
+     two selectors tie and the later position wins. Only the durations go: the close delay is what lets the pointer
+     travel onto the icons, not motion, so it stays and the drawer snaps shut after it. (#96) */
+  #nav-bar-customization-target > toolbaritem[id$="-browser-action"] { transition-duration: 0s !important; }
 
   /* Dynamic bookmarks bar – reveal and collapse snap. The resting rule carries
      :not(:has(toolbarpaletteitem)), which outranked a bare #PersonalToolbar,
