@@ -3290,6 +3290,12 @@ sidebar-main {
     opacity: 0 !important;
     visibility: hidden !important;
     padding-inline: 0 !important;
+    /* Firefox gives every extension item margin-inline: var(--space-xxsmall)
+       (.toolbaritem-combined-buttons). Left alone, a tucked run still took
+       4px per icon, and the open run had dead strips between the icons that
+       no hover reaches. Margin goes to 0 here, and the reveal moves the same
+       2px into padding, which is hit-tested. */
+    margin-inline: 0 !important;
     overflow: hidden !important;
     /* Closing waits 150ms, and the icons stay hoverable until it has run
        (visibility flips last), so the pointer can cross from the puzzle onto
@@ -3307,7 +3313,7 @@ sidebar-main {
     max-width: 60px !important;
     opacity: 1 !important;
     visibility: visible !important;
-    padding-inline: revert !important;
+    padding-inline: var(--space-xxsmall, 2px) !important;
     transition-delay: 0s !important;
   }
 }
