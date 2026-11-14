@@ -3268,6 +3268,52 @@ sidebar-main {
 
 
 /* ==========================================================================
+   EXTENSION DRAWER with vertical tabs (#96)
+   Vertical tabs leave the puzzle button in the nav-bar, never at the corner, and the extension icons beside it are
+   nav-bar items too, outside the tab bar's rules above, so --uc-hide-extension-icons did nothing for them. This hides
+   them and reveals them the way the tab bar does, only while the tab strip is vertical and the icons hide
+   (--uc-hide-extension-icons: 1). Horizontal tabs are not touched.
+   The drawer is the unbroken run of extension icons touching the puzzle button on its left: an icon is in it when
+   everything between that icon and the puzzle is another extension icon. What lies beyond the run does not matter, so
+   a spacer or a Firefox tool there does not break it, and a Firefox tool between the icons and the puzzle ends the
+   run. The run tucks away and slides out when the pointer rests on the puzzle, on the hamburger, on one of its
+   icons, or while an extension popup is open.
+   The reveal conditions are flat on purpose: a :has() inside a :has() is not allowed by the spec, and inside :is()
+   the branch is silently dropped. So "an icon of the run is hovered" is written with sibling combinators from the bar
+   (hovered icon, then the puzzle later, with only icons between), not by reusing the run selector. "An extension
+   popup is open" is looser for the same reason: an open popup from any extension button in the bar opens the drawer
+   and holds it open, wherever that extension sits, not only one in the run. Harmless in practice.
+   ========================================================================== */
+@container style(--uc-hide-extension-icons: 1) {
+  :where(:root:has(#tabbrowser-tabs[orient="vertical"])) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    padding-inline: 0 !important;
+    overflow: hidden !important;
+    /* Closing waits 150ms, and the icons stay hoverable until it has run
+       (visibility flips last), so the pointer can cross from the puzzle onto
+       an icon, or from one icon to the next, without the drawer shutting
+       under it. The reveal below drops the delay, so opening is immediate. */
+    transition: max-width 0.2s ease 150ms, opacity 0.2s ease 150ms,
+                padding-inline 0.2s ease 150ms, visibility 0s linear 350ms !important;
+  }
+  :root:root:has(#tabbrowser-tabs[orient="vertical"]) #nav-bar:is(
+    :has(#unified-extensions-button:is(:hover, [open])),
+    :has(#PanelUI-button:hover),
+    :has(#nav-bar-customization-target > toolbaritem[id$="-browser-action"]:hover ~ #unified-extensions-button):not(:has(#nav-bar-customization-target > toolbaritem[id$="-browser-action"]:hover ~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button)),
+    :has(#nav-bar-customization-target > toolbaritem[id$="-browser-action"] [open])
+  ) #nav-bar-customization-target > toolbaritem[id$="-browser-action"]:where(:has(~ #unified-extensions-button):not(:has(~ :not(toolbaritem[id$="-browser-action"], #unified-extensions-button, [hidden]) ~ #unified-extensions-button))) {
+    max-width: 60px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    padding-inline: revert !important;
+    transition-delay: 0s !important;
+  }
+}
+
+
+/* ==========================================================================
    TABS
    ========================================================================== */
 
@@ -4544,6 +4590,11 @@ html[id^="taskbartab"] #unified-extensions-button {
   /* Tabstrip extension-icon reveal */
   #TabsToolbar-customization-target > toolbaritem,
   #TabsToolbar-customization-target > toolbarbutton:where(:has(~ toolbaritem)) { transition: none !important; }
+
+  /* Nav-bar extension-icon reveal (vertical tabs). The hide rule keeps its vertical-tabs gate inside :where(), so the
+     two selectors tie and the later position wins. Only the durations go: the close delay is what lets the pointer
+     travel onto the icons, not motion, so it stays and the drawer snaps shut after it. (#96) */
+  #nav-bar-customization-target > toolbaritem[id$="-browser-action"] { transition-duration: 0s !important; }
 
   /* Dynamic bookmarks bar – reveal and collapse snap. The resting rule carries
      :not(:has(toolbarpaletteitem)), which outranked a bare #PersonalToolbar,
