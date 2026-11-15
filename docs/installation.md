@@ -6,9 +6,9 @@ title: Installation
 # Installation
 
 ---
-> Running classic (pre-Nova) Firefox?
+> FoxOne needs Firefox 153 ESR or newer with the Nova design turned on (step 2). It is tested with Firefox 160 and 153 ESR on Windows, macOS and Linux (GNOME).
 >
-> From release 3.0 onward, FoxOne targets the Nova UI. The stylesheet is dual-written (Proton & Nova) and should still work, but it is no longer tested. For a known-good classic build, use the [2.3](https://github.com/Firnschnee/FoxOne/releases/tag/2.3) release.
+> Running classic (pre-Nova) Firefox? Use the [2.3](https://github.com/Firnschnee/FoxOne/releases/tag/2.3) release, the last one built for it.
 
 ---
 
@@ -16,13 +16,16 @@ title: Installation
 
 Download [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) and [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css)
 
-### 2. Enable custom stylesheets
+### 2. Enable custom stylesheets and Nova
 
 In Firefox, go to `about:config` and set:
 
 ```
 toolkit.legacyUserProfileCustomizations.stylesheets = true
+browser.nova.enabled = true
 ```
+
+The first one lets Firefox load the stylesheets at all. The second one is Firefox' Nova design, which every part of FoxOne's layout is built against. Depending on the profile it can be off without you noticing, and other themes sometimes switch it off, so check it even if you think it is on. With Nova off, the one-line layout falls apart in odd places: misaligned buttons, a broken URL bar dropdown.
 
 ### 3. Find your profile folder
 
@@ -33,7 +36,9 @@ In Firefox, go to `about:support` and click **Open Profile Folder**.
 Create a `chrome` folder inside your profile folder if it doesn't exist, then copy these files into it:
 
 - [`userChrome.css`](https://github.com/Firnschnee/FoxOne/blob/main/userChrome.css) – browser UI styling
-- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) – new tab / home page colors
+- [`userContent.css`](https://github.com/Firnschnee/FoxOne/blob/main/userContent.css) – Firefox's internal pages (settings, add-ons, new tab) and the scrollbars on websites
+
+Copy the files rather than linking to them. A symlinked `userContent.css` works on the internal pages but silently does nothing on websites, because Firefox's sandbox blocks the link target there.
 
 ### 5. Restart Firefox
 

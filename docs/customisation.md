@@ -5,10 +5,6 @@ title: Customisation
 
 # Customisation
 ---
-> Running classic (pre-Nova) Firefox?
->
-> From release 3.0 onward, FoxOne targets the Nova UI! The stylesheet is dual-written (Proton & Nova) and should still work, but it is no longer tested. For a known-good classic build, use the [2.3](https://github.com/Firnschnee/FoxOne/releases/tag/2.3) release.
-
 > Looking for the **squared corners** look on windows 11? [This way!](https://github.com/rich-ayr/win11-toggle-rounded-corners)
 
 > Want FoxOne with genuine Windows 11 Mica transparency? Two themes build on it for that: Wintego's fork [Firefox-transparent-theme](https://github.com/Wintego/Firefox-transparent-theme) and snkiz's [FoxMica](https://github.com/snkiz/FoxMica).
