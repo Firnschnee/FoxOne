@@ -2415,6 +2415,56 @@ sidebar-main {
   }
 }
 
+/* Confirmation dialogs that open as a window of their own instead of a
+   subdialog, e.g. "Cookies und Website-Daten löschen" after removing
+   selected sites in the cookie manager (preferences/dialogs/
+   siteDataRemoveSelected.xhtml, opened from inside that subdialog), and
+   the generic window-modal prompts (toolkit commonDialog.xhtml, e.g. the
+   cookie manager's "Alle löschen" confirmation). As windows they load
+   userChrome.css, not userContent.css, so the in-content token block never
+   reaches them. Outside subdialog mode nothing in them reads a design
+   token anyway: global-shared.css paints the root with the -moz-Dialog
+   system colour (the violet-tinted Photon grey in dark mode), and
+   button.css styles the dialog buttons with ButtonFace / ButtonBorder and
+   a native `outline: auto` focus ring in the Windows accent blue.
+   Subdialog mode (:root[subdialog]) loads in-content/common.css instead,
+   so the surface rules skip it; the buttons are the exception, see
+   below. */
+@-moz-document url("chrome://global/content/commonDialog.xhtml"), url-prefix("chrome://browser/content/preferences/dialogs/") {
+  /* The site list of a multi-site removal (Field-coloured listbox). */
+  :root:not([subdialog]) richlistbox {
+    background-color: var(--uc-color-base) !important;
+    border-color: var(--uc-color-surface) !important;
+  }
+  :root:not([subdialog]),
+  :root:not([subdialog]) dialog {
+    background-color: var(--uc-color-base) !important;
+    color: var(--uc-color-text) !important;
+  }
+  /* XUL buttons draw as a native widget (-moz-default-appearance: button),
+     which paints its own ButtonFace fill, border and focus/default ring
+     and ignores colours from a user sheet. appearance: none hands the box
+     back to CSS, so the border has to be spelled out in full. The buttons
+     live in the <dialog>'s shadow root: neither a :root ancestor nor
+     ::part() from the user sheet reaches them there, a bare element
+     selector does (user sheets match inside shadow trees). That also
+     covers the subdialog variant, which then gets the same flat buttons. */
+  button {
+    appearance: none !important;
+    background-color: var(--uc-color-base) !important;
+    border: 1px solid var(--uc-color-surface) !important;
+    color: var(--uc-color-text) !important;
+    border-radius: var(--uc-radius-surface) !important;
+  }
+  button:hover {
+    color: var(--uc-color-accent) !important;
+  }
+  button:focus-visible {
+    outline: 2px solid var(--uc-color-accent) !important;
+    outline-offset: 1px !important;
+  }
+}
+
 
 /* AI chatbot chrome – everything but the chat iframe lives inside
    chrome://browser/content/genai/chat.html, not browser.xhtml.
