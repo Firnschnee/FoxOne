@@ -161,8 +161,13 @@
    * (2 from 4.0 still works and now means the same as 1.) */
   --uc-autohide-nav-buttons: 0;
 
-  /* Navigation buttons – delay before hover reveals them (with auto-hide 1), so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate (0ms = instant) */
-  --uc-autohide-nav-delay: 450ms;
+  /* Hover reveal delay – how long the pointer has to rest before a hover
+   * reveals the auto-hidden navigation buttons (on the nav bar) and the
+   * dynamic bookmarks bar (on the URL field), so a quick pass doesn't shift
+   * the URL bar or drop the bookmarks over the page. Leaving and keyboard
+   * focus stay immediate (0ms = instant). Replaces --uc-autohide-nav-delay
+   * and --uc-dynamic-bookmarks-hover-delay from 4.0. (#73) */
+  --uc-hover-reveal-delay: 450ms;
 
   /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
   --uc-hide-disabled-nav-buttons: 0;
@@ -185,10 +190,9 @@
    * Firefox' own collapse in charge everywhere else. */
   --uc-dynamic-bookmarks: 1;
 
-  /* Delay before the URL-bar hover reveals the bar, and before it hides again
-   * once the pointer leaves. The hide delay is the grace period for travelling
-   * from the URL bar down onto the bookmarks. */
-  --uc-dynamic-bookmarks-hover-delay: 450ms;
+  /* Delay before the bar hides again once the pointer leaves, the grace
+   * period for travelling from the URL bar down onto the bookmarks. The
+   * reveal delay is --uc-hover-reveal-delay further up. */
   --uc-dynamic-bookmarks-hide-delay: 150ms;
 
   /* Bookmarks bar on fresh tabs – keep the dynamic bar revealed while the
@@ -1186,8 +1190,8 @@ sidebar-main,
     /* Hover on the URL bar waits out the delay; hover on the bar itself (the
        bridge that lets the pointer travel down) opens immediately. */
     &:has(#urlbar-input:hover, .urlbar-input:hover) #PersonalToolbar {
-      transition-delay: var(--uc-dynamic-bookmarks-hover-delay),
-                        var(--uc-dynamic-bookmarks-hover-delay), 0s, 0s !important;
+      transition-delay: var(--uc-hover-reveal-delay),
+                        var(--uc-hover-reveal-delay), 0s, 0s !important;
     }
     & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])),
     :root:has(#placesContext:hover):not(:has(
@@ -2554,7 +2558,7 @@ sidebar-main {
     max-width: 60px !important;
     padding-inline: revert !important;
     margin-inline-end: 0 !important;
-    /* Only the reveal properties wait for --uc-autohide-nav-delay. The later entries override
+    /* Only the reveal properties wait for --uc-hover-reveal-delay. The later entries override
        `all` for those properties, so the hover colour still changes at once. Leaving uses the
        hidden state's transition above, so it has no delay. Keyboard focus reveals through the
        focus rule below and skips the delay. The margin has to wait with max-width: dropping
@@ -2562,12 +2566,12 @@ sidebar-main {
        length of the delay. */
     transition:
       all 0.2s ease,
-      opacity 0.2s ease var(--uc-autohide-nav-delay),
-      width 0.2s ease var(--uc-autohide-nav-delay),
-      min-width 0.2s ease var(--uc-autohide-nav-delay),
-      max-width 0.2s ease var(--uc-autohide-nav-delay),
-      padding 0.2s ease var(--uc-autohide-nav-delay),
-      margin-inline-end 0.2s ease var(--uc-autohide-nav-delay) !important;
+      opacity 0.2s ease var(--uc-hover-reveal-delay),
+      width 0.2s ease var(--uc-hover-reveal-delay),
+      min-width 0.2s ease var(--uc-hover-reveal-delay),
+      max-width 0.2s ease var(--uc-hover-reveal-delay),
+      padding 0.2s ease var(--uc-hover-reveal-delay),
+      margin-inline-end 0.2s ease var(--uc-hover-reveal-delay) !important;
   }
   /* Keyboard focus reveals the focused button alone, without delay. Focus in
      the URL bar no longer reveals anything, that was mode 1's focus reveal
@@ -3849,7 +3853,7 @@ findbar[hidden] {
       translate: 0 var(--uc-bookmarks-bar-height) !important;
     }
     &:has(#navigator-toolbox :is(#urlbar-input, .urlbar-input):hover) findbar:not([hidden]) {
-      transition-delay: 0s, 0s, 0s, var(--uc-dynamic-bookmarks-hover-delay) !important;
+      transition-delay: 0s, 0s, 0s, var(--uc-hover-reveal-delay) !important;
     }
     &:has(#PersonalToolbar:hover, #PersonalToolbar toolbarbutton[open]) findbar:not([hidden]),
     &:has(#placesContext:hover):not(:has(
@@ -4540,12 +4544,12 @@ html[id^="taskbartab"] #unified-extensions-button {
   ) {
     transition:
       all 0s,
-      opacity 0s var(--uc-autohide-nav-delay),
-      width 0s var(--uc-autohide-nav-delay),
-      min-width 0s var(--uc-autohide-nav-delay),
-      max-width 0s var(--uc-autohide-nav-delay),
-      padding 0s var(--uc-autohide-nav-delay),
-      margin-inline-end 0s var(--uc-autohide-nav-delay) !important;
+      opacity 0s var(--uc-hover-reveal-delay),
+      width 0s var(--uc-hover-reveal-delay),
+      min-width 0s var(--uc-hover-reveal-delay),
+      max-width 0s var(--uc-hover-reveal-delay),
+      padding 0s var(--uc-hover-reveal-delay),
+      margin-inline-end 0s var(--uc-hover-reveal-delay) !important;
   }
 
   /* Urlbar hover-reveal groups */
