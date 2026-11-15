@@ -97,10 +97,9 @@ What it deliberately does not touch:
 |---|---|---|
 | `--uc-show-context-splitview` | `0` | Context menu "Open Link in Split View" (`0` = hidden, `1` = visible) |
 | `--uc-show-all-tabs-button` | `0` | All-tabs button (`0` = hidden, `1` = visible) |
-| `--uc-autohide-nav-buttons` | `0` | Navigation buttons auto-hide (`0` = always visible, `1` = reveal on hover and focus, `2` = reveal on hover only) |
+| `--uc-autohide-nav-buttons` | `0` | Back, Forward, Reload and the VPN button (`0` = always visible, `1` = auto-hide, revealed by hovering the nav bar, and a button reached with the keyboard reveals itself, `3` = hidden completely, for mouse-button and shortcut users). `2` from 4.0 still works and means the same as `1` |
 | `--uc-autohide-nav-delay` | `450ms` | Delay before hovering reveals the auto-hidden navigation buttons, so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate |
 | `--uc-hide-disabled-nav-buttons` | `0` | Back/Forward while there's nowhere to go (`0` = dimmed, `1` = hidden) |
-| `--uc-hide-nav-buttons` | `0` | Remove navigation buttons entirely (`1` = hide, `0` = show) |
 | `--uc-hide-urlbar-buttons` | `0` | Hide URL-bar clutter icons – shield (tracking protection), reader mode, translations, bookmark star, add-to-taskbar (`1` = hide all, `0` = default reveal) |
 | `--uc-urlbar-icons-reveal` | `1` | When the URL-bar icons appear – reader mode, translations, add-to-taskbar, add-ons, permissions (`1` = only while resting on the bookmark star or the shield next to them, `0` = on URL-bar hover and focus). With `1`, auto-hidden navigation buttons stay hidden while you rest on the star. Ignored while `--uc-hide-urlbar-buttons` is `1` |
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |

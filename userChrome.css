@@ -153,17 +153,19 @@
   /* Tab loading progress bar (1 = show, 0 = hide) */
   --uc-show-loading-progress: 0;
 
-  /* Navigation buttons – auto-hide with hover reveal (0 = always show, 1 = reveal with hover and focus, 2 = reveal with hover) */
+  /* Navigation buttons (Back, Forward, Reload, VPN)
+   * 0 = always show
+   * 1 = auto-hide, reveal on hovering the nav bar. A button you reach with
+   *     the keyboard (Tab, arrow keys) reveals itself.
+   * 3 = hide completely, for mouse-button and shortcut users
+   * (2 from 4.0 still works and now means the same as 1.) */
   --uc-autohide-nav-buttons: 0;
 
-  /* Navigation buttons – delay before hover reveals them (with auto-hide 1 or 2), so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate (0ms = instant) */
+  /* Navigation buttons – delay before hover reveals them (with auto-hide 1), so a quick pass over the bar doesn't shift the URL bar. Leaving and keyboard focus stay immediate (0ms = instant) */
   --uc-autohide-nav-delay: 450ms;
 
   /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
   --uc-hide-disabled-nav-buttons: 0;
-
-  /* Navigation buttons – remove back/forward/reload for mouse button and shortcut users (1 = hide, 0 = show) */
-  --uc-hide-nav-buttons: 0;
 
   /* URL-bar clutter icons – fully hide shield (tracking protection), reader
    * mode, translations, bookmark star and add-to-taskbar so they can't be
@@ -2486,9 +2488,14 @@ sidebar-main {
    HIDDEN ELEMENTS
    ========================================================================== */
 
-/* Permanent hide – takes precedence over autohide. Skipped in Customize mode,
-   so the buttons can still be moved or dragged out of the bar. */
-@container style(--uc-hide-nav-buttons: 1) {
+/* Navigation buttons (Back, Forward, Reload, VPN) – one switch since 4.1
+   (#73): 0 = shown, 1 = auto-hide with hover reveal, 3 = hidden. 2 was the
+   hover-only mode next to 1 (hover + focus) and now means the same as 1, so
+   4.0 configs keep working. The old --uc-hide-nav-buttons: 1 is value 3. */
+
+/* 3: permanent hide. Skipped in Customize mode, so the buttons can still be
+   moved or dragged out of the bar. */
+@container style(--uc-autohide-nav-buttons: 3) {
   :where(:root:not([customizing])) :is(
     #back-button,
     #forward-button,
@@ -2500,14 +2507,19 @@ sidebar-main {
   }
 }
 
-/* Navigation buttons – auto-hide with hover reveal */
-/* Mode 1 and 2 apply hidden state – only inside #nav-bar and never in
-   Customize mode, so the palette and the customizable bar show every button
-   at full width. :where() keeps the qualifier at zero specificity, so the
-   hover and focus reveals below still win.
+/* 1 (and 2): auto-hide with hover reveal. Hidden state applies only inside
+   #nav-bar and never in Customize mode, so the palette and the customizable
+   bar show every button at full width. :where() keeps the qualifier at zero
+   specificity, so the hover and focus reveals below still win.
    width stays at the reveal's revert (auto) in both states, max-width does the
    collapsing. width: 0 here snapped at once on leave (auto can't interpolate)
-   while padding still animated, leaving a sliver of the arrow for 0.2s. */
+   while padding still animated, leaving a sliver of the arrow for 0.2s.
+   Keyboard: Firefox's toolbar navigation (Tab, arrow keys) skips every
+   button whose box is 0px wide, so a fully collapsed button could never take
+   focus and reveal itself. The hidden buttons therefore keep 1px and hand it
+   back with margin-inline-end: -1px, which nets out to 0 in the layout. The
+   margin sits on the top-level items only: #reload-button lives inside
+   #stop-reload-button, and a second -1px there would pull the bar 1px left. */
 @container style(--uc-autohide-nav-buttons: 1), style(--uc-autohide-nav-buttons: 2) {
   :where(:root:not([customizing])) #nav-bar :is(
     #back-button,
@@ -2517,14 +2529,22 @@ sidebar-main {
     #ipprotection-button
   ) {
     opacity: 0 !important;
-    max-width: 0 !important;
+    max-width: 1px !important;
     min-width: 0 !important;
     width: revert !important;
     padding: 0 !important;
     overflow: hidden !important;
     transition: all 0.2s ease !important;
   }
-  /* Hover reveal applies to both modes – revert restores native button widths */
+  :where(:root:not([customizing])) #nav-bar :is(
+    #back-button,
+    #forward-button,
+    #stop-reload-button,
+    #ipprotection-button
+  ) {
+    margin-inline-end: -1px !important;
+  }
+  /* Hover reveal – revert restores native button widths */
   #nav-bar:hover :is(
     #back-button,
     #forward-button,
@@ -2537,47 +2557,49 @@ sidebar-main {
     min-width: revert !important;
     max-width: 60px !important;
     padding-inline: revert !important;
+    margin-inline-end: 0 !important;
     /* Only the reveal properties wait for --uc-autohide-nav-delay. The later entries override
        `all` for those properties, so the hover colour still changes at once. Leaving uses the
        hidden state's transition above, so it has no delay. Keyboard focus reveals through the
-       focus rule below and skips the delay. */
+       focus rule below and skips the delay. The margin has to wait with max-width: dropping
+       the -1px at once while max-width still holds 1px nudged the URL bar right for the
+       length of the delay. */
     transition:
       all 0.2s ease,
       opacity 0.2s ease var(--uc-autohide-nav-delay),
       width 0.2s ease var(--uc-autohide-nav-delay),
       min-width 0.2s ease var(--uc-autohide-nav-delay),
       max-width 0.2s ease var(--uc-autohide-nav-delay),
-      padding 0.2s ease var(--uc-autohide-nav-delay) !important;
+      padding 0.2s ease var(--uc-autohide-nav-delay),
+      margin-inline-end 0.2s ease var(--uc-autohide-nav-delay) !important;
   }
-  /* Back button has extra native leading padding (8px left vs 2px); revert misses it */
-  #nav-bar:hover #back-button {
-    padding-inline-start: 8px !important;
-  }
-  /* Disabled back/forward stay visible but dimmed, like native */
-  #nav-bar:hover :is(#back-button, #forward-button)[disabled] {
-    opacity: 0.4 !important;
-  }
-}
-
-/* Mode 1 also reveals on focus */
-@container style(--uc-autohide-nav-buttons: 1) {
-  #nav-bar:focus-within :is(
+  /* Keyboard focus reveals the focused button alone, without delay. Focus in
+     the URL bar no longer reveals anything, that was mode 1's focus reveal
+     and got in the way of click-to-cancel. Toolbar buttons don't take focus
+     from a mouse click, so this only fires from the keyboard. :focus-within
+     also catches #stop-reload-button while its inner #reload-button has
+     focus. */
+  #nav-bar :is(
     #back-button,
     #forward-button,
     #reload-button,
     #stop-reload-button,
     #ipprotection-button
-  ) {
+  ):focus-within {
     opacity: 1 !important;
     width: revert !important;
     min-width: revert !important;
     max-width: 60px !important;
     padding-inline: revert !important;
+    margin-inline-end: 0 !important;
   }
-  #nav-bar:focus-within #back-button {
+  /* Back button has extra native leading padding (8px left vs 2px); revert misses it */
+  #nav-bar:hover #back-button,
+  #nav-bar #back-button:focus-within {
     padding-inline-start: 8px !important;
   }
-  #nav-bar:focus-within :is(#back-button, #forward-button)[disabled] {
+  /* Disabled back/forward stay visible but dimmed, like native */
+  #nav-bar:hover :is(#back-button, #forward-button)[disabled] {
     opacity: 0.4 !important;
   }
 }
@@ -2591,37 +2613,20 @@ sidebar-main {
    width and min-width keep the reveal's revert (auto) and follow max-width
    down. Setting width: 0 as well would snap it at once (auto can't
    interpolate) while padding still waits, leaving a sliver of the arrow
-   visible for 300ms. Mode 1 keeps its focus reveal, :where() holds that
-   exclusion at zero specificity so both modes tie with the reduced-motion
-   override at the end of the file. #id :has(#id) :is(#id) outranks the
-   #nav-bar:hover reveal above. */
+   visible for 300ms. Margin stays at the hover reveal's 0, which nets the
+   same 0px as the hidden state. A button with keyboard focus stays out;
+   :where() holds that exclusion at zero specificity so the rule ties with
+   the reduced-motion override at the end of the file. #id :has(#id) :is(#id)
+   outranks the #nav-bar:hover reveal above. */
 @container style(--uc-urlbar-icons-reveal: 1) {
-  @container style(--uc-autohide-nav-buttons: 2) {
+  @container style(--uc-autohide-nav-buttons: 1), style(--uc-autohide-nav-buttons: 2) {
     :where(:root:not([customizing])) #nav-bar:has(#page-action-buttons:hover) :is(
       #back-button,
       #forward-button,
       #reload-button,
       #stop-reload-button,
       #ipprotection-button
-    ) {
-      opacity: 0 !important;
-      max-width: 0 !important;
-      padding: 0 !important;
-      transition:
-        all 0.2s ease,
-        opacity 0.2s ease 0.3s,
-        max-width 0.2s ease 0.3s,
-        padding 0.2s ease 0.3s !important;
-    }
-  }
-  @container style(--uc-autohide-nav-buttons: 1) {
-    :where(:root:not([customizing])) #nav-bar:where(:not(:focus-within)):has(#page-action-buttons:hover) :is(
-      #back-button,
-      #forward-button,
-      #reload-button,
-      #stop-reload-button,
-      #ipprotection-button
-    ) {
+    ):where(:not(:focus-within)) {
       opacity: 0 !important;
       max-width: 0 !important;
       padding: 0 !important;
@@ -2965,14 +2970,14 @@ sidebar-main {
    HAMBURGER MENU – fixed position next to the window control buttons.
    Base rule uses the --uc-window-buttons-width fallback; non-macOS overrides
    it below with CSS anchor positioning so it tracks the real box width.
+   --uc-window-buttons-width is internal since 4.1 (#73): no longer in CONFIG,
+   every use reads it as var(--uc-window-buttons-width, 138px), so the macOS
+   and hidden-controls rules (0px) and an old CONFIG override still win.
    ========================================================================== */
 
 #PanelUI-button {
   position: fixed !important;
   right: var(--uc-window-buttons-width, 138px) !important;
-   --uc-window-buttons-width is internal since 4.1 (#73): no longer in CONFIG,
-   every use reads it as var(--uc-window-buttons-width, 138px), so the macOS
-   and hidden-controls rules (0px) and an old CONFIG override still win.
   top: 0 !important;
   height: var(--uc-row-height) !important;
   z-index: 1000 !important;
@@ -4593,7 +4598,8 @@ html[id^="taskbartab"] #unified-extensions-button {
       width 0s var(--uc-autohide-nav-delay),
       min-width 0s var(--uc-autohide-nav-delay),
       max-width 0s var(--uc-autohide-nav-delay),
-      padding 0s var(--uc-autohide-nav-delay) !important;
+      padding 0s var(--uc-autohide-nav-delay),
+      margin-inline-end 0s var(--uc-autohide-nav-delay) !important;
   }
 
   /* Urlbar hover-reveal groups */
