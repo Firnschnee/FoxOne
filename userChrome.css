@@ -621,6 +621,18 @@ tooltip {
   border-radius: var(--uc-radius-surface);
 }
 
+/* Tab hover preview (issue #102). The panel shell already follows the popup
+   radius above, but tab-hover-preview.css rounds two surfaces inside it on
+   their own: the thumbnail canvas and the tab-note box, both at
+   --border-radius-medium. At the square default they sat as rounded cards
+   in a square panel. They are rows inside the panel, so they take the row
+   radius, the same shell/row pairing every other popup uses (Firefox pairs
+   them the same way: large panel, medium thumbnail). */
+.tab-preview-thumbnail-container > canvas,
+.tab-note-preview-container {
+  border-radius: var(--uc-radius-row) !important;
+}
+
 /* Extensions-panel gear buttons escape the hover treatment above: toolkit
    declares the --uei-button-* family at :root (--uei-button-hover-bgcolor:
    var(--button-background-color-ghost-hover), unified-extensions.css), so
