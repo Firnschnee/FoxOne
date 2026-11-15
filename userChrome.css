@@ -1188,10 +1188,14 @@ sidebar-main,
       padding-block: 6px !important;
     }
     /* Hover on the URL bar waits out the delay; hover on the bar itself (the
-       bridge that lets the pointer travel down) opens immediately. */
+       bridge that lets the pointer travel down) opens immediately. The hit
+       box (max-height, padding-block) waits as well: opening it at once left
+       an invisible bar under the URL field during the delay, and a pointer
+       passing over the URL text on its way down to the page landed on it and
+       fired the bridge, a flash of the bar on every quick pass. */
     &:has(#urlbar-input:hover, .urlbar-input:hover) #PersonalToolbar {
-      transition-delay: var(--uc-hover-reveal-delay),
-                        var(--uc-hover-reveal-delay), 0s, 0s !important;
+      transition-delay: var(--uc-hover-reveal-delay), var(--uc-hover-reveal-delay),
+                        var(--uc-hover-reveal-delay), var(--uc-hover-reveal-delay) !important;
     }
     & #PersonalToolbar:is(:hover, :has(toolbarbutton[open])),
     :root:has(#placesContext:hover):not(:has(
