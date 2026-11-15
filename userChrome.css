@@ -603,6 +603,24 @@
   --panel-menuitem-border-radius: var(--uc-radius-row) !important;
 }
 
+/* Tooltips (tab titles, toolbar buttons, page title attributes) are not
+   part of the popup token family. On Windows toolkit xul.css drops the
+   native appearance and paints them with hard-coded literals: background
+   light-dark(#f9f9fb, #2b2a33), border light-dark(#67676c, #f9f9fb), 4px
+   radius. #2b2a33 is the violet-tinted Photon grey, so every tooltip read
+   as a lilac box in a Gruvbox window. Map them onto the popup surface:
+   base background, surface border, square corners like every other
+   popup. Those literals sit in a UA sheet without !important, so plain
+   user-sheet declarations win. The rule also covers the content-area
+   tooltips (#remoteBrowserTooltip, #aHTMLTooltip), which otherwise follow
+   the web page's colour scheme and flash white on light sites. */
+tooltip {
+  background-color: var(--uc-color-base);
+  color: var(--uc-color-text);
+  border-color: var(--uc-color-surface);
+  border-radius: var(--uc-radius-surface);
+}
+
 /* Extensions-panel gear buttons escape the hover treatment above: toolkit
    declares the --uei-button-* family at :root (--uei-button-hover-bgcolor:
    var(--button-background-color-ghost-hover), unified-extensions.css), so
