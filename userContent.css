@@ -30,9 +30,12 @@
 /* Derived: the radius every in-content surface reads. Zero at the default
    --uc-rounded: 0, --uc-border-radius at 1. One value for everything, the
    stock page runs three (24/16/12 under Nova) and the whole point of the
-   toggle is one shape language shared with the chrome. */
+   toggle is one shape language shared with the chrome. The row radius is
+   the one exception, as in userChrome.css: highlighted rows inside a
+   popup take half the popup's radius, so they sit concentric in it. */
 :root {
   --uc-radius-surface: calc(var(--uc-rounded) * var(--uc-border-radius));
+  --uc-radius-row: calc(var(--uc-radius-surface) / 2);
 }
 
 
@@ -250,6 +253,15 @@
     --toolbarbutton-border-radius: var(--uc-radius-surface) !important;
     --input-text-border-radius: var(--uc-radius-surface) !important;
     --input-search-border-radius: var(--uc-radius-surface) !important;
+    /* Popup menus (panel-list: the about:addons gear menu and the "…"
+       menu on each add-on card). Under Nova the shell rounds at
+       --popup-border-radius (xlarge) and the hovered rows at
+       --border-radius-large, so they stayed round on square pages
+       (issue #103). panel-list and panel-item only reference these two
+       on their host, so :root reaches them. Shell and row get the same
+       pairing as the chrome popups. */
+    --panel-border-radius: var(--uc-radius-surface) !important;
+    --panel-menuitem-border-radius: var(--uc-radius-row) !important;
   }
   /* Dropdowns re-declare their radius on the host (moz-select.tokens.css),
      same host-level treatment as the box family below. */
