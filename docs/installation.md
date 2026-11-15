@@ -94,6 +94,5 @@ A few things behave differently from editing FoxOne's CONFIG block directly, bec
 
 - Put overrides of the dark palette (`--uc-color-*`, `--uc-tab-hover-text`) in a `prefers-color-scheme: dark` block as above. Otherwise they also apply in light mode. `userContent.css` has no `--uc-light-*` settings, so set the light colours there in a `prefers-color-scheme: light` block.
 - Tab widths you set here apply at every window width. FoxOne normally widens tabs on wide windows.
-- On macOS, leave `--uc-window-buttons-width` alone. FoxOne sets it to `0px` there.
 
 When an update removes or renames a setting, that setting simply stops doing anything. The release notes list every such change.

@@ -83,7 +83,6 @@ What it deliberately does not touch:
 
 | Variable | Default | Description |
 |---|---|---|
-| `--uc-window-buttons-width` | `138px` | Window control button width. Fallback only: on non-macOS the hamburger auto-tracks the real control box via CSS anchor positioning; used on macOS and on Firefox builds without anchor support (auto `0px` on macOS) |
 | `--uc-hide-window-buttons` | `0` | Hide the window controls (minimise, maximise, close) to free their space (`1` = hide, `0` = show). Windows and Linux only, macOS keeps its traffic lights. Close with `Ctrl+Shift+W` or `Alt+F4`, maximise by double-clicking the drag space. In fullscreen the exit button goes too, `F11` leaves |
 | `--uc-hamburger-width` | `36px` | Hamburger menu reserved width |
 | `--uc-extensions-button-right` | `1` | Pin the extensions (puzzle) button to the right edge next to the hamburger instead of the nav-bar after the URL bar (`1` = right, `0` = Firefox default). Firefox locks the button to the nav-bar in Customize Toolbar, so this is the only way to get it there |
@@ -106,7 +105,6 @@ What it deliberately does not touch:
 | `--uc-urlbar-icons-reveal` | `1` | When the URL-bar icons appear – reader mode, translations, add-to-taskbar, add-ons, permissions (`1` = only while resting on the bookmark star or the shield next to them, `0` = on URL-bar hover and focus). With `1`, auto-hidden navigation buttons stay hidden while you rest on the star. Ignored while `--uc-hide-urlbar-buttons` is `1` |
 | `--uc-hide-extension-icons` | `1` | Hide pinned toolbar extension icons, reveal them on hamburger hover (`1` = hide + hover-reveal, `0` = always show) |
 | `--uc-show-loading-progress` | `0` | Loading progress bar on the active tab while a page loads (`1` = show, `0` = hide) |
-| `--uc-container-line-top` | `1` | Container tab indicator line position (`1` = top of the tab, the Firefox 153 layout, `0` = bottom edge, the classic pre-153 look) |
 | `--uc-dynamic-bookmarks` | `1` | Bookmarks bar as an overlay that reveals on hovering the URL field (not its icons) instead of a permanent row (`1` = dynamic, `0` = static row on its own line). Needs Firefox' bookmarks toolbar set to "Always show" |
 | `--uc-dynamic-bookmarks-hover-delay` | `450ms` | Delay before the URL-bar hover reveals the bar |
 | `--uc-dynamic-bookmarks-hide-delay` | `150ms` | Grace period before the bar collapses again, for travelling from the URL bar onto it |
@@ -146,7 +144,3 @@ The hand-off keys off the `lwtheme` attribute Firefox sets on the root element w
 | `--show-match-case` | `1` | Show match-case button (`1` / `0`) |
 | `--show-match-diacritics` | `1` | Show match-diacritics button (`1` / `0`) |
 | `--show-whole-words` | `1` | Show whole-words button (`1` / `0`) |
-| `--highlight-all-position` | `0` | Button order position |
-| `--match-case-position` | `1` | Button order position |
-| `--match-diacritics-position` | `2` | Button order position |
-| `--whole-words-position` | `3` | Button order position |

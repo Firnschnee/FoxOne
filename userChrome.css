@@ -85,20 +85,11 @@
   --uc-tab-hover-text: #ffda85;
   --uc-light-tab-hover-text: #855d22;
 
-  /* Container tab indicator line (0 = bottom edge, 1 = top) */
-  --uc-container-line-top: 1;
-
   /* Context menu: "Open Link in Split View" (0 = hidden, 1 = visible) */
   --uc-show-context-splitview: 0;
 
   /* All-tabs button (0 = hidden, 1 = visible) */
   --uc-show-all-tabs-button: 0;
-
-  /* Windows control button width. Fallback only: on non-macOS the hamburger
-     auto-tracks the real window-control box via CSS anchor positioning, so
-     this value is used just on macOS and on Firefox builds without anchor
-     support. No need to measure it by hand on a modern build. */
-  --uc-window-buttons-width: 138px;
 
   /* Window controls (minimise/maximise/close) – hide them to free the space
    * (1 = hide, 0 = show). Windows/Linux only, macOS keeps its traffic lights.
@@ -158,12 +149,6 @@
   --show-match-case:       1;
   --show-match-diacritics: 1;
   --show-whole-words:      1;
-
-  /* Find Bar Options Position */
-  --highlight-all-position:    0;
-  --match-case-position:       1;
-  --match-diacritics-position: 2;
-  --whole-words-position:      3;
 
   /* Tab loading progress bar (1 = show, 0 = hide) */
   --uc-show-loading-progress: 0;
@@ -2984,7 +2969,10 @@ sidebar-main {
 
 #PanelUI-button {
   position: fixed !important;
-  right: var(--uc-window-buttons-width) !important;
+  right: var(--uc-window-buttons-width, 138px) !important;
+   --uc-window-buttons-width is internal since 4.1 (#73): no longer in CONFIG,
+   every use reads it as var(--uc-window-buttons-width, 138px), so the macOS
+   and hidden-controls rules (0px) and an old CONFIG override still win.
   top: 0 !important;
   height: var(--uc-row-height) !important;
   z-index: 1000 !important;
@@ -3004,7 +2992,7 @@ sidebar-main {
     anchor-name: --uc-winbtns !important;
   }
   #PanelUI-button {
-    right: anchor(--uc-winbtns left, var(--uc-window-buttons-width)) !important;
+    right: anchor(--uc-winbtns left, var(--uc-window-buttons-width, 138px)) !important;
   }
 }
 
@@ -3255,7 +3243,7 @@ sidebar-main {
 @container style(--uc-extensions-button-right: 1) {
   #unified-extensions-button {
     position: fixed !important;
-    right: calc(var(--uc-window-buttons-width) + var(--uc-extensions-button-width)) !important;
+    right: calc(var(--uc-window-buttons-width, 138px) + var(--uc-extensions-button-width)) !important;
     top: 0 !important;
     height: var(--uc-row-height) !important;
     /* the nav-bar 1px nudge from the trust-icon family no longer applies */
@@ -3266,7 +3254,7 @@ sidebar-main {
   }
   @media not (-moz-platform: macos) {
     #unified-extensions-button {
-      right: calc(anchor(--uc-winbtns left, var(--uc-window-buttons-width)) + var(--uc-extensions-button-width)) !important;
+      right: calc(anchor(--uc-winbtns left, var(--uc-window-buttons-width, 138px)) + var(--uc-extensions-button-width)) !important;
     }
   }
   :root:has(#tabbrowser-tabs[orient="vertical"]) #unified-extensions-button {
@@ -3537,20 +3525,19 @@ sidebar-main {
   box-shadow: 0 -1px 10px 1px var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
-/* container tabs indicator (position toggle in CONFIG)
-   Nova puts its 4px stripe at the top of the tab and shifts it a further -6px
-   into the edge; the 1px FoxOne line inherits both. Default pins it to the
-   bottom edge on the same geometry as the pinned-tab indicator above; the
-   style query at 1 puts it back on top, un-shifted. */
+/* Container tabs indicator. Nova puts its stripe at the top of the tab, and
+   FoxOne keeps it there as a 1px line: in flow, 2px clear of the tab edge so
+   the glow has room on both sides, any inset shift cancelled by
+   inset-block-start: 0. Pinning it flat to the edge instead costs half the
+   glow and reads as the muted pre-3.4.5 line. The bottom-edge variant
+   (--uc-container-line-top: 0) went in 4.1 (#73). */
 #TabsToolbar .tab-context-line {
   height: 1px !important;
-  position: absolute !important;
-  inset-block-start: auto !important;
-  inset-block-end: 0 !important;
-  inset-inline: 10px !important;
-  margin: 0 !important;
-  /* Glow points up, away from the bottom tab edge, so it isn't clipped. */
-  box-shadow: 0 -1px 10px 1px var(--identity-tab-color) !important;
+  position: relative !important;
+  inset-block-start: 0 !important;
+  margin: 2px 10px 0 10px !important;
+  /* Glow points down, away from the top tab edge, so it isn't clipped. */
+  box-shadow: 0 1px 10px 1px var(--identity-tab-color) !important;
 }
 .tab-context-line {
   /* Same lift as the urlbar indicator: boosted core, raw colour for the glow.
@@ -3558,20 +3545,6 @@ sidebar-main {
      alone, where a directional glow has no edge to point away from. */
   background-color: oklch(from var(--identity-icon-color) calc(l + 0.12) calc(c * 1.15) h) !important;
   box-shadow: 0 0 10px 1px var(--identity-tab-color) !important;
-}
-/* Top placement is the 3.4.5 geometry: back into flow, 2px clear of the tab
-   edge so the glow has room on both sides, Nova's -6px shift cancelled by
-   inset-block-start: 0. Pinning it flat to the edge instead costs half the
-   glow and reads as the muted pre-3.4.5 line. */
-@container style(--uc-container-line-top: 1) {
-  #TabsToolbar .tab-context-line {
-    position: relative !important;
-    inset-block-start: 0 !important;
-    inset-block-end: auto !important;
-    inset-inline: auto !important;
-    margin: 2px 10px 0 10px !important;
-    box-shadow: 0 1px 10px 1px var(--identity-tab-color) !important;
-  }
 }
 
 /* show favicon when media is playing but tab is hovered */
@@ -3995,25 +3968,21 @@ label.found-matches {
 }
 
 .findbar-highlight {
-  order: var(--highlight-all-position) !important;
   width: calc(30px * var(--show-highlight-all)) !important;
   height: calc(24px * var(--show-highlight-all)) !important;
   margin-right: calc(4px * var(--show-highlight-all)) !important;
 }
 .findbar-case-sensitive {
-  order: var(--match-case-position) !important;
   width: calc(30px * var(--show-match-case)) !important;
   height: calc(24px * var(--show-match-case)) !important;
   margin-right: calc(4px * var(--show-match-case)) !important;
 }
 .findbar-match-diacritics {
-  order: var(--match-diacritics-position) !important;
   width: calc(30px * var(--show-match-diacritics)) !important;
   height: calc(24px * var(--show-match-diacritics)) !important;
   margin-right: calc(4px * var(--show-match-diacritics)) !important;
 }
 .findbar-entire-word {
-  order: var(--whole-words-position) !important;
   width: calc(30px * var(--show-whole-words)) !important;
   height: calc(24px * var(--show-whole-words)) !important;
   margin-right: calc(4px * var(--show-whole-words)) !important;
