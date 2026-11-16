@@ -3507,6 +3507,28 @@ sidebar-main {
   color: var(--tab-selected-textcolor, #fabd2f) !important;
 }
 
+/* Collapsed vertical strip: Nova's X is a badge on the tab's top corner,
+   a circle of 15px with 3.5px padding on ESR 153 and 16px with 2px on
+   Nova (an 8px and a 12px glyph). On a strip about 48px wide that leaves
+   little tab to click, so it is 12px with 2px padding, an 8px glyph on
+   every build. The corner follows the rounding switch, square by default
+   and 2px with rounding on, like the horizontal X. (#101) */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-close-button {
+  width: 12px !important;
+  height: 12px !important;
+  padding: 2px !important;
+  border-radius: calc(var(--uc-radius-row) / 2) !important;
+}
+/* Firefox pins the badge to the tab's start edge whichever side the
+   sidebar is on, so on the right it hangs over the page. Mirror it to
+   the end edge there. Nightly sets sidebar-positionend on the root, ESR
+   153 and Beta only on the sidebar container. (#101) */
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-close-button {
+  inset-inline-start: auto !important;
+  inset-inline-end: 2px !important;
+}
+
 /* adaptive tab width. Horizontal strip only, like Nova's own tab widths: in
    the vertical strip the tabs fill the sidebar, and the min-width pushed them
    past the collapsed strip's edge. (#85) */
