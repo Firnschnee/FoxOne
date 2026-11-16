@@ -11,7 +11,7 @@ title: Customisation
 
 
 ---
-All configuration lives in the `:root` block at the top of `userChrome.css`. It is grouped by where a setting acts: palette, look, tab bar, nav bar and URL bar, bookmarks bar, find bar, window controls and other. Sizes and offsets follow in an [Advanced](#advanced) part in the same order. This page follows the same order.
+All configuration lives in the `:root` block at the top of `userChrome.css`. It is grouped by where a setting acts: palette, look, tab bar, nav bar and URL bar, bookmarks bar, find bar, window controls and other. Sizes, offsets and delays follow in an [Advanced](#advanced) part in the same order. This page follows the same order.
 
 ### Color Palette
 
@@ -123,7 +123,7 @@ On macOS the bar collapses when you right-click a bookmark, because the native c
 
 ### Advanced
 
-Sizes and offsets, in the same order as the sections above. The defaults fit most setups.
+Sizes, offsets and delays, in the same order as the sections above. The defaults fit most setups.
 
 | Variable | Default | Description |
 |---|---|---|
@@ -146,10 +146,12 @@ Sizes and offsets, in the same order as the sections above. The defaults fit mos
 | `--findbar-right` | `8px` | Distance from right edge |
 | `--findbar-width` | `360px` | Preferred width |
 | **Window controls** | | |
-| `--uc-hamburger-width` | `36px` | Hamburger menu reserved width |
-| `--uc-extensions-button-width` | `38px` | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
+| `--uc-hamburger-width` | follows density (32 / 36 / 38px) | Hamburger menu reserved width. With the puzzle pinned it acts as the puzzle's slot, the names describe the opposite buttons |
+| `--uc-extensions-button-width` | follows density (34 / 38 / 40px) | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
 | **Other** | | |
 | `--uc-status-panel-spacing` | `8px` | Statuspanel distance from window border (`0` = corner); matches the findbar's `8px` inset |
+
+The two window-control widths follow Firefox's density by default (compact / normal / touch, as given in the table) and get narrower in small windows, the same way Firefox shrinks its own buttons there. Set a number, for example `--uc-hamburger-width: 36px;`, to fix a width.
 
 ### Adaptive Tab Bar Colour
 

@@ -16,8 +16,8 @@
 :root {
   /* Settings come first, grouped by where they act: palette, look, tab bar,
      nav bar and URL bar, bookmarks bar, find bar, window controls, other.
-     Sizes and offsets follow in the ADVANCED part further down, in the same
-     order. Most setups never need to touch those. */
+     Sizes, offsets and delays follow in the ADVANCED part further down, in
+     the same order. Most setups never need to touch those. */
 
   /* ---------------------------------------------------------------------
      PALETTE
@@ -162,7 +162,7 @@
   --uc-show-context-splitview: 0;
 
   /* =====================================================================
-     ADVANCED – sizes and offsets, in the same order as above
+     ADVANCED – sizes, offsets and delays, in the same order as above
      ===================================================================== */
 
   /* --- Look --- */
@@ -244,17 +244,20 @@
    * Naming note: with the puzzle pinned (--uc-extensions-button-right: 1)
    * the two width names describe the opposite buttons. This one acts as the
    * PUZZLE's width, --uc-extensions-button-width below as the HAMBURGER's.
-   * The names stay so existing overrides keep working. (#73) */
-  --uc-hamburger-width: 36px;
+   * The names stay so existing overrides keep working. (#73)
+   * Both widths follow Firefox's density on their own (32 / 34 compact,
+   * 36 / 38 normal, 38 / 40 touch, narrower in small windows). Put a number
+   * here instead of the var() to fix a width, e.g. 36px. How the defaults
+   * are worked out is in the BUTTON RESERVATIONS block below the config. */
+  --uc-hamburger-width: var(--uc-hamburger-width-auto);
 
   /* Width reserved for the pinned puzzle button. Also its distance from the
    * window controls beyond the hamburger, so it doubles as the gap knob:
    * lower it to pull the two buttons closer, raise it to space them out.
-   * The hamburger is 4px wider than the puzzle (40 vs 36 at normal density),
-   * so 38 puts the two at regular button spacing. Measured on Windows, FF159;
-   * compact and normal both read even with 36 / 38. Despite the name it
-   * stands for the HAMBURGER's slot, see the naming note above. (#73) */
-  --uc-extensions-button-width: 38px;
+   * The default puts the two at regular button spacing, e.g. 38px at normal
+   * density. Despite the name it stands for the HAMBURGER's slot, see the
+   * naming note above. (#73) */
+  --uc-extensions-button-width: var(--uc-extensions-button-width-auto);
 
   /* --- Other --- */
 
@@ -326,6 +329,42 @@
 
 :root {
   --uc-row-height: var(--tabstrip-min-height);
+}
+
+/* ==========================================================================
+   BUTTON RESERVATIONS – the defaults for --uc-hamburger-width and
+   --uc-extensions-button-width, derived from Firefox's toolbar button
+   padding (#73).
+
+   Not config: CONFIG hands these to the two width variables, and a number
+   set there replaces them.
+
+   A toolbar button is a 16px icon plus inner and outer padding on both
+   sides. Firefox sets both paddings on :root and changes them with the
+   density, below 900 / 800 / 700px window width and in the mini window, so
+   the reservations follow all of that. Measured widths at compact / normal /
+   touch: puzzle 32 / 36 / 38, hamburger 4px more, because the nav-bar's last
+   button takes the toolbar's edge padding instead of the outer padding on
+   its outside.
+   - --uc-hamburger-width-auto is one button box. With the puzzle pinned it
+     acts as the puzzle's slot (see the naming note in CONFIG).
+   - --uc-extensions-button-width-auto is the box plus HALF the edge extra,
+     tuned by eye: the full extra left the puzzle looking too far from the
+     hamburger. Rounded to whole pixels, since 1px outer padding below 900px
+     makes the half 2.5px.
+   That gives 32 / 34, 36 / 38 and 38 / 40 at compact / normal / touch.
+   The fallbacks are the normal-density values, so if Firefox renames the
+   tokens again (the older --toolbarbutton-inner-padding names are gone), the
+   result is the 36 / 38 that shipped in 4.0. --toolbar-edge-padding is the
+   edge token on Nightly 162 (4px), --toolbar-padding-inline the one up to
+   then (6px under Nova).
+   ========================================================================== */
+
+:root {
+  --uc-hamburger-width-auto: calc(16px + 2 * var(--toolbarbutton-padding-inner, 8px)
+                                       + 2 * var(--toolbarbutton-padding-outer, 2px));
+  --uc-extensions-button-width-auto: calc(var(--uc-hamburger-width-auto)
+    + round((var(--toolbar-edge-padding, var(--toolbar-padding-inline, 6px)) - var(--toolbarbutton-padding-outer, 2px)) / 2, 1px));
 }
 
 /* Wide-window tab widths (>= 1710px physical, ~2/3 of WQHD). Restores the
