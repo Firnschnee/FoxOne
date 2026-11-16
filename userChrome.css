@@ -126,14 +126,10 @@
    * stands for the HAMBURGER's slot, see the naming note above. (#73) */
   --uc-extensions-button-width: 38px;
 
-  /* Extra toolbar button width (extensions, uBlock etc.) */
-  --uc-toolbar-button-width: 36px;
-  
-  /* Standalone new-tab button width (set to 0 if removed from toolbar) */
-  --uc-newtab-width: 36px;
-
-  /* Drag space – grab zone after the tabs for moving the window. Kept small;
-     it is functional space, not just a gap, so don't drop it to 0. */
+  /* Drag space – grab zone after the tabs for moving the window. It stays
+     there even when a new-tab button or extension icons follow the tabs.
+     Kept small, but it is functional space, not just a gap, so don't drop
+     it to 0. */
   --uc-drag-space: 20px;
 
   /* Findbar – floating search bar */
@@ -1377,11 +1373,18 @@ sidebar-main,
   width: 100%;
 }
 
-/* The last term reserves the pinned puzzle button (#48); it is a 0/1 toggle,
-   so the product is 0 while the button stays in the nav-bar. */
+/* Only the fixed buttons are reserved here: the hamburger and the pinned
+   puzzle (#48, a 0/1 toggle, so its term is 0 while the puzzle stays in the
+   nav-bar). Buttons in the tab bar's own flow, such as the standalone new-tab
+   button or extension icons, take their own room. (#73)
+   The drag space is a margin, so it stays after the tabs when such buttons
+   fill the row and max-width no longer binds. It is also subtracted in
+   max-width: the margin sits outside the capped box, and with nothing in
+   flow after the tabs, only the cap keeps it clear of the fixed buttons. */
 #tabbrowser-tabs:not([orient="vertical"]) {
-  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-toolbar-button-width) - var(--uc-drag-space) - var(--uc-newtab-width)
+  max-width: calc(100% - var(--uc-hamburger-width) - var(--uc-drag-space)
                   - var(--uc-extensions-button-width) * var(--uc-extensions-button-right)) !important;
+  margin-inline-end: var(--uc-drag-space) !important;
 }
 
 /* Widen only while the results view is open. The toolbox-wide :focus-within
@@ -3044,8 +3047,8 @@ sidebar-main {
 /* ==========================================================================
    TOOLBAR EXTENSION BUTTONS – push to right, next to hamburger.
    Only targets <toolbarbutton> and <toolbaritem> children of #TabsToolbar
-   that are NOT known built-in elements. Adjust --uc-toolbar-button-width
-   in CONFIG for multiple buttons (36px per button).
+   that are NOT known built-in elements. They sit in the toolbar's flow, so
+   the tab strip shrinks for them on its own, however many there are.
    ========================================================================== */
 
 #TabsToolbar-customization-target > toolbaritem {

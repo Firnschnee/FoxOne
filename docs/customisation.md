@@ -87,9 +87,7 @@ What it deliberately does not touch:
 | `--uc-hamburger-width` | `36px` | Hamburger menu reserved width |
 | `--uc-extensions-button-right` | `1` | Pin the extensions (puzzle) button to the right edge next to the hamburger instead of the nav-bar after the URL bar (`1` = right, `0` = Firefox default). Firefox locks the button to the nav-bar in Customize Toolbar, so this is the only way to get it there |
 | `--uc-extensions-button-width` | `38px` | Width reserved for the pinned puzzle button. Also its distance from the window controls beyond the hamburger, so it doubles as the gap between the two: lower to pull them closer, raise to space them out |
-| `--uc-toolbar-button-width` | `36px` | Extension button width (per button) |
-| `--uc-newtab-width` | `36px` | Standalone new-tab button width (`0` if removed) |
-| `--uc-drag-space` | `20px` | Grab zone after the tabs for moving the window (functional space, don't set to `0`) |
+| `--uc-drag-space` | `20px` | Grab zone after the tabs for moving the window, kept even when a new-tab button or extension icons follow the tabs (functional space, don't set to `0`) |
 
 ### Visibility Toggles
 
