@@ -14,13 +14,22 @@
    ========================================================================== */
 
 :root {
+  /* Settings come first, grouped by where they act: palette, look, tab bar,
+     nav bar and URL bar, bookmarks bar, find bar, window controls, other.
+     Sizes and offsets follow in the ADVANCED part further down, in the same
+     order. Most setups never need to touch those. */
+
+  /* ---------------------------------------------------------------------
+     PALETTE
+     --------------------------------------------------------------------- */
+
   /* Color palette – change these five values to retheme FoxOne (dark scheme).
      Retheming takes more than this block (issue #50):
      - userContent.css carries its own copy of both sets (PALETTE block) for
        the about: pages, new tab included. The two files cannot share
        variables, so change the values there too.
      - The tab hover colour is separate: --uc-tab-hover-text and
-       --uc-light-tab-hover-text, further down in this block.
+       --uc-light-tab-hover-text, right below the light palette.
      - A few rules cannot read variables and hold literals: the accent
        (#fabd2f dark / #b57614 light) on the sidebar's selected rows and in
        the Library window, the field ground (#1f1f1f / #f9f5d7) on the
@@ -43,26 +52,127 @@
   --uc-light-color-text:    #3c3836;
   --uc-light-color-hover:   #bdae93;
 
-  /* Corner radius for the surfaces FoxOne owns (tab-group chips, library
-     search field) and the value handed to every surface the rounded-corners
-     toggle below can round. */
-  --uc-border-radius: 8px;
+  /* Inactive tab hover title color (issue #16). Sits between text and accent:
+     lighter amber on dark, darker amber on light. */
+  --uc-tab-hover-text: #ffda85;
+  --uc-light-tab-hover-text: #855d22;
+
+  /* ---------------------------------------------------------------------
+     LOOK
+     --------------------------------------------------------------------- */
 
   /* Rounded corners (0 = FoxOne's square edges, 1 = every surface FoxOne
      squares takes --uc-border-radius instead). Details in the derived block
      right below the config. */
   --uc-rounded: 0;
 
-  /* Statuspanel distance from window border (0 = corner). Set to match the
-     floating findbar's --findbar-top / --findbar-right (8px): both are CSS px,
-     so they render at the same real inset under any display scaling. */
-  --uc-status-panel-spacing: 8px;
+  /* ---------------------------------------------------------------------
+     TAB BAR
+     --------------------------------------------------------------------- */
 
-  /* URL Bar width (min applied normally, max on focus). The px ceiling caps
-     growth on ultrawide/4K, where bare vw scales to absurd widths (issue #6).
-     Caps engage from ~1800px CSS-px viewport; below that the vw value wins. */
-  --uc-urlbar-min-width: min(35vw, 630px);
-  --uc-urlbar-max-width: min(50vw, 900px);
+  /* All-tabs button (0 = hidden, 1 = visible) */
+  --uc-show-all-tabs-button: 0;
+
+  /* Pinned toolbar extension icons – hide and reveal on hamburger hover, to
+   * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
+  --uc-hide-extension-icons: 1;
+
+  /* Tab loading progress bar (1 = show, 0 = hide) */
+  --uc-show-loading-progress: 0;
+
+  /* ---------------------------------------------------------------------
+     NAV BAR AND URL BAR
+     --------------------------------------------------------------------- */
+
+  /* Navigation buttons (Back, Forward, Reload, VPN)
+   * 0 = always show
+   * 1 = auto-hide, reveal on hovering the nav bar. A button you reach with
+   *     the keyboard (Tab, arrow keys) reveals itself.
+   * 3 = hide completely, for mouse-button and shortcut users
+   * (2 from 4.0 still works and now means the same as 1.) */
+  --uc-autohide-nav-buttons: 0;
+
+  /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
+  --uc-hide-disabled-nav-buttons: 0;
+
+  /* URL-bar clutter icons – fully hide shield (tracking protection), reader
+   * mode, translations, bookmark star and add-to-taskbar so they can't be
+   * misclicked when aiming for the URL bar (1 = hide all, 0 = default reveal:
+   * reader, translations, add-to-taskbar and add-on icons appear while you
+   * rest on the bookmark star, the permissions icon on the shield) */
+  --uc-hide-urlbar-buttons: 0;
+
+  /* ---------------------------------------------------------------------
+     BOOKMARKS BAR
+     --------------------------------------------------------------------- */
+
+  /* Bookmarks bar – float it out of the layout and reveal it on URL-bar hover
+   * (1 = dynamic overlay, 0 = static row that keeps its own line).
+   * Only bites with Firefox' bookmarks toolbar set to "Always show": under
+   * "Never show" there is nothing to reveal, and "Only on New Tab" leaves
+   * Firefox' own collapse in charge everywhere else. */
+  --uc-dynamic-bookmarks: 1;
+
+  /* Bookmarks bar on fresh tabs – keep the dynamic bar revealed while the
+   * active tab shows no page yet (new tab, home), no hover needed
+   * (1 = show on fresh tabs, 0 = hover only). Ignored while
+   * --uc-dynamic-bookmarks is 0. */
+  --uc-dynamic-bookmarks-newtab: 1;
+
+  /* ---------------------------------------------------------------------
+     FIND BAR
+     --------------------------------------------------------------------- */
+
+  /* Show/Hide Find Bar Options
+   * Show: 1
+   * Hide: 0
+   */
+  --show-highlight-all:    1;
+  --show-match-case:       1;
+  --show-match-diacritics: 1;
+  --show-whole-words:      1;
+
+  /* ---------------------------------------------------------------------
+     WINDOW CONTROLS
+     --------------------------------------------------------------------- */
+
+  /* Window controls (minimise/maximise/close) – hide them to free the space
+   * (1 = hide, 0 = show). Windows/Linux only, macOS keeps its traffic lights.
+   * Close with Ctrl+Shift+W or Alt+F4, maximise by double-clicking the drag
+   * space. In fullscreen (F11) the reveal loses its exit button too, F11
+   * leaves. (#60) */
+  --uc-hide-window-buttons: 0;
+
+  /* Extensions (puzzle) button – pin it to the right edge, next to the
+   * hamburger, instead of leaving it in the nav-bar after the URL bar
+   * (1 = right, beside the hamburger, 0 = Firefox default in the nav-bar).
+   * Firefox locks the button to the nav-bar in Customize Toolbar, so this is
+   * the only way to get it there. Pinned is the tested layout, 0 leaves the
+   * button where Firefox puts it, best effort. (issues #48, #67)
+   * Two-row layouts need 0: in FoxMica's StockMica+ and in PWAsForFirefox
+   * windows the pin can't take, so the switch stays even though only 1 is
+   * tested. Don't cut it in a cleanup round. (#73) */
+  --uc-extensions-button-right: 1;
+
+  /* ---------------------------------------------------------------------
+     OTHER
+     --------------------------------------------------------------------- */
+
+  /* Context menu: "Open Link in Split View" (0 = hidden, 1 = visible) */
+  --uc-show-context-splitview: 0;
+
+  /* =====================================================================
+     ADVANCED – sizes and offsets, in the same order as above
+     ===================================================================== */
+
+  /* --- Look --- */
+
+  /* Corner radius for the surfaces FoxOne owns (tab-group chips, library
+     search field) and the value handed to every surface the rounded-corners
+     toggle (--uc-rounded) can round. */
+  --uc-border-radius: 8px;
+
+  /* --- Tab bar --- */
 
   /* Dynamic tab widths. The inactive ceiling is intentionally lower than the
      active one: inactive tabs cap sooner, freeing strip space for the active
@@ -80,82 +190,19 @@
      All three widths apply to horizontal tabs only, vertical ones fill the sidebar. */
   --uc-tab-min-width: 76px;
 
-  /* Inactive tab hover title color (issue #16). Sits between text and accent:
-     lighter amber on dark, darker amber on light. */
-  --uc-tab-hover-text: #ffda85;
-  --uc-light-tab-hover-text: #855d22;
-
-  /* Context menu: "Open Link in Split View" (0 = hidden, 1 = visible) */
-  --uc-show-context-splitview: 0;
-
-  /* All-tabs button (0 = hidden, 1 = visible) */
-  --uc-show-all-tabs-button: 0;
-
-  /* Window controls (minimise/maximise/close) – hide them to free the space
-   * (1 = hide, 0 = show). Windows/Linux only, macOS keeps its traffic lights.
-   * Close with Ctrl+Shift+W or Alt+F4, maximise by double-clicking the drag
-   * space. In fullscreen (F11) the reveal loses its exit button too, F11
-   * leaves. (#60) */
-  --uc-hide-window-buttons: 0;
-
-  /* Hamburger button width – reserved in tab bar to prevent overlap.
-   * With the pinned puzzle it works out as the puzzle's own width, so the
-   * puzzle sits at regular button spacing from the tab-bar item before it.
-   * Naming note: with the puzzle pinned (--uc-extensions-button-right: 1)
-   * the two width names describe the opposite buttons. This one acts as the
-   * PUZZLE's width, --uc-extensions-button-width below as the HAMBURGER's.
-   * The names stay until 4.1 so existing overrides keep working. (#73) */
-  --uc-hamburger-width: 36px;
-
-  /* Extensions (puzzle) button – pin it to the right edge, next to the
-   * hamburger, instead of leaving it in the nav-bar after the URL bar
-   * (1 = right, beside the hamburger, 0 = Firefox default in the nav-bar).
-   * Firefox locks the button to the nav-bar in Customize Toolbar, so this is
-   * the only way to get it there. Pinned is the tested layout, 0 leaves the
-   * button where Firefox puts it, best effort. (issues #48, #67)
-   * Two-row layouts need 0: in FoxMica's StockMica+ and in PWAsForFirefox
-   * windows the pin can't take, so the switch stays even though only 1 is
-   * tested. Don't cut it in a cleanup round. (#73) */
-  --uc-extensions-button-right: 1;
-  /* Width reserved for the pinned puzzle button. Also its distance from the
-   * window controls beyond the hamburger, so it doubles as the gap knob:
-   * lower it to pull the two buttons closer, raise it to space them out.
-   * The hamburger is 4px wider than the puzzle (40 vs 36 at normal density),
-   * so 38 puts the two at regular button spacing. Measured on Windows, FF159;
-   * compact and normal both read even with 36 / 38. Despite the name it
-   * stands for the HAMBURGER's slot, see the naming note above. (#73) */
-  --uc-extensions-button-width: 38px;
-
   /* Drag space – grab zone after the tabs for moving the window. It stays
      there even when a new-tab button or extension icons follow the tabs.
      Kept small, but it is functional space, not just a gap, so don't drop
      it to 0. */
   --uc-drag-space: 20px;
 
-  /* Findbar – floating search bar */
-  --findbar-top: 8px;
-  --findbar-right: 8px;
-  --findbar-width: 360px;
+  /* --- Nav bar and URL bar --- */
 
-  /* Show/Hide Find Bar Options
-   * Show: 1
-   * Hide: 0
-   */
-  --show-highlight-all:    1;
-  --show-match-case:       1;
-  --show-match-diacritics: 1;
-  --show-whole-words:      1;
-
-  /* Tab loading progress bar (1 = show, 0 = hide) */
-  --uc-show-loading-progress: 0;
-
-  /* Navigation buttons (Back, Forward, Reload, VPN)
-   * 0 = always show
-   * 1 = auto-hide, reveal on hovering the nav bar. A button you reach with
-   *     the keyboard (Tab, arrow keys) reveals itself.
-   * 3 = hide completely, for mouse-button and shortcut users
-   * (2 from 4.0 still works and now means the same as 1.) */
-  --uc-autohide-nav-buttons: 0;
+  /* URL Bar width (min applied normally, max on focus). The px ceiling caps
+     growth on ultrawide/4K, where bare vw scales to absurd widths (issue #6).
+     Caps engage from ~1800px CSS-px viewport; below that the vw value wins. */
+  --uc-urlbar-min-width: min(35vw, 630px);
+  --uc-urlbar-max-width: min(50vw, 900px);
 
   /* Hover reveal delay – how long the pointer has to rest before a hover
    * reveals the auto-hidden navigation buttons (on the nav bar) and the
@@ -165,37 +212,12 @@
    * and --uc-dynamic-bookmarks-hover-delay from 4.0. (#73) */
   --uc-hover-reveal-delay: 450ms;
 
-  /* Navigation buttons – hide Back/Forward while there's nowhere to go instead of dimming them (1 = hide, 0 = dim) */
-  --uc-hide-disabled-nav-buttons: 0;
+  /* --- Bookmarks bar --- */
 
-  /* URL-bar clutter icons – fully hide shield (tracking protection), reader
-   * mode, translations, bookmark star and add-to-taskbar so they can't be
-   * misclicked when aiming for the URL bar (1 = hide all, 0 = default reveal:
-   * reader, translations, add-to-taskbar and add-on icons appear while you
-   * rest on the bookmark star, the permissions icon on the shield) */
-  --uc-hide-urlbar-buttons: 0;
-
-  /* Pinned toolbar extension icons – hide and reveal on hamburger hover, to
-   * keep the one-line layout clean (1 = hide + hover-reveal, 0 = always show) */
-  --uc-hide-extension-icons: 1;
-
-  /* Bookmarks bar – float it out of the layout and reveal it on URL-bar hover
-   * (1 = dynamic overlay, 0 = static row that keeps its own line).
-   * Only bites with Firefox' bookmarks toolbar set to "Always show": under
-   * "Never show" there is nothing to reveal, and "Only on New Tab" leaves
-   * Firefox' own collapse in charge everywhere else. */
-  --uc-dynamic-bookmarks: 1;
-
-  /* Delay before the bar hides again once the pointer leaves, the grace
-   * period for travelling from the URL bar down onto the bookmarks. The
-   * reveal delay is --uc-hover-reveal-delay further up. */
+  /* Delay before the dynamic bar hides again once the pointer leaves, the
+   * grace period for travelling from the URL bar down onto the bookmarks.
+   * The reveal delay is --uc-hover-reveal-delay right above. */
   --uc-dynamic-bookmarks-hide-delay: 150ms;
-
-  /* Bookmarks bar on fresh tabs – keep the dynamic bar revealed while the
-   * active tab shows no page yet (new tab, home), no hover needed
-   * (1 = show on fresh tabs, 0 = hover only). Ignored while
-   * --uc-dynamic-bookmarks is 0. */
-  --uc-dynamic-bookmarks-newtab: 1;
 
   /* How far the find bar moves down while the dynamic bookmarks bar is open, so
    * the bar doesn't cover it. The default follows Firefox's density (about
@@ -206,6 +228,40 @@
    * bar's own 6px padding top and bottom plus one item (a 16px icon, about 3px
    * around the label, and Firefox's --bookmark-block-padding on each side). */
   --uc-bookmarks-bar-height: calc(31px + 2 * var(--bookmark-block-padding, 4px));
+
+  /* --- Find bar --- */
+
+  /* Findbar – floating search bar */
+  --findbar-top: 8px;
+  --findbar-right: 8px;
+  --findbar-width: 360px;
+
+  /* --- Window controls --- */
+
+  /* Hamburger button width – reserved in tab bar to prevent overlap.
+   * With the pinned puzzle it works out as the puzzle's own width, so the
+   * puzzle sits at regular button spacing from the tab-bar item before it.
+   * Naming note: with the puzzle pinned (--uc-extensions-button-right: 1)
+   * the two width names describe the opposite buttons. This one acts as the
+   * PUZZLE's width, --uc-extensions-button-width below as the HAMBURGER's.
+   * The names stay so existing overrides keep working. (#73) */
+  --uc-hamburger-width: 36px;
+
+  /* Width reserved for the pinned puzzle button. Also its distance from the
+   * window controls beyond the hamburger, so it doubles as the gap knob:
+   * lower it to pull the two buttons closer, raise it to space them out.
+   * The hamburger is 4px wider than the puzzle (40 vs 36 at normal density),
+   * so 38 puts the two at regular button spacing. Measured on Windows, FF159;
+   * compact and normal both read even with 36 / 38. Despite the name it
+   * stands for the HAMBURGER's slot, see the naming note above. (#73) */
+  --uc-extensions-button-width: 38px;
+
+  /* --- Other --- */
+
+  /* Statuspanel distance from window border (0 = corner). Set to match the
+     floating findbar's --findbar-top / --findbar-right (8px): both are CSS px,
+     so they render at the same real inset under any display scaling. */
+  --uc-status-panel-spacing: 8px;
 
 }
 
