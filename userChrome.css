@@ -3529,6 +3529,33 @@ sidebar-main {
   inset-inline-end: 2px !important;
 }
 
+/* Tab note badge, wherever Firefox shows it on the favicon: every tab on
+   the collapsed vertical strip, and pinned tabs on any strip. It is a 12px
+   icon with 2px padding on a round plate. The icon is too light to stand
+   on a favicon without the plate, so the plate stays but hugs the icon:
+   no padding, and a 4px corner instead of the circle. That follows three
+   of the icon's corners; the fourth is the note's folded corner. The
+   radius is fixed, it does not follow the rounding switch. The plate is
+   the base colour, like the audio badge, so it follows the palette;
+   Firefox paints it with layered images, which the shorthand clears.
+   (#101) */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-note-icon-overlay,
+#tabbrowser-tabs .tabbrowser-tab[pinned] .tab-note-icon-overlay {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  background: var(--uc-color-base) !important;
+}
+/* Vertical strip with the sidebar on the right: the note badge moves to
+   the favicon's other bottom corner, so it stays on the page side.
+   Firefox's nudge of 7px toward the end leaves the 12px badge 3px past
+   the 16px favicon; 3px the other way is its mirror image. (#101) */
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-note-icon-overlay,
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-note-icon-overlay {
+  inset-inline-end: 3px !important;
+}
+
 /* adaptive tab width. Horizontal strip only, like Nova's own tab widths: in
    the vertical strip the tabs fill the sidebar, and the min-width pushed them
    past the collapsed strip's edge. (#85) */
