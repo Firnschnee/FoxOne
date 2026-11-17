@@ -3669,7 +3669,9 @@ sidebar-main {
 
 /* speaker icon – always visible when tab is playing. Not on the collapsed
    vertical strip or on pinned tabs: the badge there keeps Nova's own place
-   and takes its size from the audio badge rules further up. (#101) */
+   and takes its size from the audio badge rules further up. The one pinned
+   case left is the selected crashed tab, whose crash badge keeps this
+   geometry. The audio rules skip [crashed]. (#101) */
 :where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay:not([crashed], [pinned]),
 :where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay[pinned][crashed][selected] {
   top: 5px !important;
