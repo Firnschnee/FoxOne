@@ -3667,9 +3667,6 @@ sidebar-main {
   opacity: 1 !important;
 }
 
-/* speaker icon – always visible when tab is playing */
-.tab-icon-overlay:not([crashed]),
-.tab-icon-overlay[pinned][crashed][selected] {
 /* speaker icon – always visible when tab is playing. Not on the collapsed
    vertical strip or on pinned tabs: the badge there keeps Nova's own place
    and takes its size from the audio badge rules further up. (#101) */
@@ -3744,12 +3741,10 @@ sidebar-main {
   background-color: var(--toolbar-color) !important;
 }
 
-.tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
 :where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
   margin-inline-end: 9.5px !important;
 }
 
-.tabbrowser-tab:not([image])
 :where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([image])
   .tab-icon-overlay:not([pinned], [sharing], [crashed]) {
   top: 0 !important;
