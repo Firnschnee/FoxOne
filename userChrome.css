@@ -2171,10 +2171,13 @@ sidebar-main,
   animation: uc-progress 2.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards !important;
 }
 
-/* Inactive busy tabs – white to match tab text color */
+/* Inactive busy tabs – the tab text colour. FoxOne sets --toolbar-color only
+   without a theme, and Firefox no longer defines it at all (checked on 160).
+   Under a theme (private windows included) Firefox puts the theme's text
+   colour in --toolbar-text-color, so fall back to that, not to white. */
 .tabbrowser-tab[busy]:not([selected], [pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::before {
-  background: var(--toolbar-color, #FFFFFF) !important;
-  box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
+  background: var(--toolbar-color, var(--toolbar-text-color)) !important;
+  box-shadow: 0 1px 10px 1px var(--toolbar-color, var(--toolbar-text-color)) !important;
 }
 
 /* Top glow – busy tabs (pinned excluded: their ::after is the indicator) */
@@ -2194,10 +2197,10 @@ sidebar-main,
   pointer-events: none !important;
 }
 
-/* Top glow – inactive tabs use white */
+/* Top glow – inactive tabs use the tab text colour, as above */
 .tabbrowser-tab[busy]:not([selected], [pinned], :where(#tabbrowser-tabs[orient="vertical"]:not([expanded]) *)) .tab-background::after {
-  background: var(--toolbar-color, #FFFFFF) !important;
-  box-shadow: 0 1px 10px 1px var(--toolbar-color, #FFFFFF) !important;
+  background: var(--toolbar-color, var(--toolbar-text-color)) !important;
+  box-shadow: 0 1px 10px 1px var(--toolbar-color, var(--toolbar-text-color)) !important;
 }
 
 @keyframes uc-progress {
