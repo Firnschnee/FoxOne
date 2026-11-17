@@ -1066,6 +1066,11 @@ sidebar-main,
 #TabsToolbar { order: 2; }
 #nav-bar { order: 3; }
 
+/* The 6px block padding comes on top of the bookmarks' own
+   (--bookmark-block-padding) and is deliberate: the bar still stays lower
+   than the nav bar at every density. 0 and 2px were tried for 4.1 (#73) and
+   read as cramped. The dynamic bar below mirrors the value, and
+   --uc-bookmarks-bar-height counts it, so change all three together. */
 #PersonalToolbar {
   padding: 6px !important;
   order: 4;
