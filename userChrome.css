@@ -1,6 +1,6 @@
 /*==============================================================================================*
 
-  FoxOne 4.0.11 – A minimalistic one-line Firefox theme
+  FoxOne 4.0.12 – A minimalistic one-line Firefox theme
   Based on Cascade (https://github.com/cascadefox/cascade)
   Floating Find Bar and dynamic Bookmarks Bar by LittleFox
   (https://github.com/biglavis/LittleFox)
@@ -3560,6 +3560,94 @@ sidebar-main {
   color: var(--tab-selected-textcolor) !important;
 }
 
+/* Collapsed vertical strip: Nova's X is a badge on the tab's top corner,
+   a circle of 15px with 3.5px padding on ESR 153 and 16px with 2px on
+   Nova (an 8px and a 12px glyph). On a strip about 48px wide that leaves
+   little tab to click, so it is 12px with 2px padding, an 8px glyph on
+   every build. The corner follows the rounding switch, square by default
+   and 2px with rounding on, like the horizontal X. (#101) */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-close-button {
+  width: 12px !important;
+  height: 12px !important;
+  padding: 2px !important;
+  border-radius: calc(var(--uc-radius-row) / 2) !important;
+}
+/* Firefox pins the badge to the tab's start edge whichever side the
+   sidebar is on, so on the right it hangs over the page. Mirror it to
+   the end edge there. Nightly sets sidebar-positionend on the root, ESR
+   153 and Beta only on the sidebar container. (#101) */
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-close-button {
+  inset-inline-start: auto !important;
+  inset-inline-end: 2px !important;
+}
+
+/* Tab note badge, wherever Firefox shows it on the favicon: every tab on
+   the collapsed vertical strip, and pinned tabs on any strip. It is a 12px
+   icon with 2px padding on a round plate. The icon is too light to stand
+   on a favicon without the plate, so the plate stays but hugs the icon:
+   no padding, and a 4px corner instead of the circle. That follows three
+   of the icon's corners; the fourth is the note's folded corner. The
+   radius is fixed, it does not follow the rounding switch. The plate is
+   the base colour, like the audio badge, so it follows the palette;
+   Firefox paints it with layered images, which the shorthand clears.
+   (#101) */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-note-icon-overlay,
+#tabbrowser-tabs .tabbrowser-tab[pinned] .tab-note-icon-overlay {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  background: var(--uc-color-base) !important;
+}
+/* Vertical strip with the sidebar on the right: the note badge moves to
+   the favicon's other bottom corner, so it stays on the page side.
+   Firefox's nudge of 7px toward the end leaves the 12px badge 3px past
+   the 16px favicon; 3px the other way is its mirror image. (#101) */
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-note-icon-overlay,
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-note-icon-overlay {
+  inset-inline-end: 3px !important;
+}
+
+/* Audio badge, in the same two places: the collapsed vertical strip and
+   pinned tabs. A pinned tab is a button with no close button, so its
+   badge is the one control on it and gets one look everywhere. The glyph
+   colours further down are keyed on #TabsToolbar, which the vertical
+   strip is not in, so there the glyph kept the tab's text colour: accent
+   on a light plate, and accent on an accent plate under the pointer.
+   Here the plate is the base colour with an accent glyph, and the two
+   swap on hover. The plate hugs the 12px glyph: no padding, still round,
+   because it is a button (play, mute, unblock). fill is set as well as
+   the plate because ESR 153 colours the glyph with fill, not with color.
+   Firefox 160 and up also draw a 1px outline inside the plate; on a 12px
+   badge it crowds the glyph and does not swap on hover, so it goes. So
+   does Nova's drop shadow, which sits 1px low and makes a plate this
+   small look heavy at the bottom. (#101) */
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]),
+#tabbrowser-tabs .tab-icon-overlay[pinned]:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
+  width: 12px !important;
+  height: 12px !important;
+  padding: 0 !important;
+  background-color: var(--uc-color-base) !important;
+  fill: var(--uc-color-accent) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+#tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]):hover,
+#tabbrowser-tabs .tab-icon-overlay[pinned]:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]):hover {
+  background-color: var(--uc-color-accent) !important;
+  fill: var(--uc-color-base) !important;
+}
+/* Vertical strip with the sidebar on the right: the audio badge moves to
+   the favicon's other bottom corner, like the note badge above and for
+   the same sum. (#101) */
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"]:not([expanded]) .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]),
+:root:is([sidebar-positionend], :has(#sidebar-container[sidebar-positionend]))
+  #tabbrowser-tabs[orient="vertical"] .tab-icon-overlay[pinned]:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
+  inset-inline-end: 3px !important;
+}
+
 /* adaptive tab width. Horizontal strip only, like Nova's own tab widths: in
    the vertical strip the tabs fill the sidebar, and the min-width pushed them
    past the collapsed strip's edge. (#85) */
@@ -3617,9 +3705,13 @@ sidebar-main {
   opacity: 1 !important;
 }
 
-/* speaker icon – always visible when tab is playing */
-.tab-icon-overlay:not([crashed]),
-.tab-icon-overlay[pinned][crashed][selected] {
+/* speaker icon – always visible when tab is playing. Not on the collapsed
+   vertical strip or on pinned tabs: the badge there keeps Nova's own place
+   and takes its size from the audio badge rules further up. The one pinned
+   case left is the selected crashed tab, whose crash badge keeps this
+   geometry. The audio rules skip [crashed]. (#101) */
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay:not([crashed], [pinned]),
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay[pinned][crashed][selected] {
   top: 5px !important;
   z-index: 1 !important;
   padding: 1.5px !important;
@@ -3689,11 +3781,11 @@ sidebar-main {
   background-color: var(--toolbar-color) !important;
 }
 
-.tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
   margin-inline-end: 9.5px !important;
 }
 
-.tabbrowser-tab:not([image])
+:where(#tabbrowser-tabs:not([orient="vertical"]:not([expanded]))) .tabbrowser-tab:not([image])
   .tab-icon-overlay:not([pinned], [sharing], [crashed]) {
   top: 0 !important;
   padding: 0 !important;
