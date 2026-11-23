@@ -28,11 +28,10 @@
 
   /* Literal about:blank in the palette's base colour instead of Firefox's
    * compiled-in canvas colour. The fresh tab is a different document and
-   * is always painted, see BLANK PAGES. 0 = hands off, 1 = on.
-   * Off by default because of the side effect: an empty about:blank
-   * iframe inside a website (a lazy embed that has not loaded yet) shows
-   * the base colour until it gets content, instead of being see-through. */
-  --uc-blank-canvas: 0;
+   * is always painted, see BLANK PAGES. 1 = on, 0 = hands off.
+   * The colour is --uc-blank-filter in the PALETTE block, a retheme of
+   * --uc-color-base has to change it too. */
+  --uc-blank-canvas: 1;
 }
 
 /* Derived: the radius every in-content surface reads. Zero at the default
@@ -105,13 +104,29 @@
      leaves Firefox Home alone, that page paints its own ground. No
      :empty here: the blank tab's body holds a newline.
    - Literal about:blank: typed into the urlbar or set as a blank
-     homepage. The same URL is every empty iframe on the web, and CSS
-     cannot tell top level from frame (the unobservable-document()
-     function is gone). body:empty limits the rule to documents nobody
-     has filled, and --uc-blank-canvas keeps it opt-in. A style query on
-     body reads the value from :root. The flash while a new tab loads is
-     neither of the two, that is --tabpanel-background-color in
-     userChrome.css.
+     homepage. The same URL is every empty iframe on the
+     web, including each one that is still loading, and CSS cannot tell
+     top level from frame (the unobservable-document() function is
+     gone). A background would therefore paint boxes into websites. A
+     backdrop-filter does not: it recolours what lies behind it, and only
+     the top-level document has an opaque canvas behind it, a frame's is
+     see-through. Two parts:
+       1. The identity filter on the root makes the document its own
+          backdrop root. Without it Firefox lets the filter below read
+          the page around an iframe and paints the iframe after all.
+       2. The pseudo-element covers the viewport and turns the canvas
+          into --uc-blank-filter. A filter cannot take a colour, so the
+          base colour is spelled as a chain: brightness(0) makes black,
+          invert(x) lifts it to the grey level x, sepia and hue-rotate
+          tint it for the light scheme.
+     body:empty limits both to documents nobody has filled, a style query
+     on body reads --uc-blank-canvas from :root. Measured on 153 ESR and
+     160 against a page with that background: same colour on top level,
+     empty, filled and loading iframes untouched. If a later Firefox moves
+     its backdrop roots, about:blank either falls back to the stock colour
+     or iframes get painted. Set --uc-blank-canvas: 0 then.
+   The flash while a new tab loads is neither document, that is
+   --tabpanel-background-color in userChrome.css.
    Sitting above PALETTE is fine: var() resolves at computed-value time,
    so the light scheme swaps in with it.
    ========================================================================== */
@@ -123,9 +138,16 @@
 }
 
 @-moz-document url("about:blank") {
+  :root:has(> body:empty) {
+    backdrop-filter: opacity(1);
+  }
   @container style(--uc-blank-canvas: 1) {
-    body:empty {
-      background-color: var(--uc-color-base) !important;
+    body:empty::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      backdrop-filter: var(--uc-blank-filter);
     }
   }
 }
@@ -149,6 +171,9 @@
   --uc-color-hover:   #7c6f64;
   --uc-color-border:  #504945;   /* Gruvbox bg2, neutral control hairline */
   --uc-tab-hover-text: #ffda85;   /* tab title hover, between text and accent */
+  /* --uc-color-base again, as a backdrop-filter chain for about:blank (see
+     BLANK PAGES). For a neutral grey: invert(level / 255), here 40 / 255. */
+  --uc-blank-filter: brightness(0) invert(0.157);
 }
 @media (prefers-color-scheme: light) {
   :root {
@@ -159,6 +184,7 @@
     --uc-color-hover:   #bdae93;
     --uc-color-border:  #d5c4a1;
     --uc-tab-hover-text: #855d22;
+    --uc-blank-filter: brightness(0) invert(0.819) sepia(0.726) hue-rotate(5.5deg);
   }
 }
 
