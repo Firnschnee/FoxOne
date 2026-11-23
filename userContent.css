@@ -82,6 +82,16 @@
 
 
 @-moz-document url-prefix("about:newtab"), url-prefix("about:home") {
+  /* 153 ESR hardcodes both tokens in Nova grey (#42414d, the card one at
+     85 % alpha), 160 derives them from --card-background-color, which the
+     central about: block sets to the base colour. Secondary paints the
+     search field, flat on the ground like 160. Card paints the shortcut
+     tiles and story cards, a step up on the surface colour so they keep
+     their shape, in 160 too. */
+  :root {
+    --newtab-background-color-secondary: var(--uc-color-base) !important;
+    --newtab-background-card: var(--uc-color-surface) !important;
+  }
   @media (prefers-color-scheme: dark) {
     :root {
       --newtab-background-color: #282828 !important;
