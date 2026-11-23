@@ -42,7 +42,7 @@ The tab hover colour sits outside the two sets, one value per scheme:
 
 Retheming takes more than these ten values:
 
-* **`userContent.css` carries its own copy of both sets** in its PALETTE block. It styles the about: pages (settings, add-ons, the new tab page and the rest), and it cannot read `userChrome.css`'s variables. Change the values there too, or those pages stay Gruvbox.
+* **`userContent.css` carries its own copy of both sets** in its PALETTE block. It styles the about: pages (settings, add-ons, the new tab page and the rest), and it cannot read `userChrome.css`'s variables. Change the values there too, or those pages stay Gruvbox. The block also holds the base colour a second time as `--uc-blank-filter`, see [Blank pages](#blank-pages-usercontentcss).
 * **The tab hover colour is separate:** `--uc-tab-hover-text` and `--uc-light-tab-hover-text`, in the table right above.
 * **A few rules hold colours as literals,** because they cannot read variables: the accent on the sidebar's selected rows and in the Library window (`#fabd2f` dark, `#b57614` light), and the sidebar search boxes' field ground (`#1f1f1f` dark, `#f9f5d7` light). Search `userChrome.css` for those values and replace them.
 
@@ -168,3 +168,11 @@ The hand-off keys off the `lwtheme` attribute Firefox sets on the root element w
 | Variable | Default | Description |
 |---|---|---|
 | `--uc-content-scrollbar` | `thin` | Scrollbar in web content (`thin` = slim everywhere, `none` = hidden everywhere, `auto` = hands off, pages keep control of their own scrollbars) |
+
+### Blank pages (`userContent.css`)
+
+| Variable | Default | Description |
+|---|---|---|
+| `--uc-blank-canvas` | `1` | Paint `about:blank` in the base colour instead of Firefox's own canvas colour, a violet-tinted dark grey in dark mode (`1` = on, `0` = hands off). The blank new tab is always painted, this only covers `about:blank` itself |
+
+`about:blank` cannot take a plain background colour, because every empty iframe on a website is an `about:blank` page too. FoxOne recolours it through a filter instead, which leaves those iframes alone. The colour therefore lives in the PALETTE block as a filter chain, `--uc-blank-filter`, and does not follow `--uc-color-base` on its own. For a neutral grey, `brightness(0) invert(x)` with x = level / 255 gives that grey. If a future Firefox paints iframes on websites in the base colour, set `--uc-blank-canvas: 0`.
