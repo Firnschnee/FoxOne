@@ -25,6 +25,14 @@
    * the category nav) takes --uc-border-radius instead. */
   --uc-rounded: 0;
   --uc-border-radius: 8px;
+
+  /* Literal about:blank in the palette's base colour instead of Firefox's
+   * compiled-in canvas colour. The fresh tab is a different document and
+   * is always painted, see BLANK PAGES. 0 = hands off, 1 = on.
+   * Off by default because of the side effect: an empty about:blank
+   * iframe inside a website (a lazy embed that has not loaded yet) shows
+   * the base colour until it gets content, instead of being see-through. */
+  --uc-blank-canvas: 0;
 }
 
 /* Derived: the radius every in-content surface reads. Zero at the default
@@ -85,6 +93,45 @@
 
 
 /* ==========================================================================
+   BLANK PAGES – fresh tab and about:blank
+   Firefox paints an empty document in a compiled-in canvas colour (dark:
+   #1c1b22). No pref reaches it for normal content, PreferenceSheet.cpp
+   takes the stand-in colours there. A background on the document itself
+   does reach it, because it propagates to the canvas. Two documents look
+   the same on screen and need separate rules:
+   - The fresh tab with Firefox Home switched off. Its URL is about:newtab
+     (blanktab.html in the privileged about process), not about:blank.
+     Websites cannot embed it, so the rule is unconditional. The :not()
+     leaves Firefox Home alone, that page paints its own ground. No
+     :empty here: the blank tab's body holds a newline.
+   - Literal about:blank: typed into the urlbar or set as a blank
+     homepage. The same URL is every empty iframe on the web, and CSS
+     cannot tell top level from frame (the unobservable-document()
+     function is gone). body:empty limits the rule to documents nobody
+     has filled, and --uc-blank-canvas keeps it opt-in. A style query on
+     body reads the value from :root. The flash while a new tab loads is
+     neither of the two, that is --tabpanel-background-color in
+     userChrome.css.
+   Sitting above PALETTE is fine: var() resolves at computed-value time,
+   so the light scheme swaps in with it.
+   ========================================================================== */
+
+@-moz-document url("about:newtab") {
+  body:not(.activity-stream) {
+    background-color: var(--uc-color-base) !important;
+  }
+}
+
+@-moz-document url("about:blank") {
+  @container style(--uc-blank-canvas: 1) {
+    body:empty {
+      background-color: var(--uc-color-base) !important;
+    }
+  }
+}
+
+
+/* ==========================================================================
    PALETTE – Gruvbox Dark / Gruvbox Light
    userContent has no shared config with userChrome; keep in sync with the
    CONFIG block there. A retheme that only touches userChrome leaves every
@@ -131,7 +178,8 @@
    about:newtab / about:home do match the about: prefix: their token-driven
    parts (customise panel, search field, selection ring) follow the palette
    (seen in issue #50); the page ground itself is set in the NEW TAB block
-   above. Known unreachable: about:blank (compiled-in canvas colour).
+   above. about:blank and the blank fresh tab have no tokens at all, they
+   are painted in the BLANK PAGES block.
    Both the legacy --in-content-* names and the design tokens are set, so
    older pages and token renames stay covered.
    ========================================================================== */
